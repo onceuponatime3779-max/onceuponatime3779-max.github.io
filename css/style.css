@@ -275,7 +275,45 @@ MOBILE
 
 
 
+/*==================================
+  PROGRAMS SECTION
+==================================*/
 
+.programs {
+    padding: 80px 8%;
+    background: #f8f9f5;
+}
+
+.programs .container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.programs .section-title {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.programs .section-title h2 {
+    font-size: 2.5rem;
+    color: #0b6b3a;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.programs .section-title p {
+    max-width: 700px;
+    margin: 0 auto;
+    color: #555;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.programs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
 
 
 
