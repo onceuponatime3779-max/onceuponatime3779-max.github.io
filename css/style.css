@@ -128,6 +128,8 @@ url("../images/hero.jpg");
 
 .btn:hover{
     background:#0d3d22;
+    transform:translateY(-3px);
+    opacity:0.9;
 }
 
 .btn-secondary{
@@ -137,8 +139,9 @@ url("../images/hero.jpg");
 
 .btn-secondary:hover{
     background:#c39b16;
+    transform:translateY(-3px);
+    opacity:0.9;
 }
-
 /* ===========================
    MOBILE
 =========================== */
