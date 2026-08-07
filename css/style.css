@@ -68,17 +68,23 @@ body{
     justify-content:center;
     align-items:center;
     text-align:center;
-    background:#f5f8f6;
+
+    background:
+    linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
+    url("../images/hero.jpg");
+
+    background-size:cover;
+    background-position:center;
+
     padding:60px 8%;
 }
-
 .hero-content{
     max-width:850px;
 }
 
 .hero h1{
     font-size:58px;
-    color:#145A32;
+    color:white;
     line-height:1.2;
     margin-bottom:20px;
 }
@@ -91,6 +97,7 @@ body{
 }
 
 .hero p{
+    color:white;
     font-size:20px;
     line-height:1.8;
     margin-bottom:40px;
