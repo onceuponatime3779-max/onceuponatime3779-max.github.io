@@ -143,7 +143,7 @@ url("../images/hero.jpg");
     opacity:0.9;
 }
 /* ===========================
-   MOBILE
+MOBILE
 =========================== */
 
 @media(max-width:900px){
@@ -160,11 +160,11 @@ url("../images/hero.jpg");
     }
 
     .hero h1{
-        font-size:40px;
+        font-size:36px;
     }
 
     .hero p{
-        font-size:18px;
+        font-size:17px;
+        line-height:1.6;
     }
-
 }
