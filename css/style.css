@@ -422,7 +422,181 @@ MOBILE
 
 
 
+/*==================================
+  IMPACT SECTION
+==================================*/
 
+.impact {
+    padding: 80px 8%;
+    background: #ffffff;
+}
+
+.impact .container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.impact .section-title {
+    text-align: center;
+    margin-bottom: 55px;
+}
+
+.impact .section-title h2 {
+    font-size: 2.5rem;
+    color: #0b6b3a;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.impact .section-title p {
+    max-width: 700px;
+    margin: 0 auto 12px;
+    color: #555;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.impact-period {
+    display: inline-block;
+    color: #b08d2c;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+
+/*==================================
+  IMPACT GRID
+==================================*/
+
+.impact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    align-items: stretch;
+}
+
+
+/*==================================
+  IMPACT CARDS
+==================================*/
+
+.impact-card {
+    background: #f8f9f5;
+    padding: 35px 30px;
+    border-radius: 16px;
+    border: 1px solid #e5e8e3;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+}
+
+.impact-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+    border-color: #0b6b3a;
+}
+
+
+/*==================================
+  IMPACT ICON
+==================================*/
+
+.impact-icon {
+    font-size: 2.8rem;
+    margin-bottom: 18px;
+    line-height: 1;
+}
+
+
+/*==================================
+  IMPACT NUMBER
+==================================*/
+
+.impact-number {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #0b6b3a;
+    line-height: 1;
+    margin-bottom: 12px;
+}
+
+
+/*==================================
+  IMPACT TITLE
+==================================*/
+
+.impact-card h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+    line-height: 1.4;
+}
+
+
+/*==================================
+  IMPACT DESCRIPTION
+==================================*/
+
+.impact-card p {
+    color: #555;
+    line-height: 1.7;
+    font-size: 1rem;
+    margin: 0;
+}
+
+
+/*==================================
+  TABLET
+==================================*/
+
+@media (max-width: 900px) {
+
+    .impact-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+/*==================================
+  MOBILE
+==================================*/
+
+@media (max-width: 600px) {
+
+    .impact {
+        padding: 60px 5%;
+    }
+
+    .impact .section-title h2 {
+        font-size: 2rem;
+    }
+
+    .impact .section-title p {
+        font-size: 1rem;
+    }
+
+    .impact-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .impact-card {
+        padding: 30px 25px;
+    }
+
+    .impact-number {
+        font-size: 2.6rem;
+    }
+
+}
 
 
 
