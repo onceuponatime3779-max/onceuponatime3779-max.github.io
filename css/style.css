@@ -422,6 +422,105 @@ MOBILE
 
 
 
+
+/*==================================
+  IMPACT SECTION
+==================================*/
+
+.impact {
+    padding: 80px 8%;
+    background: #ffffff;
+}
+
+.impact .container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.impact .section-title {
+    text-align: center;
+    margin-bottom: 55px;
+}
+
+.impact .section-title h2 {
+    font-size: 2.5rem;
+    color: #0b6b3a;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.impact .section-title p {
+    max-width: 700px;
+    margin: 0 auto 12px;
+    color: #555;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.impact-period {
+    display: inline-block;
+    color: #b08d2c;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+
+
+
+/*==================================
+  IMPACT SECTION
+==================================*/
+
+.impact {
+    padding: 80px 8%;
+    background: #ffffff;
+}
+
+.impact .container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.impact .section-title {
+    text-align: center;
+    margin-bottom: 55px;
+}
+
+.impact .section-title h2 {
+    font-size: 2.5rem;
+    color: #0b6b3a;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.impact .section-title p {
+    max-width: 700px;
+    margin: 0 auto 12px;
+    color: #555;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.impact-period {
+    display: inline-block;
+    color: #b08d2c;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+
+/*==================================
+  IMPACT GRID
+==================================*/
+
+.impact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    align-items: stretch;
+}
+
+
 /*==================================
   IMPACT SECTION
 ==================================*/
@@ -597,21 +696,6 @@ MOBILE
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
