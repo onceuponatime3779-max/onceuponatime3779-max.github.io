@@ -270,11 +270,6 @@ MOBILE
 
 
 
-
-
-
-
-
 /*==================================
   PROGRAMS SECTION
 ==================================*/
@@ -291,7 +286,7 @@ MOBILE
 
 .programs .section-title {
     text-align: center;
-    margin-bottom: 50px;
+    margin-bottom: 55px;
 }
 
 .programs .section-title h2 {
@@ -318,6 +313,7 @@ MOBILE
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
+    align-items: stretch;
 }
 
 
@@ -327,16 +323,23 @@ MOBILE
 
 .program-card {
     background: #ffffff;
-    padding: 30px;
-    border-radius: 15px;
+    padding: 35px 30px;
+    border-radius: 16px;
+    border: 1px solid #e5e8e3;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
     text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
 }
 
 .program-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+    border-color: #0b6b3a;
 }
 
 
@@ -345,8 +348,9 @@ MOBILE
 ==================================*/
 
 .program-icon {
-    font-size: 3rem;
-    margin-bottom: 20px;
+    font-size: 2.8rem;
+    margin-bottom: 18px;
+    line-height: 1;
 }
 
 
@@ -370,6 +374,7 @@ MOBILE
     color: #555;
     line-height: 1.7;
     font-size: 1rem;
+    margin: 0;
 }
 
 
@@ -410,31 +415,10 @@ MOBILE
     }
 
     .program-card {
-        padding: 25px;
+        padding: 30px 25px;
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
