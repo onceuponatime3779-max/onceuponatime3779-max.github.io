@@ -309,15 +309,111 @@ MOBILE
     line-height: 1.8;
 }
 
+
+/*==================================
+  PROGRAMS GRID
+==================================*/
+
 .programs-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 30px;
 }
 
 
+/*==================================
+  PROGRAM CARDS
+==================================*/
+
+.program-card {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.program-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
 
 
+/*==================================
+  PROGRAM ICON
+==================================*/
+
+.program-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+
+/*==================================
+  PROGRAM TITLE
+==================================*/
+
+.program-card h3 {
+    color: #0b6b3a;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+    line-height: 1.4;
+}
+
+
+/*==================================
+  PROGRAM DESCRIPTION
+==================================*/
+
+.program-card p {
+    color: #555;
+    line-height: 1.7;
+    font-size: 1rem;
+}
+
+
+/*==================================
+  TABLET
+==================================*/
+
+@media (max-width: 900px) {
+
+    .programs-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+/*==================================
+  MOBILE
+==================================*/
+
+@media (max-width: 600px) {
+
+    .programs {
+        padding: 60px 5%;
+    }
+
+    .programs .section-title h2 {
+        font-size: 2rem;
+    }
+
+    .programs .section-title p {
+        font-size: 1rem;
+    }
+
+    .programs-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .program-card {
+        padding: 25px;
+    }
+
+}
 
 
 
