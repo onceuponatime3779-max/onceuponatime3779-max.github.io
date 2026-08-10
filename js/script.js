@@ -21,13 +21,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const whatsappNumber = "254111503308";
 
-        const whatsappMessage =
-            "Hello OUT Organization,\n\n" +
-            "NEW WEBSITE ENQUIRY\n\n" +
-            "Name: " + name + "\n" +
-            "Email: " + email + "\n" +
-            "Subject: " + subject + "\n\n" +
-            "Message:\n" + message;
+     const whatsappMessage =
+    "Hello OUT Organization,\n\n" +
+    "*NEW WEBSITE ENQUIRY*\n\n" +
+    "*Name:* " + name + "\n" +
+    "*Email:* " + email + "\n" +
+    "*Subject:* " + subject + "\n\n" +
+    "*Message:*\n" +
+    message +
+    "\n\nThank you.";  
 
         const whatsappURL =
             "https://wa.me/" +
