@@ -86,46 +86,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
             event.preventDefault();
 
-            // Find fields by their NAME attributes
-            const nameField = contactForm.querySelector('[name="name"]');
-            const emailField = contactForm.querySelector('[name="email"]');
-            const subjectField = contactForm.querySelector('[name="subject"]');
-            const messageField = contactForm.querySelector('[name="message"]');
+            // Get all submitted form data
+            const formData = new FormData(contactForm);
 
-            // Make sure all fields exist
-            if (!nameField || !emailField || !subjectField || !messageField) {
+            const name = (formData.get("name") || "").trim();
+            const email = (formData.get("email") || "").trim();
+            const subject = (formData.get("subject") || "").trim();
+            const message = (formData.get("message") || "").trim();
 
-                alert("There is a problem with the contact form fields. Please check the form HTML.");
-
-                return;
-
-            }
-
-            // Get the actual values
-            const name = nameField.value.trim();
-            const email = emailField.value.trim();
-            const subject = subjectField.value.trim();
-            const message = messageField.value.trim();
-
-            // Check if anything is empty
-            if (name === "" || email === "" || subject === "" || message === "") {
+            // Check required fields
+            if (!name || !email || !subject || !message) {
 
                 alert("Please fill in all the required fields.");
 
                 return;
-
             }
 
-            // ========================================
-            // WHATSAPP NUMBER
-            // ========================================
-
+            // OUT Organization WhatsApp number
             const whatsappNumber = "254111503308";
 
-            // ========================================
-            // MESSAGE TO WHATSAPP
-            // ========================================
-
+            // Create WhatsApp message
             const whatsappMessage =
                 "Hello OUT Organization,\n\n" +
                 "*New Contact Form Message*\n\n" +
@@ -134,10 +114,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 "*Subject:* " + subject + "\n\n" +
                 "*Message:*\n" + message;
 
-            // Encode message
+            // Encode the message
             const encodedMessage = encodeURIComponent(whatsappMessage);
 
-            // Create WhatsApp link
+            // WhatsApp URL
             const whatsappURL =
                 "https://wa.me/" +
                 whatsappNumber +
@@ -149,6 +129,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
         });
 
-    }
-
-});
+    } 
