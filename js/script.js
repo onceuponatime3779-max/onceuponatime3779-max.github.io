@@ -20,8 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const message = contactForm.elements["message"].value.trim();
 
         const whatsappNumber = "254111503308";
-
-     const whatsappMessage =
+const whatsappMessage =
     "Hello OUT Organization,\n\n" +
     "*NEW WEBSITE ENQUIRY*\n\n" +
     "*Name:* " + name + "\n" +
@@ -29,8 +28,8 @@ document.addEventListener("DOMContentLoaded", function () {
     "*Subject:* " + subject + "\n\n" +
     "*Message:*\n" +
     message +
-    "\n\nThank you.";  
-
+    "\n\nThank you.";
+    
         const whatsappURL =
             "https://wa.me/" +
             whatsappNumber +
