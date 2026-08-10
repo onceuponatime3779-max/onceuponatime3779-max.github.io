@@ -36,7 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 lightboxImage.alt = image.alt;
 
                 lightbox.classList.add("active");
-
                 document.body.style.overflow = "hidden";
 
             });
@@ -87,19 +86,45 @@ document.addEventListener("DOMContentLoaded", function () {
 
             event.preventDefault();
 
-            const name = contactForm.elements["name"].value.trim();
-            const email = contactForm.elements["email"].value.trim();
-            const subject = contactForm.elements["subject"].value.trim();
-            const message = contactForm.elements["message"].value.trim();
+            // Find fields by their NAME attributes
+            const nameField = contactForm.querySelector('[name="name"]');
+            const emailField = contactForm.querySelector('[name="email"]');
+            const subjectField = contactForm.querySelector('[name="subject"]');
+            const messageField = contactForm.querySelector('[name="message"]');
 
-            if (!name || !email || !subject || !message) {
+            // Make sure all fields exist
+            if (!nameField || !emailField || !subjectField || !messageField) {
 
-                alert("Please fill in all the required fields.");
+                alert("There is a problem with the contact form fields. Please check the form HTML.");
+
                 return;
 
             }
 
+            // Get the actual values
+            const name = nameField.value.trim();
+            const email = emailField.value.trim();
+            const subject = subjectField.value.trim();
+            const message = messageField.value.trim();
+
+            // Check if anything is empty
+            if (name === "" || email === "" || subject === "" || message === "") {
+
+                alert("Please fill in all the required fields.");
+
+                return;
+
+            }
+
+            // ========================================
+            // WHATSAPP NUMBER
+            // ========================================
+
             const whatsappNumber = "254111503308";
+
+            // ========================================
+            // MESSAGE TO WHATSAPP
+            // ========================================
 
             const whatsappMessage =
                 "Hello OUT Organization,\n\n" +
@@ -109,14 +134,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 "*Subject:* " + subject + "\n\n" +
                 "*Message:*\n" + message;
 
+            // Encode message
             const encodedMessage = encodeURIComponent(whatsappMessage);
 
+            // Create WhatsApp link
             const whatsappURL =
                 "https://wa.me/" +
                 whatsappNumber +
                 "?text=" +
                 encodedMessage;
 
+            // Open WhatsApp
             window.open(whatsappURL, "_blank");
 
         });
