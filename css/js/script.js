@@ -86,7 +86,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             event.preventDefault();
 
-            // Get all submitted form data
             const formData = new FormData(contactForm);
 
             const name = (formData.get("name") || "").trim();
@@ -94,38 +93,36 @@ document.addEventListener("DOMContentLoaded", function () {
             const subject = (formData.get("subject") || "").trim();
             const message = (formData.get("message") || "").trim();
 
-            // Check required fields
             if (!name || !email || !subject || !message) {
 
                 alert("Please fill in all the required fields.");
 
                 return;
+
             }
 
-            // OUT Organization WhatsApp number
             const whatsappNumber = "254111503308";
 
-            // Create WhatsApp message
-          const whatsappMessage =
-    "Hello OUT Organization,\n\n" +
-    "New Contact Form Message\n\n" +
-    "Name: " + name + "\n" +
-    "Email: " + email + "\n" +
-    "Subject: " + subject + "\n\n" +
-    "Message:\n" + message; 
-            // Encode the message
+            const whatsappMessage =
+                "Hello OUT Organization,\n\n" +
+                "New Contact Form Message\n\n" +
+                "Name: " + name + "\n" +
+                "Email: " + email + "\n" +
+                "Subject: " + subject + "\n\n" +
+                "Message:\n" + message;
+
             const encodedMessage = encodeURIComponent(whatsappMessage);
 
-            // WhatsApp URL
             const whatsappURL =
                 "https://wa.me/" +
                 whatsappNumber +
                 "?text=" +
                 encodedMessage;
 
-            // Open WhatsApp
             window.open(whatsappURL, "_blank");
 
         });
 
-    } 
+    }
+
+});
