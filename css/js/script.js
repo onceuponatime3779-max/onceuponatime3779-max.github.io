@@ -106,14 +106,13 @@ document.addEventListener("DOMContentLoaded", function () {
             const whatsappNumber = "254111503308";
 
             // Create WhatsApp message
-            const whatsappMessage =
-                "Hello OUT Organization,\n\n" +
-                "*New Contact Form Message*\n\n" +
-                "*Name:* " + name + "\n" +
-                "*Email:* " + email + "\n" +
-                "*Subject:* " + subject + "\n\n" +
-                "*Message:*\n" + message;
-
+          const whatsappMessage =
+    "Hello OUT Organization,\n\n" +
+    "New Contact Form Message\n\n" +
+    "Name: " + name + "\n" +
+    "Email: " + email + "\n" +
+    "Subject: " + subject + "\n\n" +
+    "Message:\n" + message; 
             // Encode the message
             const encodedMessage = encodeURIComponent(whatsappMessage);
 
