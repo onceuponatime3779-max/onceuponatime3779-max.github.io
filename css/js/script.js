@@ -96,7 +96,6 @@ document.addEventListener("DOMContentLoaded", function () {
             if (!name || !email || !subject || !message) {
 
                 alert("Please fill in all the required fields.");
-
                 return;
 
             }
