@@ -1,9 +1,11 @@
 // ========================================
 // OUT ORGANIZATION - MAIN JAVASCRIPT
 // Gallery Lightbox + WhatsApp Contact Form
+// + Mobile Navigation
 // ========================================
 
 document.addEventListener("DOMContentLoaded", function () {
+
 
     // ========================================
     // GALLERY LIGHTBOX
@@ -14,6 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (galleryImages.length > 0) {
 
         const lightbox = document.createElement("div");
+
         lightbox.className = "gallery-lightbox";
 
         lightbox.innerHTML = `
@@ -23,8 +26,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         document.body.appendChild(lightbox);
 
-        const lightboxImage = lightbox.querySelector(".lightbox-image");
-        const closeButton = lightbox.querySelector(".lightbox-close");
+        const lightboxImage =
+            lightbox.querySelector(".lightbox-image");
+
+        const closeButton =
+            lightbox.querySelector(".lightbox-close");
+
 
         galleryImages.forEach(function (image) {
 
@@ -33,38 +40,52 @@ document.addEventListener("DOMContentLoaded", function () {
             image.addEventListener("click", function () {
 
                 lightboxImage.src = image.src;
+
                 lightboxImage.alt = image.alt;
 
                 lightbox.classList.add("active");
+
                 document.body.style.overflow = "hidden";
 
             });
 
         });
 
+
+        // Close button
+
         closeButton.addEventListener("click", function () {
 
             lightbox.classList.remove("active");
+
             document.body.style.overflow = "";
 
         });
+
+
+        // Close when clicking outside image
 
         lightbox.addEventListener("click", function (event) {
 
             if (event.target === lightbox) {
 
                 lightbox.classList.remove("active");
+
                 document.body.style.overflow = "";
 
             }
 
         });
 
+
+        // Close with Escape key
+
         document.addEventListener("keydown", function (event) {
 
             if (event.key === "Escape") {
 
                 lightbox.classList.remove("active");
+
                 document.body.style.overflow = "";
 
             }
@@ -78,7 +99,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // CONTACT FORM → WHATSAPP
     // ========================================
 
-    const contactForm = document.getElementById("contactForm");
+    const contactForm =
+        document.getElementById("contactForm");
 
     if (contactForm) {
 
@@ -86,21 +108,36 @@ document.addEventListener("DOMContentLoaded", function () {
 
             event.preventDefault();
 
-            const formData = new FormData(contactForm);
+            const formData =
+                new FormData(contactForm);
 
-            const name = (formData.get("name") || "").trim();
-            const email = (formData.get("email") || "").trim();
-            const subject = (formData.get("subject") || "").trim();
-            const message = (formData.get("message") || "").trim();
+            const name =
+                (formData.get("name") || "").trim();
+
+            const email =
+                (formData.get("email") || "").trim();
+
+            const subject =
+                (formData.get("subject") || "").trim();
+
+            const message =
+                (formData.get("message") || "").trim();
+
 
             if (!name || !email || !subject || !message) {
 
-                alert("Please fill in all the required fields.");
+                alert(
+                    "Please fill in all the required fields."
+                );
+
                 return;
 
             }
 
-            const whatsappNumber = "254111503308";
+
+            const whatsappNumber =
+                "254111503308";
+
 
             const whatsappMessage =
                 "Hello OUT Organization,\n\n" +
@@ -110,7 +147,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 "Subject: " + subject + "\n\n" +
                 "Message:\n" + message;
 
-            const encodedMessage = encodeURIComponent(whatsappMessage);
+
+            const encodedMessage =
+                encodeURIComponent(whatsappMessage);
+
 
             const whatsappURL =
                 "https://wa.me/" +
@@ -118,9 +158,101 @@ document.addEventListener("DOMContentLoaded", function () {
                 "?text=" +
                 encodedMessage;
 
-            window.open(whatsappURL, "_blank");
+
+            window.open(
+                whatsappURL,
+                "_blank"
+            );
 
         });
+
+    }
+
+
+    // ========================================
+    // MOBILE NAVIGATION
+    // ========================================
+
+    const menuToggle =
+        document.getElementById("menuToggle");
+
+    const navLinks =
+        document.getElementById("navLinks");
+
+
+    if (menuToggle && navLinks) {
+
+
+        // Open and close mobile menu
+
+        menuToggle.addEventListener(
+            "click",
+            function () {
+
+                navLinks.classList.toggle("active");
+
+                const isOpen =
+                    navLinks.classList.contains("active");
+
+
+                menuToggle.setAttribute(
+                    "aria-expanded",
+                    isOpen
+                );
+
+
+                menuToggle.setAttribute(
+                    "aria-label",
+                    isOpen
+                        ? "Close navigation menu"
+                        : "Open navigation menu"
+                );
+
+
+                menuToggle.textContent =
+                    isOpen ? "×" : "☰";
+
+            }
+        );
+
+
+        // Close menu after clicking a link
+
+        const navigationLinks =
+            navLinks.querySelectorAll("a");
+
+
+        navigationLinks.forEach(
+            function (link) {
+
+                link.addEventListener(
+                    "click",
+                    function () {
+
+                        navLinks.classList.remove(
+                            "active"
+                        );
+
+
+                        menuToggle.setAttribute(
+                            "aria-expanded",
+                            "false"
+                        );
+
+
+                        menuToggle.setAttribute(
+                            "aria-label",
+                            "Open navigation menu"
+                        );
+
+
+                        menuToggle.textContent = "☰";
+
+                    }
+                );
+
+            }
+        );
 
     }
 
