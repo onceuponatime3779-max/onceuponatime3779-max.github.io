@@ -1,11 +1,112 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset
+    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+    xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
+    <!-- HOME PAGE -->
     <url>
         <loc>https://outorganization.org/</loc>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/logo.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/feed%201.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/feed%202.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/feed%203.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/feed%204.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/feed%206.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/feed%207.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/feed%208.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/feed%209.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/feed%2010.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/feed%2011.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/feed%2012.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/mentor%202.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/mentor%203.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/mentor%204.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/mentor%20s.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/mentor%20s%202.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/mentor%20s%203.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/orphanage%201.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/orphanage%202.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/orphanage%203.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/orphanage%204.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/orphanage%205.jpg</image:loc>
+        </image:image>
+
+        <image:image>
+            <image:loc>https://outorganization.org/images/orphanage%206.jpg</image:loc>
+        </image:image>
+
     </url>
 
+    <!-- ABOUT PAGE -->
     <url>
         <loc>https://outorganization.org/about.html</loc>
     </url>
