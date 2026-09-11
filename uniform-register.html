@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register | Uniform Cycle | OUT Organization</title>
+
+    <meta name="description"
+          content="Register for the OUT Organization Uniform Cycle and join the community supporting students through reusable school uniforms.">
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        :root {
+            --uc-green: #145A32;
+            --uc-gold: #D4AF37;
+            --uc-light: #f5f8f5;
+            --uc-dark: #17351f;
+            --uc-border: #d9e2da;
+            --uc-danger: #b42318;
+            --uc-success: #087443;
+        }
+
+        .uc-register-page {
+            background: var(--uc-light);
+            min-height: 100vh;
+            padding: 50px 20px;
+        }
+
+        .uc-register-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .uc-register-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .uc-register-header h1 {
+            color: var(--uc-green);
+            margin-bottom: 10px;
+        }
+
+        .uc-register-header p {
+            max-width: 700px;
+            margin: 0 auto;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .uc-form-card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 35px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            border-top: 5px solid var(--uc-gold);
+        }
+
+        .uc-section {
+            margin-bottom: 32px;
+        }
+
+        .uc-section-title {
+            color: var(--uc-green);
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            padding-bottom: 9px;
+            border-bottom: 1px solid var(--uc-border);
+        }
+
+        .uc-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .uc-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .uc-field.full {
+            grid-column: 1 / -1;
+        }
+
+        .uc-field label {
+            font-weight: 600;
+            color: var(--uc-dark);
+            margin-bottom: 7px;
+        }
+
+        .uc-field label span {
+            color: var(--uc-danger);
+        }
+
+        .uc-field input,
+        .uc-field select,
+        .uc-field textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 13px;
+            border: 1px solid #ccd6ce;
+            border-radius: 7px;
+            font-size: 15px;
+            font-family: inherit;
+            background: #fff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .uc-field textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .uc-field input:focus,
+        .uc-field select:focus,
+        .uc-field textarea:focus {
+            outline: none;
+            border-color: var(--uc-green);
+            box-shadow: 0 0 0 3px rgba(20, 90, 50, 0.1);
+        }
+
+        .uc-help {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+            line-height: 1.5;
+        }
+
+        .uc-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .uc-option {
+            border: 1px solid var(--uc-border);
+            border-radius: 8px;
+            padding: 14px;
+            background: #fafcfa;
+        }
+
+        .uc-option label {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .uc-option input {
+            margin-top: 3px;
+        }
+
+        .uc-privacy {
+            background: #f0f6f1;
+            border-left: 4px solid var(--uc-green);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #37443a;
+        }
+
+        .uc-check {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 15px 0;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .uc-check input {
+            margin-top: 4px;
+        }
+
+        .uc-submit {
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            padding: 14px 20px;
+            background: var(--uc-green);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .uc-submit:hover {
+            background: #0e4426;
+        }
+
+        .uc-submit:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .uc-message {
+            display: none;
+            padding: 14px 16px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .uc-message.success {
+            display: block;
+            background: #e8f7ee;
+            color: var(--uc-success);
+            border: 1px solid #b7e2c8;
+        }
+
+        .uc-message.error {
+            display: block;
+            background: #fff0ef;
+            color: var(--uc-danger);
+            border: 1px solid #f0c1bd;
+        }
+
+        .uc-login-note {
+            text-align: center;
+            margin-top: 22px;
+            color: #555;
+        }
+
+        .uc-login-note a {
+            color: var(--uc-green);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        @media (max-width: 700px) {
+            .uc-register-page {
+                padding: 30px 15px;
+            }
+
+            .uc-form-card {
+                padding: 22px;
+            }
+
+            .uc-grid,
+            .uc-options {
+                grid-template-columns: 1fr;
+            }
+
+            .uc-field.full {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Use your existing website navigation here -->
+<header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="uniform-cycle.html">Uniform Cycle</a>
+    </nav>
+</header>
+
+
+<main class="uc-register-page">
+
+    <div class="uc-register-container">
+
+        <div class="uc-register-header">
+            <h1>Join the Uniform Cycle</h1>
+
+            <p>
+                Create your Uniform Cycle account to donate uniforms,
+                request support, explore partnerships, or contribute
+                skills and resources to help students access school uniforms.
+            </p>
+        </div>
+
+
+        <div class="uc-form-card">
+
+            <div id="message" class="uc-message"></div>
+
+
+            <form id="registrationForm">
+
+
+                <!-- PERSONAL INFORMATION -->
+                <section class="uc-section">
+
+                    <h2 class="uc-section-title">
+                        1. Personal Information
+                    </h2>
+
+                    <div class="uc-grid">
+
+                        <div class="uc-field">
+                            <label>
+                                Full Name <span>*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="fullName"
+                                required
+                                autocomplete="name"
+                                placeholder="Enter your full name">
+                        </div>
+
+
+                        <div class="uc-field">
+                            <label>
+                                Email Address <span>*</span>
+                            </label>
+
+                            <input
+                                type="email"
+                                id="email"
+                                required
+                                autocomplete="email"
+                                placeholder="you@example.com">
+                        </div>
+
+
+                        <div class="uc-field">
+                            <label>
+                                Phone Number <span>*</span>
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="phone"
+                                required
+                                autocomplete="tel"
+                                placeholder="+254 7XX XXX XXX">
+                        </div>
+
+
+                        <div class="uc-field">
+                            <label>
+                                Country <span>*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="country"
+                                required
+                                placeholder="e.g. Kenya">
+                        </div>
+
+
+                        <div class="uc-field">
+                            <label>
+                                County / State / Province
+                            </label>
+
+                            <input
+                                type="text"
+                                id="countyState"
+                                placeholder="e.g. Nairobi County">
+                        </div>
+
+
+                        <div class="uc-field">
+                            <label>
+                                City / Town
+                            </label>
+
+                            <input
+                                type="text"
+                                id="cityTown"
+                                placeholder="e.g. Nairobi">
+                        </div>
+
+
+                        <div class="uc-field full">
+                            <label>
+                                Address / Area
+                            </label>
+
+                            <input
+                                type="text"
+                                id="address"
+                                placeholder="Area, estate, or general location">
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- ORGANIZATION -->
+                <section class="uc-section">
+
+                    <h2 class="uc-section-title">
+                        2. Organization / Affiliation
+                    </h2>
+
+                    <div class="uc-grid">
+
+                        <div class="uc-field">
+                            <label>
+                                Organization / Institution Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="organizationName"
+                                placeholder="If applicable">
+                        </div>
+
+
+                        <div class="uc-field">
+                            <label>
+                                Organization Type
+                            </label>
+
+                            <select id="organizationType">
+
+                                <option value="">
+                                    Select an option
+                                </option>
+
+                                <option value="individual">
+                                    Individual
+                                </option>
+
+                                <option value="school">
+                                    School / Educational Institution
+                                </option>
+
+                                <option value="community_organization">
+                                    Community Organization
+                                </option>
+
+                                <option value="ngo">
+                                    NGO / Non-Profit Organization
+                                </option>
+
+                                <option value="faith_based">
+                                    Faith-Based Organization
+                                </option>
+
+                                <option value="business">
+                                    Business / Company
+                                </option>
+
+                                <option value="government">
+                                    Government Institution
+                                </option>
+
+                                <option value="other">
+                                    Other
+                                </option>
+
+                            </select>
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- PARTICIPATION -->
+                <section class="uc-section">
+
+                    <h2 class="uc-section-title">
+                        3. How Would You Like to Participate?
+                    </h2>
+
+                    <p class="uc-help" style="margin-bottom:15px;">
+                        Select all areas that apply.
+                    </p>
+
+
+                    <div class="uc-options">
+
+                        <div class="uc-option">
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    name="participation"
+                                    value="donor">
+
+                                <span>
+                                    Donate Uniforms
+                                    <small class="uc-help">
+                                        Give reusable school uniforms to the cycle.
+                                    </small>
+                                </span>
+                            </label>
+                        </div>
+
+
+                        <div class="uc-option">
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    name="participation"
+                                    value="requester">
+
+                                <span>
+                                    Request Uniform Support
+                                    <small class="uc-help">
+                                        Request uniforms for a student or eligible learner.
+                                    </small>
+                                </span>
+                            </label>
+                        </div>
+
+
+                        <div class="uc-option">
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    name="participation"
+                                    value="partner">
+
+                                <span>
+                                    Become a Partner
+                                    <small class="uc-help">
+                                        Support the programme through an organization or institution.
+                                    </small>
+                                </span>
+                            </label>
+                        </div>
+
+
+                        <div class="uc-option">
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    name="participation"
+                                    value="supporter">
+
+                                <span>
+                                    Support With Skills or Resources
+                                    <small class="uc-help">
+                                        Contribute skills, services, logistics, or other resources.
+                                    </small>
+                                </span>
+                            </label>
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- REASON -->
+                <section class="uc-section">
+
+                    <h2 class="uc-section-title">
+                        4. Tell Us About Your Interest
+                    </h2>
+
+                    <div class="uc-field">
+
+                        <label>
+                            Why are you joining the Uniform Cycle?
+                            <span>*</span>
+                        </label>
+
+                        <textarea
+                            id="reasonForJoining"
+                            required
+                            placeholder="Please tell us why you would like to participate in the Uniform Cycle."></textarea>
+
+                    </div>
+
+                </section>
+
+
+                <!-- ACCOUNT -->
+                <section class="uc-section">
+
+                    <h2 class="uc-section-title">
+                        5. Create Your Account
+                    </h2>
+
+                    <div class="uc-grid">
+
+                        <div class="uc-field">
+
+                            <label>
+                                Password <span>*</span>
+                            </label>
+
+                            <input
+                                type="password"
+                                id="password"
+                                required
+                                minlength="8"
+                                autocomplete="new-password"
+                                placeholder="Create a strong password">
+
+                            <div class="uc-help">
+                                Use at least 8 characters, including
+                                uppercase and lowercase letters, numbers
+                                and symbols.
+                            </div>
+
+                        </div>
+
+
+                        <div class="uc-field">
+
+                            <label>
+                                Confirm Password <span>*</span>
+                            </label>
+
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                required
+                                minlength="8"
+                                autocomplete="new-password"
+                                placeholder="Re-enter your password">
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- PRIVACY -->
+                <section class="uc-section">
+
+                    <div class="uc-privacy">
+
+                        <strong>Privacy and responsible information use</strong>
+
+                        <br><br>
+
+                        OUT Organization will use the information provided
+                        to manage your Uniform Cycle account, communicate
+                        with you about your participation, and coordinate
+                        relevant programme activities.
+
+                        Please do not provide unnecessary sensitive
+                        information about yourself or another person in
+                        these registration fields.
+
+                    </div>
+
+
+                    <label class="uc-check">
+
+                        <input
+                            type="checkbox"
+                            id="consent"
+                            required>
+
+                        <span>
+                            I confirm that the information I have provided
+                            is accurate and I agree to participate in the
+                            Uniform Cycle programme under OUT Organization's
+                            applicable guidelines. <strong>*</strong>
+                        </span>
+
+                    </label>
+
+                </section>
+
+
+                <button
+                    type="submit"
+                    id="submitButton"
+                    class="uc-submit">
+
+                    Create Uniform Cycle Account
+
+                </button>
+
+            </form>
+
+
+            <div class="uc-login-note">
+
+                Already have an account?
+
+                <a href="uniform-login.html">
+                    Log in here
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<!--
+=========================================================
+SUPABASE CONFIGURATION
+=========================================================
+Replace the two placeholder values below with your
+Supabase Project URL and Publishable/Anon Key.
+=========================================================
+-->
+
+<script>
+
+    const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
+
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY";
+
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        );
+
+
+    const form =
+        document.getElementById("registrationForm");
+
+    const message =
+        document.getElementById("message");
+
+    const submitButton =
+        document.getElementById("submitButton");
+
+
+    function showMessage(text, type) {
+
+        message.textContent = text;
+
+        message.className =
+            "uc-message " + type;
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+
+
+    form.addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+
+        const fullName =
+            document.getElementById("fullName").value.trim();
+
+        const email =
+            document.getElementById("email").value.trim();
+
+        const phone =
+            document.getElementById("phone").value.trim();
+
+        const country =
+            document.getElementById("country").value.trim();
+
+        const countyState =
+            document.getElementById("countyState").value.trim();
+
+        const cityTown =
+            document.getElementById("cityTown").value.trim();
+
+        const address =
+            document.getElementById("address").value.trim();
+
+        const organizationName =
+            document.getElementById("organizationName").value.trim();
+
+        const organizationType =
+            document.getElementById("organizationType").value;
+
+        const reasonForJoining =
+            document.getElementById("reasonForJoining").value.trim();
+
+        const password =
+            document.getElementById("password").value;
+
+        const confirmPassword =
+            document.getElementById("confirmPassword").value;
+
+
+        const participationTypes =
+            Array.from(
+                document.querySelectorAll(
+                    'input[name="participation"]:checked'
+                )
+            ).map(function(input) {
+                return input.value;
+            });
+
+
+        if (participationTypes.length === 0) {
+
+            showMessage(
+                "Please select at least one way you would like to participate in the Uniform Cycle.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        if (password !== confirmPassword) {
+
+            showMessage(
+                "The passwords do not match. Please check and try again.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        if (password.length < 8) {
+
+            showMessage(
+                "Your password must contain at least 8 characters.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        submitButton.disabled = true;
+
+        submitButton.textContent =
+            "Creating your account...";
+
+
+        try {
+
+            const { data, error } =
+                await supabaseClient.auth.signUp({
+
+                    email: email,
+
+                    password: password,
+
+                    options: {
+
+                        emailRedirectTo:
+                            "https://outorganization.org/uniform-dashboard.html",
+
+                        data: {
+
+                            full_name: fullName,
+
+                            phone: phone,
+
+                            country: country,
+
+                            county_state: countyState,
+
+                            city_town: cityTown,
+
+                            address: address,
+
+                            organization_name:
+                                organizationName,
+
+                            organization_type:
+                                organizationType,
+
+                            reason_for_joining:
+                                reasonForJoining,
+
+                            participation_types:
+                                participationTypes
+                        }
+
+                    }
+
+                });
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            showMessage(
+                "Registration successful. Please check your email and click the verification link to activate your Uniform Cycle account.",
+                "success"
+            );
+
+
+            form.reset();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            let errorMessage =
+                error.message ||
+                "Registration could not be completed. Please try again.";
+
+
+            if (
+                errorMessage.toLowerCase().includes("already registered") ||
+                errorMessage.toLowerCase().includes("already exists")
+            ) {
+
+                errorMessage =
+                    "An account with this email address already exists. Please log in instead.";
+
+            }
+
+
+            showMessage(
+                errorMessage,
+                "error"
+            );
+
+
+        } finally {
+
+            submitButton.disabled = false;
+
+            submitButton.textContent =
+                "Create Uniform Cycle Account";
+
+        }
+
+    });
+
+</script>
+
+</body>
+</html>
