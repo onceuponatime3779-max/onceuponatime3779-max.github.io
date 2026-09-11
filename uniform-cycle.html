@@ -1,0 +1,2609 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Uniform Cycle | OUT Organization
+    </title>
+
+    <meta
+        name="description"
+        content="Uniform Cycle is an OUT Organization continuous school-uniform reuse, exchange, restoration and redistribution initiative."
+    >
+
+    <meta
+        name="robots"
+        content="index, follow"
+    >
+
+    <link
+        rel="canonical"
+        href="https://outorganization.org/uniform-cycle.html"
+    >
+
+    <link
+        rel="icon"
+        type="image/jpeg"
+        href="/images/logo.jpg"
+    >
+
+    <meta
+        property="og:type"
+        content="website"
+    >
+
+    <meta
+        property="og:title"
+        content="Uniform Cycle | OUT Organization"
+    >
+
+    <meta
+        property="og:description"
+        content="Give What You've Outgrown. Get What You Need. Keep the Cycle Moving."
+    >
+
+    <meta
+        property="og:url"
+        content="https://outorganization.org/uniform-cycle.html"
+    >
+
+    <meta
+        property="og:image"
+        content="https://outorganization.org/images/logo.jpg"
+    >
+
+    <meta
+        property="og:site_name"
+        content="OUT Organization"
+    >
+
+    <meta
+        name="twitter:card"
+        content="summary_large_image"
+    >
+
+    <meta
+        name="twitter:title"
+        content="Uniform Cycle | OUT Organization"
+    >
+
+    <meta
+        name="twitter:description"
+        content="Give What You've Outgrown. Get What You Need. Keep the Cycle Moving."
+    >
+
+    <meta
+        name="twitter:image"
+        content="https://outorganization.org/images/logo.jpg"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+    <!-- =================================================
+         UNIFORM CYCLE PAGE STYLES
+    ================================================== -->
+
+    <style>
+
+        /* ================================================
+           UNIFORM CYCLE PAGE
+        ================================================ */
+
+        .uniform-page {
+            color: #333;
+            overflow: hidden;
+        }
+
+
+        /* ================================================
+           HERO
+        ================================================ */
+
+        .uniform-hero {
+            position: relative;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #145A32 0%,
+                    #0b6b3a 55%,
+                    #083d24 100%
+                );
+
+            color: #ffffff;
+
+            padding: 100px 20px 90px;
+
+            overflow: hidden;
+        }
+
+        .uniform-hero::before {
+            content: "";
+
+            position: absolute;
+
+            width: 500px;
+            height: 500px;
+
+            border: 1px solid rgba(212,175,55,0.18);
+
+            border-radius: 50%;
+
+            top: -230px;
+            right: -150px;
+        }
+
+        .uniform-hero::after {
+            content: "";
+
+            position: absolute;
+
+            width: 350px;
+            height: 350px;
+
+            border: 1px solid rgba(255,255,255,0.08);
+
+            border-radius: 50%;
+
+            bottom: -180px;
+            left: -120px;
+        }
+
+        .uniform-hero-container {
+            width: min(1200px, 100%);
+
+            margin: 0 auto;
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1.15fr)
+                minmax(320px, 0.85fr);
+
+            gap: 70px;
+
+            align-items: center;
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+        .uniform-eyebrow {
+            display: inline-block;
+
+            color: #D4AF37;
+
+            font-size: 0.78rem;
+
+            font-weight: 800;
+
+            letter-spacing: 2.5px;
+
+            margin-bottom: 18px;
+        }
+
+        .uniform-hero h1 {
+            margin: 0 0 18px;
+
+            font-size:
+                clamp(3.2rem, 7vw, 6rem);
+
+            line-height: 0.95;
+
+            font-weight: 800;
+
+            letter-spacing: -2px;
+        }
+
+        .uniform-hero-title {
+            margin: 0 0 25px;
+
+            font-size:
+                clamp(1.35rem, 3vw, 2.1rem);
+
+            line-height: 1.3;
+
+            font-weight: 600;
+
+            color: #ffffff;
+        }
+
+        .uniform-hero-description {
+            max-width: 700px;
+
+            margin: 0 0 32px;
+
+            font-size: 1.08rem;
+
+            line-height: 1.8;
+
+            color: rgba(255,255,255,0.92);
+        }
+
+        .uniform-hero-buttons {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 14px;
+        }
+
+        .uniform-btn {
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 48px;
+
+            padding: 0 24px;
+
+            border-radius: 6px;
+
+            text-decoration: none;
+
+            font-weight: 700;
+
+            transition:
+                transform 0.25s ease,
+                background 0.25s ease,
+                color 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .uniform-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .uniform-btn-gold {
+            background: #D4AF37;
+
+            color: #145A32;
+
+            box-shadow:
+                0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .uniform-btn-gold:hover {
+            background: #ffffff;
+
+            color: #145A32;
+        }
+
+        .uniform-btn-outline {
+            border: 1px solid rgba(255,255,255,0.7);
+
+            color: #ffffff;
+
+            background: transparent;
+        }
+
+        .uniform-btn-outline:hover {
+            background: #ffffff;
+
+            color: #145A32;
+        }
+
+
+        /* ================================================
+           HERO CYCLE VISUAL
+        ================================================ */
+
+        .uniform-cycle-visual {
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+        }
+
+        .cycle-wheel {
+            position: relative;
+
+            width: min(390px, 82vw);
+
+            aspect-ratio: 1;
+
+            border:
+                2px solid rgba(212,175,55,0.45);
+
+            border-radius: 50%;
+        }
+
+        .cycle-wheel::before {
+            content: "";
+
+            position: absolute;
+
+            inset: 12%;
+
+            border:
+                1px dashed rgba(255,255,255,0.32);
+
+            border-radius: 50%;
+        }
+
+        .cycle-wheel::after {
+            content: "↻";
+
+            position: absolute;
+
+            top: 50%;
+            left: 50%;
+
+            transform: translate(-50%, -50%);
+
+            width: 145px;
+            height: 145px;
+
+            border-radius: 50%;
+
+            background: #ffffff;
+
+            color: #145A32;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 4rem;
+
+            font-weight: 300;
+
+            box-shadow:
+                0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .cycle-label {
+            position: absolute;
+
+            width: 88px;
+            height: 88px;
+
+            border-radius: 50%;
+
+            background: #D4AF37;
+
+            color: #145A32;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+
+            font-size: 0.67rem;
+
+            font-weight: 800;
+
+            letter-spacing: 0.8px;
+
+            box-shadow:
+                0 8px 20px rgba(0,0,0,0.18);
+
+            z-index: 2;
+        }
+
+        .cycle-label-one {
+            top: 0;
+            left: 50%;
+
+            transform: translateX(-50%);
+        }
+
+        .cycle-label-two {
+            top: 22%;
+            right: 0;
+        }
+
+        .cycle-label-three {
+            bottom: 7%;
+            right: 12%;
+        }
+
+        .cycle-label-four {
+            bottom: 7%;
+            left: 12%;
+        }
+
+        .cycle-label-five {
+            top: 22%;
+            left: 0;
+        }
+
+
+        /* ================================================
+           STANDARD SECTION
+        ================================================ */
+
+        .uniform-section {
+            padding: 90px 20px;
+        }
+
+        .uniform-container {
+            width: min(1150px, 100%);
+
+            margin: 0 auto;
+        }
+
+        .uniform-narrow {
+            max-width: 850px;
+
+            margin: 0 auto;
+        }
+
+        .uniform-section-header {
+            max-width: 820px;
+
+            margin: 0 auto 50px;
+
+            text-align: center;
+        }
+
+        .uniform-section-label {
+            display: inline-block;
+
+            color: #0b6b3a;
+
+            font-size: 0.78rem;
+
+            font-weight: 800;
+
+            letter-spacing: 2px;
+
+            margin-bottom: 14px;
+        }
+
+        .uniform-section-header h2,
+        .uniform-narrow h2 {
+            margin: 0 0 20px;
+
+            color: #145A32;
+
+            font-size:
+                clamp(2rem, 4vw, 3rem);
+
+            line-height: 1.15;
+        }
+
+        .uniform-section-header p,
+        .uniform-narrow p {
+            margin: 0;
+
+            color: #555;
+
+            font-size: 1rem;
+
+            line-height: 1.85;
+        }
+
+        .uniform-narrow p + p {
+            margin-top: 20px;
+        }
+
+
+        /* ================================================
+           VISION
+        ================================================ */
+
+        .uniform-vision {
+            background: #f5f8f5;
+
+            border-top:
+                1px solid #e7ece8;
+
+            border-bottom:
+                1px solid #e7ece8;
+        }
+
+        .vision-card {
+            max-width: 950px;
+
+            margin: 0 auto;
+
+            padding: 45px;
+
+            background: #ffffff;
+
+            border-radius: 12px;
+
+            border-top:
+                5px solid #D4AF37;
+
+            box-shadow:
+                0 12px 35px rgba(0,0,0,0.07);
+
+            text-align: center;
+        }
+
+        .vision-card h2 {
+            margin-bottom: 18px;
+        }
+
+
+        /* ================================================
+           THE IDEA
+        ================================================ */
+
+        .idea-layout {
+            display: grid;
+
+            grid-template-columns:
+                0.85fr 1.15fr;
+
+            gap: 60px;
+
+            align-items: center;
+        }
+
+        .idea-highlight {
+            padding: 45px 35px;
+
+            border-radius: 12px;
+
+            background: #145A32;
+
+            color: #ffffff;
+
+            box-shadow:
+                0 12px 30px rgba(0,0,0,0.12);
+        }
+
+        .idea-highlight span {
+            display: block;
+
+            color: #D4AF37;
+
+            font-size: 0.75rem;
+
+            font-weight: 800;
+
+            letter-spacing: 2px;
+
+            margin-bottom: 15px;
+        }
+
+        .idea-highlight h3 {
+            margin: 0 0 18px;
+
+            color: #ffffff;
+
+            font-size: 2rem;
+
+            line-height: 1.2;
+        }
+
+        .idea-highlight p {
+            margin: 0;
+
+            color: rgba(255,255,255,0.88);
+
+            line-height: 1.8;
+        }
+
+        .idea-text p {
+            color: #555;
+
+            line-height: 1.85;
+
+            margin: 0 0 18px;
+        }
+
+        .idea-text p:last-child {
+            margin-bottom: 0;
+        }
+
+
+        /* ================================================
+           HOW THE CYCLE WORKS
+        ================================================ */
+
+        .uniform-cycle-section {
+            background: #f5f8f5;
+        }
+
+        .cycle-steps {
+            display: grid;
+
+            grid-template-columns:
+                repeat(5, 1fr);
+
+            gap: 18px;
+        }
+
+        .cycle-step-card {
+            position: relative;
+
+            background: #ffffff;
+
+            padding: 30px 22px;
+
+            border-radius: 10px;
+
+            border:
+                1px solid #e5ebe6;
+
+            box-shadow:
+                0 7px 22px rgba(0,0,0,0.05);
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .cycle-step-card:hover {
+            transform: translateY(-5px);
+
+            box-shadow:
+                0 14px 30px rgba(0,0,0,0.09);
+        }
+
+        .cycle-step-number {
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            width: 42px;
+            height: 42px;
+
+            margin-bottom: 18px;
+
+            border-radius: 50%;
+
+            background: #145A32;
+
+            color: #D4AF37;
+
+            font-size: 0.78rem;
+
+            font-weight: 800;
+        }
+
+        .cycle-step-card h3 {
+            margin: 0 0 12px;
+
+            color: #145A32;
+
+            font-size: 1.15rem;
+        }
+
+        .cycle-step-card p {
+            margin: 0;
+
+            color: #555;
+
+            font-size: 0.9rem;
+
+            line-height: 1.7;
+        }
+
+        .cycle-step-card ul {
+            padding-left: 18px;
+
+            margin: 12px 0 0;
+
+            color: #555;
+
+            font-size: 0.86rem;
+
+            line-height: 1.7;
+        }
+
+
+        /* ================================================
+           SUPPORTING STUDENTS
+        ================================================ */
+
+        .student-support-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 24px;
+        }
+
+        .student-support-card {
+            padding: 35px 28px;
+
+            background: #ffffff;
+
+            border:
+                1px solid #e5ebe6;
+
+            border-radius: 10px;
+
+            box-shadow:
+                0 7px 22px rgba(0,0,0,0.05);
+
+            border-top:
+                4px solid #145A32;
+        }
+
+        .student-support-card h3 {
+            margin: 0 0 14px;
+
+            color: #145A32;
+
+            font-size: 1.25rem;
+        }
+
+        .student-support-card p {
+            margin: 0;
+
+            color: #555;
+
+            line-height: 1.75;
+
+            font-size: 0.94rem;
+        }
+
+
+        /* ================================================
+           GLOBAL OPPORTUNITY
+        ================================================ */
+
+        .global-section {
+            background: #145A32;
+
+            color: #ffffff;
+        }
+
+        .global-section .uniform-section-header h2 {
+            color: #ffffff;
+        }
+
+        .global-section .uniform-section-header p {
+            color: rgba(255,255,255,0.85);
+        }
+
+        .participation-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 20px;
+        }
+
+        .participation-card {
+            padding: 30px;
+
+            border:
+                1px solid rgba(255,255,255,0.14);
+
+            background:
+                rgba(255,255,255,0.055);
+
+            border-radius: 10px;
+
+            transition:
+                transform 0.25s ease,
+                background 0.25s ease;
+        }
+
+        .participation-card:hover {
+            transform: translateY(-4px);
+
+            background:
+                rgba(255,255,255,0.09);
+        }
+
+        .participation-card h3 {
+            margin: 0 0 12px;
+
+            color: #D4AF37;
+
+            font-size: 1.15rem;
+        }
+
+        .participation-card p {
+            margin: 0;
+
+            color: rgba(255,255,255,0.84);
+
+            font-size: 0.92rem;
+
+            line-height: 1.7;
+        }
+
+
+        /* ================================================
+           FROM ONE STUDENT TO ANOTHER
+        ================================================ */
+
+        .student-quote-section {
+            padding: 100px 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f7f9f7,
+                    #ffffff
+                );
+
+            text-align: center;
+        }
+
+        .student-quote {
+            max-width: 850px;
+
+            margin: 0 auto;
+        }
+
+        .student-quote-mark {
+            color: #D4AF37;
+
+            font-size: 5rem;
+
+            line-height: 0.6;
+
+            margin-bottom: 25px;
+        }
+
+        .student-quote blockquote {
+            margin: 0 0 25px;
+
+            color: #145A32;
+
+            font-size:
+                clamp(1.7rem, 4vw, 2.8rem);
+
+            font-weight: 700;
+
+            line-height: 1.25;
+        }
+
+        .student-quote p {
+            color: #555;
+
+            font-size: 1rem;
+
+            line-height: 1.8;
+        }
+
+
+        /* ================================================
+           MORE THAN A UNIFORM
+        ================================================ */
+
+        .more-section {
+            padding: 90px 20px;
+
+            background: #ffffff;
+        }
+
+        .more-grid {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+        }
+
+        .more-content h2 {
+            margin: 0 0 20px;
+
+            color: #145A32;
+
+            font-size:
+                clamp(2rem, 4vw, 3rem);
+        }
+
+        .more-content p {
+            color: #555;
+
+            line-height: 1.8;
+
+            margin: 0 0 18px;
+        }
+
+        .values-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 14px;
+        }
+
+        .value-card {
+            padding: 25px;
+
+            background: #f5f8f5;
+
+            border-radius: 9px;
+
+            border-left:
+                4px solid #D4AF37;
+        }
+
+        .value-card strong {
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: #145A32;
+
+            letter-spacing: 1px;
+        }
+
+        .value-card span {
+            color: #666;
+
+            font-size: 0.88rem;
+
+            line-height: 1.5;
+        }
+
+
+        /* ================================================
+           RESPONSIBLE REUSE
+        ================================================ */
+
+        .responsible-section {
+            padding: 50px 20px;
+
+            background: #f5f8f5;
+        }
+
+        .responsible-box {
+            max-width: 950px;
+
+            margin: 0 auto;
+
+            padding: 30px 35px;
+
+            background: #ffffff;
+
+            border-left:
+                5px solid #D4AF37;
+
+            border-radius: 8px;
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .responsible-box h3 {
+            margin: 0 0 10px;
+
+            color: #145A32;
+        }
+
+        .responsible-box p {
+            margin: 0;
+
+            color: #555;
+
+            line-height: 1.75;
+        }
+
+
+        /* ================================================
+           OUR GOAL
+        ================================================ */
+
+        .goal-section {
+            padding: 90px 20px;
+
+            background: #ffffff;
+
+            text-align: center;
+        }
+
+        .goal-box {
+            max-width: 900px;
+
+            margin: 0 auto;
+
+            padding: 50px 45px;
+
+            border-radius: 12px;
+
+            background: #145A32;
+
+            box-shadow:
+                0 15px 35px rgba(0,0,0,0.12);
+        }
+
+        .goal-box .uniform-section-label {
+            color: #D4AF37;
+        }
+
+        .goal-box h2 {
+            margin: 0 0 20px;
+
+            color: #ffffff;
+
+            font-size:
+                clamp(2rem, 4vw, 3rem);
+        }
+
+        .goal-box p {
+            margin: 0;
+
+            color: rgba(255,255,255,0.9);
+
+            line-height: 1.85;
+        }
+
+
+        /* ================================================
+           THE CYCLE — FINAL VISUAL
+        ================================================ */
+
+        .final-cycle-section {
+            padding: 90px 20px;
+
+            background: #f5f8f5;
+        }
+
+        .final-cycle {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 10px;
+
+            max-width: 1100px;
+
+            margin: 45px auto 0;
+        }
+
+        .final-cycle-item {
+            min-width: 125px;
+
+            padding: 17px 15px;
+
+            background: #ffffff;
+
+            border:
+                2px solid #145A32;
+
+            border-radius: 7px;
+
+            color: #145A32;
+
+            font-size: 0.82rem;
+
+            font-weight: 800;
+
+            text-align: center;
+
+            letter-spacing: 0.5px;
+        }
+
+        .final-cycle-arrow {
+            color: #D4AF37;
+
+            font-size: 1.5rem;
+
+            font-weight: 800;
+        }
+
+        .cycle-repeat {
+            width: 100%;
+
+            margin-top: 20px;
+
+            text-align: center;
+
+            color: #0b6b3a;
+
+            font-weight: 800;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* ================================================
+           FINAL CTA
+        ================================================ */
+
+        .uniform-final-cta {
+            padding: 105px 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0b6b3a,
+                    #145A32
+                );
+
+            color: #ffffff;
+
+            text-align: center;
+        }
+
+        .uniform-final-cta-content {
+            max-width: 800px;
+
+            margin: 0 auto;
+        }
+
+        .uniform-final-cta h2 {
+            margin: 0 0 18px;
+
+            color: #ffffff;
+
+            font-size:
+                clamp(2.4rem, 5vw, 4rem);
+        }
+
+        .uniform-final-cta p {
+            margin: 0 auto 28px;
+
+            max-width: 700px;
+
+            color: rgba(255,255,255,0.9);
+
+            line-height: 1.8;
+        }
+
+        .final-statements {
+            margin: 30px auto;
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 7px;
+
+            color: #D4AF37;
+
+            font-size: 1.15rem;
+
+            font-weight: 700;
+        }
+
+
+        /* ================================================
+           MOBILE
+        ================================================ */
+
+        @media (max-width: 1000px) {
+
+            .uniform-hero-container {
+                grid-template-columns: 1fr;
+
+                text-align: center;
+
+                gap: 55px;
+            }
+
+            .uniform-hero-description {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .uniform-hero-buttons {
+                justify-content: center;
+            }
+
+            .cycle-steps {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .student-support-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .participation-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .idea-layout,
+            .more-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            .uniform-hero {
+                padding:
+                    70px 18px 65px;
+            }
+
+            .uniform-section {
+                padding:
+                    65px 18px;
+            }
+
+            .more-section {
+                padding:
+                    65px 18px;
+            }
+
+            .uniform-hero h1 {
+                font-size: 3.4rem;
+
+                letter-spacing: -1px;
+            }
+
+            .uniform-hero-title {
+                font-size: 1.3rem;
+            }
+
+            .uniform-hero-description {
+                font-size: 0.96rem;
+            }
+
+            .uniform-hero-buttons {
+                flex-direction: column;
+            }
+
+            .uniform-btn {
+                width: 100%;
+
+                box-sizing: border-box;
+            }
+
+            .cycle-wheel {
+                width: 310px;
+            }
+
+            .cycle-wheel::after {
+                width: 105px;
+                height: 105px;
+
+                font-size: 3rem;
+            }
+
+            .cycle-label {
+                width: 70px;
+                height: 70px;
+
+                font-size: 0.55rem;
+            }
+
+            .cycle-steps,
+            .student-support-grid,
+            .participation-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .vision-card,
+            .goal-box {
+                padding: 32px 23px;
+            }
+
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .responsible-box {
+                padding:
+                    25px 22px;
+            }
+
+            .final-cycle {
+                flex-direction: column;
+            }
+
+            .final-cycle-arrow {
+                transform: rotate(90deg);
+            }
+
+            .final-cycle-item {
+                width: 100%;
+
+                max-width: 260px;
+
+                box-sizing: border-box;
+            }
+
+            .cycle-repeat {
+                margin-top: 25px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="uniform-page">
+
+
+<!-- =====================================================
+     NAVIGATION
+====================================================== -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        <a
+            href="index.html"
+            class="logo-link"
+        >
+
+            <img
+                src="/images/logo.jpg"
+                alt="OUT Organization Logo"
+                class="logo-image"
+            >
+
+        </a>
+
+        <p class="tagline">
+            From Where We Came, We Rise.
+        </p>
+
+    </div>
+
+
+    <button
+        class="menu-toggle"
+        id="menuToggle"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+    >
+        ☰
+    </button>
+
+
+    <ul
+        class="nav-links"
+        id="navLinks"
+    >
+
+        <li>
+            <a href="index.html">
+                Home
+            </a>
+        </li>
+
+        <li>
+            <a href="about.html">
+                About
+            </a>
+        </li>
+
+        <li>
+            <a href="index.html#programs">
+                Programs
+            </a>
+        </li>
+
+        <li>
+            <a href="index.html#impact">
+                Impact
+            </a>
+        </li>
+
+        <li>
+            <a href="index.html#leadership">
+                Leadership
+            </a>
+        </li>
+
+        <li>
+            <a href="index.html#gallery">
+                Gallery
+            </a>
+        </li>
+
+        <li>
+            <a href="index.html#volunteer">
+                Support Us
+            </a>
+        </li>
+
+        <li>
+            <a href="index.html#contact">
+                Contact
+            </a>
+        </li>
+
+    </ul>
+
+</nav>
+
+
+
+<!-- =====================================================
+     HERO
+====================================================== -->
+
+<section class="uniform-hero">
+
+    <div class="uniform-hero-container">
+
+
+        <div>
+
+            <span class="uniform-eyebrow">
+                AN OUT ORGANIZATION CONTINUOUS INITIATIVE
+            </span>
+
+            <h1>
+                Uniform Cycle
+            </h1>
+
+            <h2 class="uniform-hero-title">
+                Give What You’ve Outgrown.
+                Get What You Need.
+                Keep the Cycle Moving.
+            </h2>
+
+            <p class="uniform-hero-description">
+                Uniform Cycle is a continuous school-uniform reuse,
+                exchange, restoration, and redistribution initiative
+                by OUT Organization, designed to ensure that usable
+                school uniforms continue serving students rather than
+                becoming unused or going to waste.
+            </p>
+
+            <div class="uniform-hero-buttons">
+
+                <a
+                    href="#how-it-works"
+                    class="uniform-btn uniform-btn-gold"
+                >
+                    Explore the Cycle
+                </a>
+
+                <a
+                    href="#get-involved"
+                    class="uniform-btn uniform-btn-outline"
+                >
+                    Get Involved
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="uniform-cycle-visual">
+
+            <div class="cycle-wheel">
+
+                <div class="cycle-label cycle-label-one">
+                    GIVE
+                </div>
+
+                <div class="cycle-label cycle-label-two">
+                    COLLECT
+                </div>
+
+                <div class="cycle-label cycle-label-three">
+                    RESTORE
+                </div>
+
+                <div class="cycle-label cycle-label-four">
+                    MATCH
+                </div>
+
+                <div class="cycle-label cycle-label-five">
+                    EXCHANGE
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     INTRODUCTION
+====================================================== -->
+
+<section class="uniform-section">
+
+    <div class="uniform-narrow">
+
+        <span class="uniform-section-label">
+            THE IDEA
+        </span>
+
+        <h2>
+            A uniform can have more than one journey.
+        </h2>
+
+        <p>
+            Children grow. Families change. Students transfer schools.
+            Uniform requirements change.
+        </p>
+
+        <p>
+            As a result, perfectly usable uniforms are often left
+            behind in homes, schools, cupboards, and communities.
+        </p>
+
+        <p>
+            <strong>
+                Uniform Cycle gives those uniforms another purpose.
+            </strong>
+        </p>
+
+        <p>
+            A uniform that no longer fits one student may fit another.
+            A uniform from a student transferring to another school
+            may help a new student. A worn uniform may be restored
+            and returned to use.
+        </p>
+
+        <p>
+            Rather than treating uniforms as disposable items,
+            Uniform Cycle treats them as
+            <strong>
+                resources that can continue circulating within communities.
+            </strong>
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     OUR VISION
+====================================================== -->
+
+<section class="uniform-section uniform-vision">
+
+    <div class="uniform-container">
+
+        <div class="vision-card">
+
+            <span class="uniform-section-label">
+                OUR VISION
+            </span>
+
+            <h2>
+                A continuous and inclusive global movement.
+            </h2>
+
+            <p>
+                To build a continuous and inclusive global movement
+                where school uniforms are kept in use, resources are
+                shared responsibly, and students can access the uniforms
+                they need with dignity.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     THE IDEA — TWO COLUMN
+====================================================== -->
+
+<section class="uniform-section">
+
+    <div class="uniform-container">
+
+        <div class="idea-layout">
+
+
+            <div class="idea-highlight">
+
+                <span>
+                    WHY UNIFORM CYCLE?
+                </span>
+
+                <h3>
+                    What one student has outgrown may be exactly what
+                    another student needs.
+                </h3>
+
+                <p>
+                    The cycle creates an opportunity for usable
+                    resources to continue serving students instead
+                    of being left unused.
+                </p>
+
+            </div>
+
+
+            <div class="idea-text">
+
+                <p>
+                    Uniform Cycle is designed around a simple but
+                    powerful principle: resources can continue
+                    creating value when communities find practical
+                    ways to share them.
+                </p>
+
+                <p>
+                    Students grow. Families change. School requirements
+                    change. Transfers happen. These changes can leave
+                    perfectly usable uniforms behind.
+                </p>
+
+                <p>
+                    Uniform Cycle creates a structured pathway through
+                    which suitable uniforms can be contributed,
+                    collected, assessed, restored, matched and made
+                    available for reuse.
+                </p>
+
+                <p>
+                    The initiative brings together students, families,
+                    schools, organizations, businesses and individuals
+                    to help keep uniforms moving through communities.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     HOW THE CYCLE WORKS
+====================================================== -->
+
+<section
+    id="how-it-works"
+    class="uniform-section uniform-cycle-section"
+>
+
+    <div class="uniform-container">
+
+        <div class="uniform-section-header">
+
+            <span class="uniform-section-label">
+                HOW THE CYCLE WORKS
+            </span>
+
+            <h2>
+                Keeping the cycle moving.
+            </h2>
+
+            <p>
+                Every contribution is assessed according to its
+                condition and potential for reuse. Suitable uniforms
+                can then move through the cycle toward another student
+                or family.
+            </p>
+
+        </div>
+
+
+        <div class="cycle-steps">
+
+
+            <!-- STEP 1 -->
+
+            <article class="cycle-step-card">
+
+                <div class="cycle-step-number">
+                    01
+                </div>
+
+                <h3>
+                    Give
+                </h3>
+
+                <p>
+                    Students, parents, guardians, schools, organizations,
+                    businesses and individuals can donate school
+                    uniforms they no longer need.
+                </p>
+
+                <ul>
+                    <li>Good and ready-to-use</li>
+                    <li>Gently worn</li>
+                    <li>In need of minor repairs</li>
+                    <li>Potentially repairable</li>
+                </ul>
+
+            </article>
+
+
+            <!-- STEP 2 -->
+
+            <article class="cycle-step-card">
+
+                <div class="cycle-step-number">
+                    02
+                </div>
+
+                <h3>
+                    Collect
+                </h3>
+
+                <p>
+                    OUT Organization works to collect uniforms and
+                    connect donated items with students and families
+                    who may need them.
+                </p>
+
+            </article>
+
+
+            <!-- STEP 3 -->
+
+            <article class="cycle-step-card">
+
+                <div class="cycle-step-number">
+                    03
+                </div>
+
+                <h3>
+                    Restore
+                </h3>
+
+                <p>
+                    Where practical, uniforms that need attention can
+                    be cleaned, repaired, restored or prepared for reuse.
+                </p>
+
+            </article>
+
+
+            <!-- STEP 4 -->
+
+            <article class="cycle-step-card">
+
+                <div class="cycle-step-number">
+                    04
+                </div>
+
+                <h3>
+                    Match
+                </h3>
+
+                <p>
+                    Available uniforms are sorted and matched according
+                    to practical factors such as school, requirements,
+                    size, gender where relevant, condition and availability.
+                </p>
+
+            </article>
+
+
+            <!-- STEP 5 -->
+
+            <article class="cycle-step-card">
+
+                <div class="cycle-step-number">
+                    05
+                </div>
+
+                <h3>
+                    Exchange or Request
+                </h3>
+
+                <p>
+                    A student or family may contribute a uniform they
+                    no longer need and, where a suitable uniform is
+                    available, request or exchange it for one that
+                    meets their current needs.
+                </p>
+
+            </article>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     SUPPORTING STUDENTS THROUGH CHANGE
+====================================================== -->
+
+<section class="uniform-section">
+
+    <div class="uniform-container">
+
+        <div class="uniform-section-header">
+
+            <span class="uniform-section-label">
+                SUPPORTING STUDENTS THROUGH CHANGE
+            </span>
+
+            <h2>
+                Different circumstances. One continuous cycle.
+            </h2>
+
+            <p>
+                Uniform Cycle recognizes that students and families
+                experience different changes throughout their educational
+                journey.
+            </p>
+
+        </div>
+
+
+        <div class="student-support-grid">
+
+
+            <article class="student-support-card">
+
+                <h3>
+                    Students Who Have Outgrown Their Uniforms
+                </h3>
+
+                <p>
+                    When a child outgrows a uniform, the family can
+                    contribute it to Uniform Cycle rather than allowing
+                    it to remain unused. If a suitable larger uniform
+                    is available, the family may request one.
+                </p>
+
+            </article>
+
+
+            <article class="student-support-card">
+
+                <h3>
+                    Students Transferring Schools
+                </h3>
+
+                <p>
+                    A student moving to another school can contribute
+                    uniforms from their previous school to the cycle.
+                    Where possible, they can then request the
+                    appropriate uniform required by their new school.
+                </p>
+
+            </article>
+
+
+            <article class="student-support-card">
+
+                <h3>
+                    Families Seeking Uniform Support
+                </h3>
+
+                <p>
+                    Families who need assistance accessing school
+                    uniforms may participate by requesting available
+                    uniforms through the Uniform Cycle process.
+                    Availability will depend on donations and current stock.
+                </p>
+
+            </article>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     GLOBAL OPPORTUNITY
+====================================================== -->
+
+<section
+    id="get-involved"
+    class="uniform-section global-section"
+>
+
+    <div class="uniform-container">
+
+        <div class="uniform-section-header">
+
+            <span class="uniform-section-label">
+                A GLOBAL OPPORTUNITY TO MAKE A DIFFERENCE
+            </span>
+
+            <h2>
+                You do not have to live in Kenya to contribute.
+            </h2>
+
+            <p>
+                Uniform Cycle is open to support from people and
+                organizations around the world. People everywhere
+                can support the mission in ways that are practical
+                and meaningful to them.
+            </p>
+
+        </div>
+
+
+        <div class="participation-grid">
+
+
+            <article class="participation-card">
+
+                <h3>
+                    Donating Uniforms
+                </h3>
+
+                <p>
+                    Contribute new, gently used, worn or repairable
+                    school uniforms that can potentially be returned
+                    to use.
+                </p>
+
+            </article>
+
+
+            <article class="participation-card">
+
+                <h3>
+                    Supporting Restoration
+                </h3>
+
+                <p>
+                    Help provide resources for cleaning, repairing,
+                    tailoring and restoring uniforms.
+                </p>
+
+            </article>
+
+
+            <article class="participation-card">
+
+                <h3>
+                    Providing Financial Support
+                </h3>
+
+                <p>
+                    Contribute toward collection, transportation,
+                    storage, cleaning, repairs, administration and
+                    redistribution.
+                </p>
+
+            </article>
+
+
+            <article class="participation-card">
+
+                <h3>
+                    Supporting Logistics
+                </h3>
+
+                <p>
+                    Help with transportation, collection points,
+                    storage, shipping or other practical logistics
+                    where appropriate.
+                </p>
+
+            </article>
+
+
+            <article class="participation-card">
+
+                <h3>
+                    Partnering With OUT Organization
+                </h3>
+
+                <p>
+                    Schools, businesses, charities, community
+                    organizations, manufacturers, retailers and
+                    other institutions can collaborate with
+                    Uniform Cycle.
+                </p>
+
+            </article>
+
+
+            <article class="participation-card">
+
+                <h3>
+                    Spreading the Message
+                </h3>
+
+                <p>
+                    Share the initiative with families, schools,
+                    communities, organizations and networks that
+                    may benefit from or contribute to the cycle.
+                </p>
+
+            </article>
+
+
+            <article class="participation-card">
+
+                <h3>
+                    Creating Local Collection Points
+                </h3>
+
+                <p>
+                    Supporters in different locations may help
+                    establish appropriate collection networks that
+                    connect uniforms with the wider initiative.
+                </p>
+
+            </article>
+
+
+            <article class="participation-card">
+
+                <h3>
+                    Offering Skills or Services
+                </h3>
+
+                <p>
+                    Tailors, cleaners, transport providers, designers,
+                    schools, technology professionals, photographers,
+                    communicators and other professionals can
+                    contribute their skills and services.
+                </p>
+
+            </article>
+
+
+            <article class="participation-card">
+
+                <h3>
+                    Connecting Resources to Need
+                </h3>
+
+                <p>
+                    Anyone with access to uniforms, resources,
+                    partnerships, facilities or opportunities that
+                    could strengthen the initiative can help connect
+                    those resources to the cause.
+                </p>
+
+            </article>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FROM ONE STUDENT TO ANOTHER
+====================================================== -->
+
+<section class="student-quote-section">
+
+    <div class="student-quote">
+
+        <div class="student-quote-mark">
+            “
+        </div>
+
+        <blockquote>
+            What one student has outgrown may be exactly what
+            another student needs.
+        </blockquote>
+
+        <p>
+            Instead of allowing uniforms to sit unused, we create
+            opportunities for them to continue their journey.
+
+            A uniform can move from one student to another,
+            from one family to another, and from one school community
+            to another.
+        </p>
+
+        <strong>
+            The cycle continues.
+        </strong>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     MORE THAN A UNIFORM
+====================================================== -->
+
+<section class="more-section">
+
+    <div class="uniform-container">
+
+        <div class="more-grid">
+
+
+            <div class="more-content">
+
+                <span class="uniform-section-label">
+                    MORE THAN A UNIFORM
+                </span>
+
+                <h2>
+                    It is about people, resources and community.
+                </h2>
+
+                <p>
+                    Uniform Cycle is not simply about clothing.
+                </p>
+
+                <p>
+                    It is about creating a culture of responsibility,
+                    participation and support around education.
+                </p>
+
+                <p>
+                    Every suitable contribution can become an
+                    opportunity for another student.
+                </p>
+
+            </div>
+
+
+            <div class="values-grid">
+
+
+                <div class="value-card">
+
+                    <strong>
+                        DIGNITY
+                    </strong>
+
+                    <span>
+                        Helping students access school essentials
+                        without unnecessary stigma.
+                    </span>
+
+                </div>
+
+
+                <div class="value-card">
+
+                    <strong>
+                        SUSTAINABILITY
+                    </strong>
+
+                    <span>
+                        Extending the life of uniforms and reducing
+                        avoidable waste.
+                    </span>
+
+                </div>
+
+
+                <div class="value-card">
+
+                    <strong>
+                        ACCESS
+                    </strong>
+
+                    <span>
+                        Creating additional pathways for students
+                        and families to obtain uniforms they need.
+                    </span>
+
+                </div>
+
+
+                <div class="value-card">
+
+                    <strong>
+                        COMMUNITY
+                    </strong>
+
+                    <span>
+                        Encouraging people to share resources and
+                        support one another.
+                    </span>
+
+                </div>
+
+
+                <div class="value-card">
+
+                    <strong>
+                        RESPONSIBILITY
+                    </strong>
+
+                    <span>
+                        Recognizing that resources can have value
+                        beyond their first use.
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     RESPONSIBLE REUSE
+====================================================== -->
+
+<section class="responsible-section">
+
+    <div class="responsible-box">
+
+        <h3>
+            Responsible reuse
+        </h3>
+
+        <p>
+            Every contribution is assessed according to its condition
+            and potential for reuse. Not every donated uniform will
+            necessarily be suitable for reuse. Where practical,
+            suitable items may be cleaned, repaired, restored or
+            prepared for another student. Items that cannot reasonably
+            enter the uniform cycle should be handled responsibly
+            through appropriate alternatives.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     OUR GOAL
+====================================================== -->
+
+<section class="goal-section">
+
+    <div class="goal-box">
+
+        <span class="uniform-section-label">
+            OUR GOAL
+        </span>
+
+        <h2>
+            A continuous uniform-sharing system.
+        </h2>
+
+        <p>
+            To establish a continuous, sustainable, and accessible
+            uniform-sharing system that connects available school
+            uniforms with students who need them while encouraging
+            communities around the world to participate in the cycle.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     THE CYCLE
+====================================================== -->
+
+<section class="final-cycle-section">
+
+    <div class="uniform-container">
+
+        <div class="uniform-section-header">
+
+            <span class="uniform-section-label">
+                THE CYCLE
+            </span>
+
+            <h2>
+                Keep the cycle moving.
+            </h2>
+
+        </div>
+
+
+        <div class="final-cycle">
+
+            <div class="final-cycle-item">
+                DONATE
+            </div>
+
+            <div class="final-cycle-arrow">
+                →
+            </div>
+
+            <div class="final-cycle-item">
+                COLLECT
+            </div>
+
+            <div class="final-cycle-arrow">
+                →
+            </div>
+
+            <div class="final-cycle-item">
+                ASSESS
+            </div>
+
+            <div class="final-cycle-arrow">
+                →
+            </div>
+
+            <div class="final-cycle-item">
+                RESTORE
+            </div>
+
+            <div class="final-cycle-arrow">
+                →
+            </div>
+
+            <div class="final-cycle-item">
+                MATCH
+            </div>
+
+            <div class="final-cycle-arrow">
+                →
+            </div>
+
+            <div class="final-cycle-item">
+                EXCHANGE /
+                REDISTRIBUTE
+            </div>
+
+            <div class="final-cycle-arrow">
+                →
+            </div>
+
+            <div class="final-cycle-item">
+                REUSE
+            </div>
+
+            <div class="final-cycle-arrow">
+                →
+            </div>
+
+            <div class="final-cycle-item">
+                DONATE AGAIN
+            </div>
+
+            <div class="cycle-repeat">
+                ↻ THE CYCLE CONTINUES
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FINAL CALL TO ACTION
+====================================================== -->
+
+<section class="uniform-final-cta">
+
+    <div class="uniform-final-cta-content">
+
+        <span class="uniform-eyebrow">
+            UNIFORM CYCLE
+        </span>
+
+        <h2>
+            Keep the Cycle Moving.
+        </h2>
+
+        <p>
+            A uniform does not have to stop being useful simply because
+            it is no longer useful to its first owner.
+        </p>
+
+
+        <div class="final-statements">
+
+            <span>
+                Give what you’ve outgrown.
+            </span>
+
+            <span>
+                Get what you need.
+            </span>
+
+            <span>
+                Help another student.
+            </span>
+
+            <span>
+                Keep the cycle moving.
+            </span>
+
+        </div>
+
+
+        <a
+            href="index.html#contact"
+            class="uniform-btn uniform-btn-gold"
+        >
+            Connect With OUT Organization
+        </a>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FOOTER
+====================================================== -->
+
+<footer class="footer">
+
+    <div class="footer-container">
+
+
+        <!-- ORGANIZATION -->
+
+        <div class="footer-column">
+
+            <h3>
+                OUT Organization
+            </h3>
+
+            <p class="footer-tagline">
+                From Where We Came, We Rise.
+            </p>
+
+            <p>
+                Transforming lives through compassion,
+                education and hope.
+            </p>
+
+        </div>
+
+
+        <!-- QUICK LINKS -->
+
+        <div class="footer-column">
+
+            <h3>
+                Quick Links
+            </h3>
+
+            <ul>
+
+                <li>
+                    <a href="index.html">
+                        Home
+                    </a>
+                </li>
+
+                <li>
+                    <a href="about.html">
+                        About
+                    </a>
+                </li>
+
+                <li>
+                    <a href="index.html#programs">
+                        Programs
+                    </a>
+                </li>
+
+                <li>
+                    <a href="index.html#impact">
+                        Impact
+                    </a>
+                </li>
+
+                <li>
+                    <a href="index.html#leadership">
+                        Leadership
+                    </a>
+                </li>
+
+                <li>
+                    <a href="index.html#contact">
+                        Contact
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <!-- CONTACT -->
+
+        <div class="footer-column">
+
+            <h3>
+                Contact Us
+            </h3>
+
+            <p>
+                📍 Mathare, Nairobi, Kenya
+            </p>
+
+            <p>
+                📞
+                <a href="tel:+254111503308">
+                    +254 111 503 308
+                </a>
+            </p>
+
+            <p>
+                📞
+                <a href="tel:+254768178598">
+                    +254 768 178 598
+                </a>
+            </p>
+
+            <p>
+                ✉️
+                <a
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=info@outorganization.org"
+                >
+                    info@outorganization.org
+                </a>
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        <p>
+            &copy; 2026 OUT Organization.
+            All Rights Reserved.
+        </p>
+
+        <p>
+            From Where We Came, We Rise.
+        </p>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================================
+     EXISTING OUT JAVASCRIPT
+====================================================== -->
+
+<script src="css/js/script.js?v=4"></script>
+
+</body>
+
+</html>
