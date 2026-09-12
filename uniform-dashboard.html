@@ -1,0 +1,3015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Uniform Cycle Dashboard | OUT Organization</title>
+
+    <meta name="description"
+          content="OUT Organization Uniform Cycle member dashboard.">
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+
+        :root {
+            --green: #145A32;
+            --green-dark: #0d4325;
+            --gold: #D4AF37;
+            --light: #f4f8f5;
+            --border: #d8e2da;
+            --text: #24332a;
+            --muted: #66736b;
+            --white: #ffffff;
+            --danger: #b42318;
+            --success: #087443;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: var(--text);
+            background: var(--light);
+        }
+
+        .uc-dashboard {
+            min-height: 100vh;
+        }
+
+        /* TOP BAR */
+
+        .uc-topbar {
+            background: var(--green);
+            color: white;
+            padding: 14px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .uc-brand {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .uc-top-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .uc-top-button {
+            border: 1px solid rgba(255,255,255,0.5);
+            background: transparent;
+            color: white;
+            padding: 9px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .uc-top-button:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* LAYOUT */
+
+        .uc-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: calc(100vh - 60px);
+        }
+
+        .uc-sidebar {
+            background: white;
+            border-right: 1px solid var(--border);
+            padding: 25px 15px;
+        }
+
+        .uc-sidebar-title {
+            color: var(--green);
+            font-weight: 700;
+            padding: 0 10px 15px;
+        }
+
+        .uc-nav-button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            border: none;
+            background: transparent;
+            padding: 13px 12px;
+            margin-bottom: 4px;
+            border-radius: 7px;
+            cursor: pointer;
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        .uc-nav-button:hover,
+        .uc-nav-button.active {
+            background: #edf5ef;
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        .uc-main {
+            padding: 30px;
+            max-width: 1300px;
+            width: 100%;
+            margin: auto;
+        }
+
+        /* WELCOME */
+
+        .uc-welcome {
+            background: var(--green);
+            color: white;
+            border-radius: 14px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border-bottom: 5px solid var(--gold);
+        }
+
+        .uc-welcome h1 {
+            margin: 0 0 8px;
+        }
+
+        .uc-welcome p {
+            margin: 0;
+            opacity: 0.92;
+            line-height: 1.6;
+        }
+
+        /* MESSAGE */
+
+        .uc-message {
+            padding: 15px 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            display: none;
+        }
+
+        .uc-message.success {
+            display: block;
+            background: #e9f7ef;
+            color: var(--success);
+            border: 1px solid #b7e2c8;
+        }
+
+        .uc-message.error {
+            display: block;
+            background: #fff0ef;
+            color: var(--danger);
+            border: 1px solid #f0c1bd;
+        }
+
+        /* CARDS */
+
+        .uc-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+        }
+
+        .uc-card h2 {
+            margin-top: 0;
+            color: var(--green);
+            font-size: 21px;
+        }
+
+        /* STATS */
+
+        .uc-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .uc-stat {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .uc-stat-number {
+            font-size: 27px;
+            font-weight: 700;
+            color: var(--green);
+        }
+
+        .uc-stat-label {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        /* PROFILE */
+
+        .uc-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .uc-info {
+            background: #f8faf8;
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .uc-info strong {
+            display: block;
+            color: var(--green);
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+
+        /* SECTIONS */
+
+        .uc-section {
+            display: none;
+        }
+
+        .uc-section.active {
+            display: block;
+        }
+
+        /* FORMS */
+
+        .uc-form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .uc-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .uc-field.full {
+            grid-column: 1 / -1;
+        }
+
+        .uc-field label {
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .uc-field label span {
+            color: var(--danger);
+        }
+
+        .uc-field input,
+        .uc-field select,
+        .uc-field textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccd6ce;
+            border-radius: 7px;
+            font-size: 14px;
+            font-family: inherit;
+            background: white;
+        }
+
+        .uc-field textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .uc-field input:focus,
+        .uc-field select:focus,
+        .uc-field textarea:focus {
+            outline: none;
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(20,90,50,0.1);
+        }
+
+        .uc-help {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 5px;
+            line-height: 1.5;
+        }
+
+        .uc-submit {
+            background: var(--green);
+            color: white;
+            border: none;
+            padding: 13px 22px;
+            border-radius: 7px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .uc-submit:hover {
+            background: var(--green-dark);
+        }
+
+        .uc-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* CHECKBOX */
+
+        .uc-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 18px;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .uc-checkbox input {
+            margin-top: 4px;
+        }
+
+        /* NOTICE */
+
+        .uc-notice {
+            background: #f1f6f2;
+            border-left: 4px solid var(--green);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* SUBMISSIONS */
+
+        .uc-submission {
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 18px;
+            margin-bottom: 12px;
+            background: #fbfcfb;
+        }
+
+        .uc-submission-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .uc-submission-title {
+            font-weight: 700;
+            color: var(--green);
+        }
+
+        .uc-status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            background: #edf5ef;
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .uc-submission-date {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .uc-empty {
+            text-align: center;
+            padding: 30px;
+            color: var(--muted);
+        }
+
+        /* PARTICIPATION */
+
+        .uc-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .uc-tag {
+            background: #edf5ef;
+            color: var(--green);
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 900px) {
+
+            .uc-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .uc-sidebar {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 10px;
+                display: flex;
+                overflow-x: auto;
+                gap: 5px;
+            }
+
+            .uc-sidebar-title {
+                display: none;
+            }
+
+            .uc-nav-button {
+                white-space: nowrap;
+                width: auto;
+            }
+
+            .uc-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            .uc-main {
+                padding: 18px 12px;
+            }
+
+            .uc-topbar {
+                padding: 12px 15px;
+            }
+
+            .uc-brand {
+                font-size: 16px;
+            }
+
+            .uc-form-grid,
+            .uc-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .uc-field.full {
+                grid-column: auto;
+            }
+
+            .uc-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .uc-welcome {
+                padding: 23px;
+            }
+
+            .uc-card {
+                padding: 18px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="uc-dashboard">
+
+    <!-- TOP BAR -->
+
+    <header class="uc-topbar">
+
+        <div class="uc-brand">
+            OUT Organization | Uniform Cycle
+        </div>
+
+        <div class="uc-top-actions">
+
+            <a
+                href="uniform-cycle.html"
+                class="uc-top-button"
+                style="text-decoration:none;">
+                Uniform Cycle
+            </a>
+
+            <button
+                id="logoutButton"
+                class="uc-top-button">
+                Log Out
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <div class="uc-layout">
+
+
+        <!-- SIDEBAR -->
+
+        <aside class="uc-sidebar">
+
+            <div class="uc-sidebar-title">
+                Member Dashboard
+            </div>
+
+            <button
+                class="uc-nav-button active"
+                data-section="overview">
+                🏠 Overview
+            </button>
+
+            <button
+                class="uc-nav-button"
+                data-section="profile">
+                👤 My Profile
+            </button>
+
+            <button
+                class="uc-nav-button"
+                data-section="donate">
+                🎒 Donate Uniform
+            </button>
+
+            <button
+                class="uc-nav-button"
+                data-section="request">
+                🧑‍🎓 Request Support
+            </button>
+
+            <button
+                class="uc-nav-button"
+                data-section="partner">
+                🤝 Partnership
+            </button>
+
+            <button
+                class="uc-nav-button"
+                data-section="support">
+                🌍 Skills & Resources
+            </button>
+
+            <button
+                class="uc-nav-button"
+                data-section="submissions">
+                📋 My Submissions
+            </button>
+
+        </aside>
+
+
+        <!-- MAIN -->
+
+        <main class="uc-main">
+
+            <div id="globalMessage" class="uc-message"></div>
+
+
+            <!-- ================= OVERVIEW ================= -->
+
+            <section
+                id="overview"
+                class="uc-section active">
+
+                <div class="uc-welcome">
+
+                    <h1>
+                        Welcome, <span id="welcomeName">Member</span>
+                    </h1>
+
+                    <p>
+                        Thank you for being part of the OUT Organization
+                        Uniform Cycle. Together, we can help school uniforms
+                        move from one student to another and support
+                        continued access to education.
+                    </p>
+
+                </div>
+
+
+                <div class="uc-stats">
+
+                    <div class="uc-stat">
+                        <div
+                            id="donationCount"
+                            class="uc-stat-number">
+                            0
+                        </div>
+
+                        <div class="uc-stat-label">
+                            Uniform Donations
+                        </div>
+                    </div>
+
+
+                    <div class="uc-stat">
+                        <div
+                            id="requestCount"
+                            class="uc-stat-number">
+                            0
+                        </div>
+
+                        <div class="uc-stat-label">
+                            Uniform Requests
+                        </div>
+                    </div>
+
+
+                    <div class="uc-stat">
+                        <div
+                            id="partnershipCount"
+                            class="uc-stat-number">
+                            0
+                        </div>
+
+                        <div class="uc-stat-label">
+                            Partnership Applications
+                        </div>
+                    </div>
+
+
+                    <div class="uc-stat">
+                        <div
+                            id="supportCount"
+                            class="uc-stat-number">
+                            0
+                        </div>
+
+                        <div class="uc-stat-label">
+                            Support Applications
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="uc-card">
+
+                    <h2>
+                        Your Uniform Cycle Participation
+                    </h2>
+
+                    <div
+                        id="participationTags"
+                        class="uc-tags">
+                        Loading...
+                    </div>
+
+                </div>
+
+
+                <div class="uc-card">
+
+                    <h2>
+                        Get Involved
+                    </h2>
+
+                    <p>
+                        Choose how you would like to contribute to the
+                        Uniform Cycle.
+                    </p>
+
+                    <div class="uc-form-grid">
+
+                        <div class="uc-info">
+                            <strong>Donate Uniforms</strong>
+                            Give usable school uniforms a second life.
+                        </div>
+
+                        <div class="uc-info">
+                            <strong>Request Support</strong>
+                            Request uniform assistance for an eligible
+                            student.
+                        </div>
+
+                        <div class="uc-info">
+                            <strong>Partner With Us</strong>
+                            Work with OUT Organization to strengthen
+                            the programme.
+                        </div>
+
+                        <div class="uc-info">
+                            <strong>Share Skills & Resources</strong>
+                            Contribute your skills, services, resources,
+                            or logistical support.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= PROFILE ================= -->
+
+            <section
+                id="profile"
+                class="uc-section">
+
+                <div class="uc-card">
+
+                    <h2>
+                        My Profile
+                    </h2>
+
+                    <div class="uc-info-grid">
+
+                        <div class="uc-info">
+                            <strong>Registration ID</strong>
+                            <span id="profileRegistrationId">-</span>
+                        </div>
+
+                        <div class="uc-info">
+                            <strong>Full Name</strong>
+                            <span id="profileName">-</span>
+                        </div>
+
+                        <div class="uc-info">
+                            <strong>Email Address</strong>
+                            <span id="profileEmail">-</span>
+                        </div>
+
+                        <div class="uc-info">
+                            <strong>Phone Number</strong>
+                            <span id="profilePhone">-</span>
+                        </div>
+
+                        <div class="uc-info">
+                            <strong>Country</strong>
+                            <span id="profileCountry">-</span>
+                        </div>
+
+                        <div class="uc-info">
+                            <strong>County / State</strong>
+                            <span id="profileCounty">-</span>
+                        </div>
+
+                        <div class="uc-info">
+                            <strong>City / Town</strong>
+                            <span id="profileCity">-</span>
+                        </div>
+
+                        <div class="uc-info">
+                            <strong>Organization</strong>
+                            <span id="profileOrganization">-</span>
+                        </div>
+
+                        <div class="uc-info">
+                            <strong>Organization Type</strong>
+                            <span id="profileOrganizationType">-</span>
+                        </div>
+
+                        <div class="uc-info">
+                            <strong>Account Status</strong>
+                            <span id="profileStatus">-</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="uc-card">
+
+                    <h2>
+                        Why You Joined
+                    </h2>
+
+                    <p id="profileReason">
+                        -
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= DONATE ================= -->
+
+            <section
+                id="donate"
+                class="uc-section">
+
+                <div class="uc-card">
+
+                    <h2>
+                        Donate a Uniform
+                    </h2>
+
+                    <div class="uc-notice">
+
+                        Please provide accurate information about the
+                        uniform. OUT Organization may review the condition
+                        and suitability of donated uniforms before they
+                        enter the Uniform Cycle.
+
+                    </div>
+
+
+                    <form id="donationForm">
+
+                        <div class="uc-form-grid">
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Uniform Type <span>*</span>
+                                </label>
+
+                                <select
+                                    id="donationUniformType"
+                                    required>
+
+                                    <option value="">
+                                        Select uniform type
+                                    </option>
+
+                                    <option>Shirt / Blouse</option>
+                                    <option>Trousers</option>
+                                    <option>Skirt</option>
+                                    <option>Shorts</option>
+                                    <option>Sweater</option>
+                                    <option>School Dress</option>
+                                    <option>Sports Uniform</option>
+                                    <option>Full Uniform Set</option>
+                                    <option>Other</option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    School Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="donationSchool"
+                                    placeholder="School associated with the uniform">
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Uniform Size <span>*</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="donationSize"
+                                    required
+                                    placeholder="e.g. 12, 14, Small, Medium">
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Quantity <span>*</span>
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="donationQuantity"
+                                    min="1"
+                                    required
+                                    placeholder="Number of items">
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Condition <span>*</span>
+                                </label>
+
+                                <select
+                                    id="donationCondition"
+                                    required>
+
+                                    <option value="">
+                                        Select condition
+                                    </option>
+
+                                    <option value="new">
+                                        New
+                                    </option>
+
+                                    <option value="good">
+                                        Good
+                                    </option>
+
+                                    <option value="gently_worn">
+                                        Gently worn
+                                    </option>
+
+                                    <option value="needs_minor_repair">
+                                        Needs minor repair
+                                    </option>
+
+                                    <option value="poor_but_repairable">
+                                        Poor but repairable
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Does it need repair?
+                                </label>
+
+                                <select id="donationRepair">
+
+                                    <option value="false">
+                                        No
+                                    </option>
+
+                                    <option value="true">
+                                        Yes
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    How long has it been unused?
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="donationUnused"
+                                    placeholder="e.g. 6 months">
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Preferred Collection Method
+                                </label>
+
+                                <select id="donationCollectionMethod">
+
+                                    <option value="">
+                                        Select an option
+                                    </option>
+
+                                    <option>
+                                        Deliver to OUT Organization
+                                    </option>
+
+                                    <option>
+                                        Request collection
+                                    </option>
+
+                                    <option>
+                                        Discuss with OUT Organization
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="uc-field full">
+
+                                <label>
+                                    Collection / Delivery Location
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="donationLocation"
+                                    placeholder="General area or agreed delivery location">
+
+                            </div>
+
+
+                            <div class="uc-field full">
+
+                                <label>
+                                    Why are you donating this uniform?
+                                    <span>*</span>
+                                </label>
+
+                                <textarea
+                                    id="donationReason"
+                                    required
+                                    placeholder="Tell us why you would like to donate the uniform."></textarea>
+
+                            </div>
+
+
+                            <div class="uc-field full">
+
+                                <label>
+                                    Additional Information
+                                </label>
+
+                                <textarea
+                                    id="donationAdditional"
+                                    placeholder="Any other useful information about the uniform?"></textarea>
+
+                            </div>
+
+                        </div>
+
+
+                        <label class="uc-checkbox">
+
+                            <input
+                                type="checkbox"
+                                id="donationConsent"
+                                required>
+
+                            <span>
+                                I confirm that the information provided
+                                about this donation is accurate and I
+                                authorize OUT Organization to assess the
+                                uniform for participation in the Uniform
+                                Cycle. <strong>*</strong>
+                            </span>
+
+                        </label>
+
+
+                        <button
+                            type="submit"
+                            class="uc-submit"
+                            id="donationSubmit">
+
+                            Submit Uniform Donation
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= REQUEST ================= -->
+
+            <section
+                id="request"
+                class="uc-section">
+
+                <div class="uc-card">
+
+                    <h2>
+                        Request Uniform Support
+                    </h2>
+
+                    <div class="uc-notice">
+
+                        For requests involving a student who is a minor,
+                        the request should be submitted by a parent,
+                        guardian, school representative, or another
+                        authorized responsible adult.
+
+                        Please do not include unnecessary sensitive
+                        information about the student.
+
+                    </div>
+
+
+                    <form id="requestForm">
+
+                        <div class="uc-form-grid">
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Student Name <span>*</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="requestStudentName"
+                                    required
+                                    placeholder="Student's name">
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    School Name <span>*</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="requestSchool"
+                                    required
+                                    placeholder="Current school">
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Class / Grade <span>*</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="requestGrade"
+                                    required
+                                    placeholder="e.g. Grade 6">
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Uniform Type <span>*</span>
+                                </label>
+
+                                <select
+                                    id="requestUniformType"
+                                    required>
+
+                                    <option value="">
+                                        Select uniform type
+                                    </option>
+
+                                    <option>Shirt / Blouse</option>
+                                    <option>Trousers</option>
+                                    <option>Skirt</option>
+                                    <option>Shorts</option>
+                                    <option>Sweater</option>
+                                    <option>School Dress</option>
+                                    <option>Sports Uniform</option>
+                                    <option>Full Uniform Set</option>
+                                    <option>Other</option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Size <span>*</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="requestSize"
+                                    required
+                                    placeholder="e.g. 12, 14, Small">
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Quantity <span>*</span>
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="requestQuantity"
+                                    min="1"
+                                    required
+                                    value="1">
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Reason for Request <span>*</span>
+                                </label>
+
+                                <select
+                                    id="requestType"
+                                    required>
+
+                                    <option value="">
+                                        Select reason
+                                    </option>
+
+                                    <option value="outgrown">
+                                        Student has outgrown current uniform
+                                    </option>
+
+                                    <option value="school_transfer">
+                                        School transfer
+                                    </option>
+
+                                    <option value="family_support">
+                                        Family support need
+                                    </option>
+
+                                    <option value="replacement">
+                                        Replacement needed
+                                    </option>
+
+                                    <option value="new_student">
+                                        New student
+                                    </option>
+
+                                    <option value="other">
+                                        Other
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Urgency <span>*</span>
+                                </label>
+
+                                <select
+                                    id="requestUrgency"
+                                    required>
+
+                                    <option value="normal">
+                                        Normal
+                                    </option>
+
+                                    <option value="soon">
+                                        Needed soon
+                                    </option>
+
+                                    <option value="urgent">
+                                        Urgent
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Transferring From Another School?
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="requestTransferringSchool"
+                                    placeholder="Previous school, if applicable">
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Current Uniform Available?
+                                </label>
+
+                                <select id="requestCurrentUniform">
+
+                                    <option value="">
+                                        Select
+                                    </option>
+
+                                    <option>
+                                        Yes
+                                    </option>
+
+                                    <option>
+                                        No
+                                    </option>
+
+                                    <option>
+                                        Partially
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="uc-field full">
+
+                                <label>
+                                    Why are you requesting support?
+                                    <span>*</span>
+                                </label>
+
+                                <textarea
+                                    id="requestReason"
+                                    required
+                                    placeholder="Please explain the need for the uniform support."></textarea>
+
+                            </div>
+
+
+                            <div class="uc-field full">
+
+                                <label>
+                                    Additional Information
+                                </label>
+
+                                <textarea
+                                    id="requestAdditional"
+                                    placeholder="Provide any additional information that may help us understand the request."></textarea>
+
+                            </div>
+
+                        </div>
+
+
+                        <label class="uc-checkbox">
+
+                            <input
+                                type="checkbox"
+                                id="requestAdultConsent"
+                                required>
+
+                            <span>
+                                I confirm that I am the student's parent,
+                                guardian, school representative, or another
+                                authorized responsible adult submitting this
+                                request. <strong>*</strong>
+                            </span>
+
+                        </label>
+
+
+                        <button
+                            type="submit"
+                            class="uc-submit"
+                            id="requestSubmit">
+
+                            Submit Uniform Request
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= PARTNERSHIP ================= -->
+
+            <section
+                id="partner"
+                class="uc-section">
+
+                <div class="uc-card">
+
+                    <h2>
+                        Partnership Application
+                    </h2>
+
+                    <div class="uc-notice">
+
+                        We welcome schools, community organizations,
+                        businesses, NGOs, institutions, and other
+                        partners interested in strengthening the
+                        Uniform Cycle.
+
+                    </div>
+
+
+                    <form id="partnerForm">
+
+                        <div class="uc-form-grid">
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Organization Name <span>*</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="partnerOrganization"
+                                    required>
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Organization Type <span>*</span>
+                                </label>
+
+                                <select
+                                    id="partnerType"
+                                    required>
+
+                                    <option value="">
+                                        Select type
+                                    </option>
+
+                                    <option>School / Educational Institution</option>
+                                    <option>Community Organization</option>
+                                    <option>NGO / Non-Profit Organization</option>
+                                    <option>Business / Company</option>
+                                    <option>Faith-Based Organization</option>
+                                    <option>Government Institution</option>
+                                    <option>Other</option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Contact Person <span>*</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="partnerContact"
+                                    required>
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Email <span>*</span>
+                                </label>
+
+                                <input
+                                    type="email"
+                                    id="partnerEmail"
+                                    required>
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Phone <span>*</span>
+                                </label>
+
+                                <input
+                                    type="tel"
+                                    id="partnerPhone"
+                                    required>
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Country <span>*</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="partnerCountry"
+                                    required>
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    County / State
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="partnerCounty">
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    City / Town
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="partnerCity">
+
+                            </div>
+
+
+                            <div class="uc-field full">
+
+                                <label>
+                                    What Would Your Organization Contribute?
+                                    <span>*</span>
+                                </label>
+
+                                <textarea
+                                    id="partnerContribution"
+                                    required
+                                    placeholder="Uniforms, funding, transport, storage, outreach, technology, training, etc."></textarea>
+
+                            </div>
+
+
+                            <div class="uc-field full">
+
+                                <label>
+                                    Logistics Support
+                                </label>
+
+                                <textarea
+                                    id="partnerLogistics"
+                                    placeholder="Describe any transport, storage, collection, distribution, or logistical support."></textarea>
+
+                            </div>
+
+
+                            <div class="uc-field full">
+
+                                <label>
+                                    Partnership Idea <span>*</span>
+                                </label>
+
+                                <textarea
+                                    id="partnerIdea"
+                                    required
+                                    placeholder="How would you like to work with the Uniform Cycle?"></textarea>
+
+                            </div>
+
+
+                            <div class="uc-field full">
+
+                                <label>
+                                    Relevant Experience
+                                </label>
+
+                                <textarea
+                                    id="partnerExperience"
+                                    placeholder="Tell us about relevant experience your organization has."></textarea>
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Expected Partnership Duration
+                                </label>
+
+                                <select id="partnerDuration">
+
+                                    <option value="">
+                                        Select
+                                    </option>
+
+                                    <option>
+                                        One-time
+                                    </option>
+
+                                    <option>
+                                        Short-term
+                                    </option>
+
+                                    <option>
+                                        One year
+                                    </option>
+
+                                    <option>
+                                        Long-term
+                                    </option>
+
+                                    <option>
+                                        To be discussed
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Additional Information
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="partnerAdditional">
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="uc-submit"
+                            id="partnerSubmit">
+
+                            Submit Partnership Application
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= SUPPORT ================= -->
+
+            <section
+                id="support"
+                class="uc-section">
+
+                <div class="uc-card">
+
+                    <h2>
+                        Support With Skills & Resources
+                    </h2>
+
+                    <p>
+                        You can contribute to the Uniform Cycle even if
+                        you are not donating or requesting a uniform.
+                    </p>
+
+
+                    <form id="supportForm">
+
+                        <div class="uc-form-grid">
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Area of Support <span>*</span>
+                                </label>
+
+                                <select
+                                    id="supportArea"
+                                    required>
+
+                                    <option value="">
+                                        Select an area
+                                    </option>
+
+                                    <option>
+                                        Transport / Logistics
+                                    </option>
+
+                                    <option>
+                                        Uniform Repair
+                                    </option>
+
+                                    <option>
+                                        Storage
+                                    </option>
+
+                                    <option>
+                                        Community Outreach
+                                    </option>
+
+                                    <option>
+                                        Technology / Digital Support
+                                    </option>
+
+                                    <option>
+                                        Communications
+                                    </option>
+
+                                    <option>
+                                        Fundraising
+                                    </option>
+
+                                    <option>
+                                        Programme Support
+                                    </option>
+
+                                    <option>
+                                        Professional Skills
+                                    </option>
+
+                                    <option>
+                                        Other
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="uc-field">
+
+                                <label>
+                                    Availability <span>*</span>
+                                </label>
+
+                                <select
+                                    id="supportAvailability"
+                                    required>
+
+                                    <option value="">
+                                        Select availability
+                                    </option>
+
+                                    <option>
+                                        One-time
+                                    </option>
+
+                                    <option>
+                                        Occasionally
+                                    </option>
+
+                                    <option>
+                                        Monthly
+                                    </option>
+
+                                    <option>
+                                        Regularly
+                                    </option>
+
+                                    <option>
+                                        To be discussed
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="uc-field full">
+
+                                <label>
+                                    Skills / Services You Can Offer
+                                    <span>*</span>
+                                </label>
+
+                                <textarea
+                                    id="supportSkills"
+                                    required
+                                    placeholder="Describe your skills, experience, services, or expertise."></textarea>
+
+                            </div>
+
+
+                            <div class="uc-field full">
+
+                                <label>
+                                    Resources Available
+                                </label>
+
+                                <textarea
+                                    id="supportResources"
+                                    placeholder="Describe any resources you can make available."></textarea>
+
+                            </div>
+
+
+                            <div class="uc-field full">
+
+                                <label>
+                                    Why Would You Like to Support
+                                    the Uniform Cycle? <span>*</span>
+                                </label>
+
+                                <textarea
+                                    id="supportReason"
+                                    required
+                                    placeholder="Tell us why you would like to contribute."></textarea>
+
+                            </div>
+
+
+                            <div class="uc-field full">
+
+                                <label>
+                                    Additional Information
+                                </label>
+
+                                <textarea
+                                    id="supportAdditional"></textarea>
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="uc-submit"
+                            id="supportSubmit">
+
+                            Submit Support Application
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= SUBMISSIONS ================= -->
+
+            <section
+                id="submissions"
+                class="uc-section">
+
+                <div class="uc-card">
+
+                    <h2>
+                        My Submissions
+                    </h2>
+
+                    <p>
+                        Track the requests and applications you have
+                        submitted through the Uniform Cycle.
+                    </p>
+
+                    <div id="submissionsList">
+
+                        Loading your submissions...
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   SUPABASE CONNECTION
+===================================================== */
+
+const SUPABASE_URL =
+    "https://kxajujtqqfodqxmkuguv.supabase.co";
+
+const SUPABASE_ANON_KEY =
+    "sb_publishable_7WBopHAmgduaTJl5vbe4Sw_PD5GLAMA";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+
+let currentUser = null;
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function escapeHTML(value) {
+
+    if (value === null || value === undefined) {
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+function showMessage(text, type) {
+
+    const box =
+        document.getElementById("globalMessage");
+
+    box.textContent = text;
+
+    box.className =
+        "uc-message " + type;
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+    setTimeout(function() {
+
+        box.className = "uc-message";
+
+    }, 7000);
+}
+
+
+function formatRole(role) {
+
+    return role
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, function(letter) {
+            return letter.toUpperCase();
+        });
+}
+
+
+function formatStatus(status) {
+
+    return status
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, function(letter) {
+            return letter.toUpperCase();
+        });
+}
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+document
+    .querySelectorAll(".uc-nav-button")
+    .forEach(function(button) {
+
+        button.addEventListener("click", function() {
+
+            document
+                .querySelectorAll(".uc-nav-button")
+                .forEach(function(item) {
+
+                    item.classList.remove("active");
+
+                });
+
+
+            document
+                .querySelectorAll(".uc-section")
+                .forEach(function(section) {
+
+                    section.classList.remove("active");
+
+                });
+
+
+            button.classList.add("active");
+
+
+            const section =
+                document.getElementById(
+                    button.dataset.section
+                );
+
+
+            section.classList.add("active");
+
+
+            if (button.dataset.section === "submissions") {
+
+                loadSubmissions();
+
+            }
+
+        });
+
+    });
+
+
+/* =====================================================
+   LOAD MEMBER
+===================================================== */
+
+async function loadMember() {
+
+    const {
+        data: { user },
+        error: authError
+    } = await supabaseClient.auth.getUser();
+
+
+    if (authError || !user) {
+
+        window.location.href =
+            "uniform-login.html";
+
+        return;
+
+    }
+
+
+    currentUser = user;
+
+
+    const {
+        data: profile,
+        error: profileError
+    } = await supabaseClient
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+
+
+    if (profileError) {
+
+        showMessage(
+            "Your account is confirmed, but your member profile could not be loaded.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /* PROFILE */
+
+    document.getElementById("welcomeName")
+        .textContent =
+        profile.full_name || "Member";
+
+
+    document.getElementById("profileRegistrationId")
+        .textContent =
+        profile.registration_id || "Pending";
+
+
+    document.getElementById("profileName")
+        .textContent =
+        profile.full_name || "-";
+
+
+    document.getElementById("profileEmail")
+        .textContent =
+        profile.email || user.email || "-";
+
+
+    document.getElementById("profilePhone")
+        .textContent =
+        profile.phone || "-";
+
+
+    document.getElementById("profileCountry")
+        .textContent =
+        profile.country || "-";
+
+
+    document.getElementById("profileCounty")
+        .textContent =
+        profile.county_state || "-";
+
+
+    document.getElementById("profileCity")
+        .textContent =
+        profile.city_town || "-";
+
+
+    document.getElementById("profileOrganization")
+        .textContent =
+        profile.organization_name || "-";
+
+
+    document.getElementById("profileOrganizationType")
+        .textContent =
+        profile.organization_type || "-";
+
+
+    document.getElementById("profileStatus")
+        .textContent =
+        profile.status || "active";
+
+
+    document.getElementById("profileReason")
+        .textContent =
+        profile.reason_for_joining || "-";
+
+
+    /* PARTICIPATION TYPES */
+
+    const {
+        data: roles
+    } = await supabaseClient
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id);
+
+
+    const tagBox =
+        document.getElementById("participationTags");
+
+
+    if (roles && roles.length) {
+
+        tagBox.innerHTML =
+            roles.map(function(item) {
+
+                return `
+                    <span class="uc-tag">
+                        ${escapeHTML(formatRole(item.role))}
+                    </span>
+                `;
+
+            }).join("");
+
+    } else {
+
+        tagBox.textContent =
+            "No participation type recorded.";
+
+    }
+
+
+    /* PREFILL PARTNERSHIP */
+
+    document.getElementById("partnerEmail").value =
+        user.email || "";
+
+    document.getElementById("partnerPhone").value =
+        profile.phone || "";
+
+    document.getElementById("partnerCountry").value =
+        profile.country || "";
+
+    document.getElementById("partnerCounty").value =
+        profile.county_state || "";
+
+    document.getElementById("partnerCity").value =
+        profile.city_town || "";
+
+    document.getElementById("partnerOrganization").value =
+        profile.organization_name || "";
+
+
+    await loadCounts();
+
+}
+
+
+/* =====================================================
+   LOAD COUNTS
+===================================================== */
+
+async function loadCounts() {
+
+    if (!currentUser) return;
+
+
+    const tables = [
+        "uniform_donations",
+        "uniform_requests",
+        "uniform_partnerships",
+        "uniform_support"
+    ];
+
+
+    for (const table of tables) {
+
+        const {
+            count,
+            error
+        } = await supabaseClient
+            .from(table)
+            .select("*", {
+                count: "exact",
+                head: true
+            })
+            .eq("user_id", currentUser.id);
+
+
+        if (!error) {
+
+            if (table === "uniform_donations") {
+
+                document.getElementById(
+                    "donationCount"
+                ).textContent = count || 0;
+
+            }
+
+
+            if (table === "uniform_requests") {
+
+                document.getElementById(
+                    "requestCount"
+                ).textContent = count || 0;
+
+            }
+
+
+            if (table === "uniform_partnerships") {
+
+                document.getElementById(
+                    "partnershipCount"
+                ).textContent = count || 0;
+
+            }
+
+
+            if (table === "uniform_support") {
+
+                document.getElementById(
+                    "supportCount"
+                ).textContent = count || 0;
+
+            }
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+   DONATION FORM
+===================================================== */
+
+document
+    .getElementById("donationForm")
+    .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+
+        const button =
+            document.getElementById("donationSubmit");
+
+
+        button.disabled = true;
+
+        button.textContent =
+            "Submitting...";
+
+
+        try {
+
+            const {
+                error
+            } = await supabaseClient
+                .from("uniform_donations")
+                .insert({
+
+                    user_id: currentUser.id,
+
+                    uniform_type:
+                        document.getElementById(
+                            "donationUniformType"
+                        ).value,
+
+                    school_name:
+                        document.getElementById(
+                            "donationSchool"
+                        ).value.trim(),
+
+                    size:
+                        document.getElementById(
+                            "donationSize"
+                        ).value.trim(),
+
+                    quantity:
+                        parseInt(
+                            document.getElementById(
+                                "donationQuantity"
+                            ).value
+                        ),
+
+                    condition:
+                        document.getElementById(
+                            "donationCondition"
+                        ).value,
+
+                    needs_repair:
+                        document.getElementById(
+                            "donationRepair"
+                        ).value === "true",
+
+                    reason_for_donation:
+                        document.getElementById(
+                            "donationReason"
+                        ).value.trim(),
+
+                    unused_duration:
+                        document.getElementById(
+                            "donationUnused"
+                        ).value.trim(),
+
+                    collection_method:
+                        document.getElementById(
+                            "donationCollectionMethod"
+                        ).value,
+
+                    collection_location:
+                        document.getElementById(
+                            "donationLocation"
+                        ).value.trim(),
+
+                    additional_information:
+                        document.getElementById(
+                            "donationAdditional"
+                        ).value.trim()
+
+                });
+
+
+            if (error) throw error;
+
+
+            document
+                .getElementById("donationForm")
+                .reset();
+
+
+            showMessage(
+                "Your uniform donation has been submitted successfully. OUT Organization will review the information and follow up with you.",
+                "success"
+            );
+
+
+            await loadCounts();
+
+        } catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                "We could not submit your donation. Please try again.",
+                "error"
+            );
+
+        } finally {
+
+            button.disabled = false;
+
+            button.textContent =
+                "Submit Uniform Donation";
+
+        }
+
+    });
+
+
+/* =====================================================
+   REQUEST FORM
+===================================================== */
+
+document
+    .getElementById("requestForm")
+    .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+
+        const button =
+            document.getElementById("requestSubmit");
+
+
+        button.disabled = true;
+
+        button.textContent =
+            "Submitting...";
+
+
+        try {
+
+            const {
+                error
+            } = await supabaseClient
+                .from("uniform_requests")
+                .insert({
+
+                    user_id: currentUser.id,
+
+                    student_name:
+                        document.getElementById(
+                            "requestStudentName"
+                        ).value.trim(),
+
+                    school_name:
+                        document.getElementById(
+                            "requestSchool"
+                        ).value.trim(),
+
+                    class_grade:
+                        document.getElementById(
+                            "requestGrade"
+                        ).value.trim(),
+
+                    uniform_type:
+                        document.getElementById(
+                            "requestUniformType"
+                        ).value,
+
+                    size:
+                        document.getElementById(
+                            "requestSize"
+                        ).value.trim(),
+
+                    quantity:
+                        parseInt(
+                            document.getElementById(
+                                "requestQuantity"
+                            ).value
+                        ),
+
+                    reason_for_request:
+                        document.getElementById(
+                            "requestReason"
+                        ).value.trim(),
+
+                    request_type:
+                        document.getElementById(
+                            "requestType"
+                        ).value,
+
+                    transferring_school:
+                        document.getElementById(
+                            "requestTransferringSchool"
+                        ).value.trim(),
+
+                    current_uniform_available:
+                        document.getElementById(
+                            "requestCurrentUniform"
+                        ).value,
+
+                    urgency:
+                        document.getElementById(
+                            "requestUrgency"
+                        ).value,
+
+                    additional_information:
+                        document.getElementById(
+                            "requestAdditional"
+                        ).value.trim()
+
+                });
+
+
+            if (error) throw error;
+
+
+            document
+                .getElementById("requestForm")
+                .reset();
+
+
+            showMessage(
+                "Your uniform support request has been submitted successfully. OUT Organization will review the request and contact you.",
+                "success"
+            );
+
+
+            await loadCounts();
+
+        } catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                "We could not submit your request. Please try again.",
+                "error"
+            );
+
+        } finally {
+
+            button.disabled = false;
+
+            button.textContent =
+                "Submit Uniform Request";
+
+        }
+
+    });
+
+
+/* =====================================================
+   PARTNERSHIP FORM
+===================================================== */
+
+document
+    .getElementById("partnerForm")
+    .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+
+        const button =
+            document.getElementById("partnerSubmit");
+
+
+        button.disabled = true;
+
+        button.textContent =
+            "Submitting...";
+
+
+        try {
+
+            const {
+                error
+            } = await supabaseClient
+                .from("uniform_partnerships")
+                .insert({
+
+                    user_id: currentUser.id,
+
+                    organization_name:
+                        document.getElementById(
+                            "partnerOrganization"
+                        ).value.trim(),
+
+                    organization_type:
+                        document.getElementById(
+                            "partnerType"
+                        ).value,
+
+                    contact_person:
+                        document.getElementById(
+                            "partnerContact"
+                        ).value.trim(),
+
+                    email:
+                        document.getElementById(
+                            "partnerEmail"
+                        ).value.trim(),
+
+                    phone:
+                        document.getElementById(
+                            "partnerPhone"
+                        ).value.trim(),
+
+                    country:
+                        document.getElementById(
+                            "partnerCountry"
+                        ).value.trim(),
+
+                    county_state:
+                        document.getElementById(
+                            "partnerCounty"
+                        ).value.trim(),
+
+                    city_town:
+                        document.getElementById(
+                            "partnerCity"
+                        ).value.trim(),
+
+                    proposed_contribution:
+                        document.getElementById(
+                            "partnerContribution"
+                        ).value.trim(),
+
+                    logistics_support:
+                        document.getElementById(
+                            "partnerLogistics"
+                        ).value.trim(),
+
+                    partnership_idea:
+                        document.getElementById(
+                            "partnerIdea"
+                        ).value.trim(),
+
+                    relevant_experience:
+                        document.getElementById(
+                            "partnerExperience"
+                        ).value.trim(),
+
+                    expected_duration:
+                        document.getElementById(
+                            "partnerDuration"
+                        ).value,
+
+                    additional_information:
+                        document.getElementById(
+                            "partnerAdditional"
+                        ).value.trim()
+
+                });
+
+
+            if (error) throw error;
+
+
+            document
+                .getElementById("partnerForm")
+                .reset();
+
+
+            showMessage(
+                "Your partnership application has been submitted successfully. OUT Organization will review it and contact you.",
+                "success"
+            );
+
+
+            await loadCounts();
+
+        } catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                "We could not submit your partnership application. Please try again.",
+                "error"
+            );
+
+        } finally {
+
+            button.disabled = false;
+
+            button.textContent =
+                "Submit Partnership Application";
+
+        }
+
+    });
+
+
+/* =====================================================
+   SUPPORT FORM
+===================================================== */
+
+document
+    .getElementById("supportForm")
+    .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+
+        const button =
+            document.getElementById("supportSubmit");
+
+
+        button.disabled = true;
+
+        button.textContent =
+            "Submitting...";
+
+
+        try {
+
+            const {
+                error
+            } = await supabaseClient
+                .from("uniform_support")
+                .insert({
+
+                    user_id: currentUser.id,
+
+                    support_area:
+                        document.getElementById(
+                            "supportArea"
+                        ).value,
+
+                    skills_services:
+                        document.getElementById(
+                            "supportSkills"
+                        ).value.trim(),
+
+                    availability:
+                        document.getElementById(
+                            "supportAvailability"
+                        ).value,
+
+                    resources_available:
+                        document.getElementById(
+                            "supportResources"
+                        ).value.trim(),
+
+                    reason_for_support:
+                        document.getElementById(
+                            "supportReason"
+                        ).value.trim(),
+
+                    additional_information:
+                        document.getElementById(
+                            "supportAdditional"
+                        ).value.trim()
+
+                });
+
+
+            if (error) throw error;
+
+
+            document
+                .getElementById("supportForm")
+                .reset();
+
+
+            showMessage(
+                "Your support application has been submitted successfully. Thank you for contributing to the Uniform Cycle.",
+                "success"
+            );
+
+
+            await loadCounts();
+
+        } catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                "We could not submit your support application. Please try again.",
+                "error"
+            );
+
+        } finally {
+
+            button.disabled = false;
+
+            button.textContent =
+                "Submit Support Application";
+
+        }
+
+    });
+
+
+/* =====================================================
+   LOAD SUBMISSIONS
+===================================================== */
+
+async function loadSubmissions() {
+
+    const box =
+        document.getElementById(
+            "submissionsList"
+        );
+
+
+    box.innerHTML =
+        "Loading your submissions...";
+
+
+    const results = [];
+
+
+    const donationResult =
+        await supabaseClient
+            .from("uniform_donations")
+            .select("id, uniform_type, quantity, status, created_at")
+            .eq("user_id", currentUser.id)
+            .order("created_at", {
+                ascending: false
+            });
+
+
+    if (!donationResult.error) {
+
+        donationResult.data.forEach(function(item) {
+
+            results.push({
+
+                type: "Uniform Donation",
+
+                title:
+                    item.uniform_type +
+                    " × " +
+                    item.quantity,
+
+                status: item.status,
+
+                date: item.created_at
+
+            });
+
+        });
+
+    }
+
+
+    const requestResult =
+        await supabaseClient
+            .from("uniform_requests")
+            .select("id, uniform_type, quantity, status, created_at")
+            .eq("user_id", currentUser.id)
+            .order("created_at", {
+                ascending: false
+            });
+
+
+    if (!requestResult.error) {
+
+        requestResult.data.forEach(function(item) {
+
+            results.push({
+
+                type: "Uniform Request",
+
+                title:
+                    item.uniform_type +
+                    " × " +
+                    item.quantity,
+
+                status: item.status,
+
+                date: item.created_at
+
+            });
+
+        });
+
+    }
+
+
+    const partnerResult =
+        await supabaseClient
+            .from("uniform_partnerships")
+            .select("id, organization_name, status, created_at")
+            .eq("user_id", currentUser.id)
+            .order("created_at", {
+                ascending: false
+            });
+
+
+    if (!partnerResult.error) {
+
+        partnerResult.data.forEach(function(item) {
+
+            results.push({
+
+                type: "Partnership",
+
+                title:
+                    item.organization_name,
+
+                status: item.status,
+
+                date: item.created_at
+
+            });
+
+        });
+
+    }
+
+
+    const supportResult =
+        await supabaseClient
+            .from("uniform_support")
+            .select("id, support_area, status, created_at")
+            .eq("user_id", currentUser.id)
+            .order("created_at", {
+                ascending: false
+            });
+
+
+    if (!supportResult.error) {
+
+        supportResult.data.forEach(function(item) {
+
+            results.push({
+
+                type: "Skills & Resources Support",
+
+                title:
+                    item.support_area,
+
+                status: item.status,
+
+                date: item.created_at
+
+            });
+
+        });
+
+    }
+
+
+    results.sort(function(a, b) {
+
+        return new Date(b.date) -
+               new Date(a.date);
+
+    });
+
+
+    if (results.length === 0) {
+
+        box.innerHTML =
+            '<div class="uc-empty">' +
+            'You have not submitted any applications yet.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    box.innerHTML =
+        results.map(function(item) {
+
+            return `
+
+                <div class="uc-submission">
+
+                    <div class="uc-submission-header">
+
+                        <div>
+
+                            <div class="uc-submission-title">
+                                ${escapeHTML(item.type)}
+                            </div>
+
+                            <div>
+                                ${escapeHTML(item.title)}
+                            </div>
+
+                        </div>
+
+                        <span class="uc-status">
+                            ${escapeHTML(formatStatus(item.status))}
+                        </span>
+
+                    </div>
+
+                    <div class="uc-submission-date">
+                        Submitted:
+                        ${new Date(item.date).toLocaleString()}
+                    </div>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+document
+    .getElementById("logoutButton")
+    .addEventListener("click", async function() {
+
+        await supabaseClient.auth.signOut();
+
+        window.location.href =
+            "uniform-login.html";
+
+    });
+
+
+/* =====================================================
+   START DASHBOARD
+===================================================== */
+
+loadMember();
+
+</script>
+
+</body>
+</html>
