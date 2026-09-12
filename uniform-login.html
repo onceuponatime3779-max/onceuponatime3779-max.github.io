@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Login | Uniform Cycle | OUT Organization</title>
+
+    <meta name="description"
+          content="Login to the OUT Organization Uniform Cycle.">
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+
+        :root {
+            --green: #145A32;
+            --green-dark: #0d4325;
+            --gold: #D4AF37;
+            --light: #f5f8f5;
+            --border: #d7e1d9;
+            --text: #26352c;
+            --muted: #69766e;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--light);
+            font-family: Arial, sans-serif;
+            color: var(--text);
+        }
+
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 15px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 460px;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 15px;
+            padding: 35px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .login-header h1 {
+            color: var(--green);
+            margin: 0 0 10px;
+            font-size: 28px;
+        }
+
+        .login-header p {
+            color: var(--muted);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .field {
+            margin-bottom: 18px;
+        }
+
+        .field label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .field input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        .field input:focus {
+            outline: none;
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(20,90,50,0.1);
+        }
+
+        .password-row {
+            position: relative;
+        }
+
+        .password-row input {
+            padding-right: 85px;
+        }
+
+        .show-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: var(--green);
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .login-button {
+            width: 100%;
+            background: var(--green);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .login-button:hover {
+            background: var(--green-dark);
+        }
+
+        .login-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            display: none;
+            padding: 13px;
+            border-radius: 7px;
+            margin-bottom: 18px;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .message.error {
+            display: block;
+            background: #fff0ef;
+            color: #b42318;
+            border: 1px solid #efc2bd;
+        }
+
+        .message.success {
+            display: block;
+            background: #eaf7ef;
+            color: #087443;
+            border: 1px solid #b8dfc7;
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 25px;
+            line-height: 1.8;
+        }
+
+        .links a {
+            color: var(--green);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .security-note {
+            background: #f3f7f4;
+            border-left: 4px solid var(--green);
+            padding: 13px;
+            margin-top: 20px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--muted);
+        }
+
+        @media (max-width: 500px) {
+
+            .login-card {
+                padding: 25px 20px;
+            }
+
+            .login-header h1 {
+                font-size: 24px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="login-page">
+
+    <div class="login-container">
+
+        <div class="login-card">
+
+            <div class="login-header">
+
+                <h1>
+                    Uniform Cycle
+                </h1>
+
+                <p>
+                    Sign in to your OUT Organization
+                    Uniform Cycle account.
+                </p>
+
+            </div>
+
+
+            <div
+                id="message"
+                class="message">
+            </div>
+
+
+            <form id="loginForm">
+
+                <div class="field">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter your email address"
+                        autocomplete="email"
+                        required>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="password-row">
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required>
+
+                        <button
+                            type="button"
+                            class="show-password"
+                            id="showPassword">
+
+                            Show
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="login-button"
+                    id="loginButton">
+
+                    Login
+
+                </button>
+
+            </form>
+
+
+            <div class="links">
+
+                <div>
+                    Don't have an account?
+                    <a href="uniform-register.html">
+                        Create an account
+                    </a>
+                </div>
+
+                <div>
+                    <a href="uniform-cycle.html">
+                        Back to Uniform Cycle
+                    </a>
+                </div>
+
+            </div>
+
+
+            <div class="security-note">
+
+                Your account is securely authenticated through
+                Supabase. Your password is not stored by this
+                website.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+    "https://kxajujtqqfodqxmkuguv.supabase.co";
+
+const SUPABASE_ANON_KEY =
+    "sb_publishable_7WBopHAmgduaTJl5vbe4Sw_PD5GLAMA";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+function showMessage(text, type) {
+
+    const message =
+        document.getElementById("message");
+
+    message.textContent = text;
+
+    message.className =
+        "message " + type;
+
+}
+
+
+/* =====================================================
+   SHOW / HIDE PASSWORD
+===================================================== */
+
+document
+    .getElementById("showPassword")
+    .addEventListener("click", function() {
+
+        const password =
+            document.getElementById("password");
+
+        if (password.type === "password") {
+
+            password.type = "text";
+
+            this.textContent = "Hide";
+
+        } else {
+
+            password.type = "password";
+
+            this.textContent = "Show";
+
+        }
+
+    });
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+document
+    .getElementById("loginForm")
+    .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+
+        const email =
+            document
+                .getElementById("email")
+                .value
+                .trim();
+
+
+        const password =
+            document
+                .getElementById("password")
+                .value;
+
+
+        const button =
+            document.getElementById("loginButton");
+
+
+        button.disabled = true;
+
+        button.textContent =
+            "Signing in...";
+
+
+        showMessage("", "");
+
+
+        try {
+
+            const {
+                data,
+                error
+            } = await supabaseClient.auth.signInWithPassword({
+
+                email: email,
+
+                password: password
+
+            });
+
+
+            if (error) {
+
+                console.error(
+                    "Supabase login error:",
+                    error
+                );
+
+                throw error;
+
+            }
+
+
+            if (!data || !data.user) {
+
+                throw new Error(
+                    "Login was not completed."
+                );
+
+            }
+
+
+            showMessage(
+                "Login successful. Opening your dashboard...",
+                "success"
+            );
+
+
+            setTimeout(function() {
+
+                window.location.href =
+                    "uniform-dashboard.html";
+
+            }, 700);
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            let message =
+                "Unable to log in. Please check your email and password.";
+
+
+            if (
+                error.message &&
+                error.message.toLowerCase().includes(
+                    "email not confirmed"
+                )
+            ) {
+
+                message =
+                    "Your email address has not been confirmed yet. Please open the confirmation email sent to you and confirm your account before logging in.";
+
+            }
+
+
+            if (
+                error.message &&
+                error.message.toLowerCase().includes(
+                    "invalid login credentials"
+                )
+            ) {
+
+                message =
+                    "The email address or password is incorrect. Please check your details and try again.";
+
+            }
+
+
+            showMessage(
+                message,
+                "error"
+            );
+
+
+        } finally {
+
+            button.disabled = false;
+
+            button.textContent =
+                "Login";
+
+        }
+
+    });
+
+
+/* =====================================================
+   CHECK EXISTING SESSION
+===================================================== */
+
+async function checkExistingSession() {
+
+    const {
+        data: { session }
+    } = await supabaseClient.auth.getSession();
+
+
+    if (session && session.user) {
+
+        window.location.href =
+            "uniform-dashboard.html";
+
+    }
+
+}
+
+
+checkExistingSession();
+
+</script>
+
+</body>
+</html>
