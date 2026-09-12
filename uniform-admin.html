@@ -1,0 +1,1933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | OUT Organization</title>
+
+    <meta name="description"
+          content="OUT Organization Uniform Cycle secure administration dashboard">
+
+    <style>
+        :root {
+            --green: #145A32;
+            --green-dark: #0b3d22;
+            --green-light: #eaf5ee;
+            --gold: #D4AF37;
+            --white: #ffffff;
+            --bg: #f4f7f5;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --danger: #b91c1c;
+            --warning: #b45309;
+            --success: #166534;
+            --blue: #1d4ed8;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* =========================
+           HEADER
+        ========================== */
+
+        .topbar {
+            background: var(--green);
+            color: white;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 3px 12px rgba(0,0,0,.12);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand img {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 50%;
+            background: white;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .brand p {
+            margin: 3px 0 0;
+            font-size: 12px;
+            opacity: .85;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button,
+        .btn {
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 7px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .btn-light {
+            background: white;
+            color: var(--green);
+        }
+
+        .btn-gold {
+            background: var(--gold);
+            color: #1f2937;
+        }
+
+        .btn-danger {
+            background: #991b1b;
+            color: white;
+        }
+
+        .btn:hover,
+        button:hover {
+            opacity: .9;
+        }
+
+        /* =========================
+           PAGE
+        ========================== */
+
+        .container {
+            width: min(1400px, 94%);
+            margin: 30px auto;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h2 {
+            margin: 0 0 6px;
+            color: var(--green);
+        }
+
+        .welcome p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        /* =========================
+           LOADING / ERROR
+        ========================== */
+
+        .message {
+            display: none;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        .message.success {
+            background: #dcfce7;
+            color: var(--success);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--muted);
+        }
+
+        /* =========================
+           STAT CARDS
+        ========================== */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,.05);
+        }
+
+        .stat-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .stat-number {
+            font-size: 30px;
+            font-weight: 700;
+            color: var(--green);
+        }
+
+        .stat-label {
+            color: var(--muted);
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        /* =========================
+           SECTIONS
+        ========================== */
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 28px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,.04);
+        }
+
+        .section-header {
+            padding: 18px 20px;
+            background: var(--green-light);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .section-header h3 {
+            margin: 0;
+            color: var(--green);
+        }
+
+        .section-tools {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .search {
+            padding: 9px 12px;
+            border: 1px solid #cfd5d1;
+            border-radius: 7px;
+            min-width: 220px;
+            outline: none;
+        }
+
+        .search:focus {
+            border-color: var(--green);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th,
+        td {
+            padding: 13px 14px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+            vertical-align: top;
+            font-size: 13px;
+        }
+
+        th {
+            background: #fafafa;
+            color: var(--green-dark);
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        tr:hover td {
+            background: #fafdf9;
+        }
+
+        .empty {
+            padding: 30px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        /* =========================
+           STATUS
+        ========================== */
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: capitalize;
+            white-space: nowrap;
+        }
+
+        .status-submitted,
+        .status-under_review,
+        .status-searching {
+            background: #fef3c7;
+            color: var(--warning);
+        }
+
+        .status-approved,
+        .status-active,
+        .status-collected,
+        .status-ready_for_matching,
+        .status-ready_for_collection,
+        .status-contacted {
+            background: #dcfce7;
+            color: var(--success);
+        }
+
+        .status-matched,
+        .status-completed,
+        .status-fulfilled {
+            background: #dbeafe;
+            color: var(--blue);
+        }
+
+        .status-declined,
+        .status-closed,
+        .status-unavailable,
+        .status-inactive,
+        .status-suspended {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        .status-being_restored,
+        .status-collection_pending {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        /* =========================
+           DETAIL PANEL
+        ========================== */
+
+        .detail-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.55);
+            z-index: 3000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .detail-overlay.show {
+            display: block;
+        }
+
+        .detail-box {
+            background: white;
+            max-width: 900px;
+            margin: 30px auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,.25);
+        }
+
+        .detail-header {
+            background: var(--green);
+            color: white;
+            padding: 18px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .detail-header h3 {
+            margin: 0;
+        }
+
+        .close-detail {
+            background: transparent;
+            color: white;
+            font-size: 25px;
+            padding: 2px 8px;
+        }
+
+        .detail-content {
+            padding: 22px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .detail-item {
+            padding: 13px;
+            background: #f8faf9;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .detail-item strong {
+            display: block;
+            color: var(--green);
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .detail-item span {
+            word-break: break-word;
+        }
+
+        /* =========================
+           FOOTER
+        ========================== */
+
+        footer {
+            background: var(--green-dark);
+            color: white;
+            text-align: center;
+            padding: 25px;
+            margin-top: 40px;
+        }
+
+        footer p {
+            margin: 5px;
+            font-size: 13px;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================== */
+
+        @media (max-width: 1100px) {
+            .stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .top-actions {
+                width: 100%;
+            }
+
+            .top-actions .btn {
+                flex: 1;
+                text-align: center;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .section-header {
+                align-items: stretch;
+            }
+
+            .section-tools {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                width: 92%;
+            }
+
+            .brand h1 {
+                font-size: 17px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- =========================
+     HEADER
+========================== -->
+
+<header class="topbar">
+
+    <div class="brand">
+        <img src="images/logo.jpg" alt="OUT Organization Logo">
+
+        <div>
+            <h1>OUT Organization</h1>
+            <p>Uniform Cycle — Administration</p>
+        </div>
+    </div>
+
+    <div class="top-actions">
+        <a href="uniform-cycle.html" class="btn btn-light">
+            Public Page
+        </a>
+
+        <a href="uniform-dashboard.html" class="btn btn-gold">
+            Member Dashboard
+        </a>
+
+        <button id="logoutBtn" class="btn btn-danger">
+            Logout
+        </button>
+    </div>
+
+</header>
+
+
+<main class="container">
+
+    <div id="errorMessage" class="message error"></div>
+    <div id="successMessage" class="message success"></div>
+
+    <!-- =========================
+         WELCOME
+    ========================== -->
+
+    <div class="welcome">
+        <h2>Uniform Cycle Admin Dashboard</h2>
+        <p>
+            Manage members, uniform donations, support requests,
+            partnerships, and skills/resource applications.
+        </p>
+    </div>
+
+
+    <!-- =========================
+         STATISTICS
+    ========================== -->
+
+    <section class="stats">
+
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-number" id="memberCount">0</div>
+            <div class="stat-label">Registered Members</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🎒</div>
+            <div class="stat-number" id="donationCount">0</div>
+            <div class="stat-label">Uniform Donations</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🆘</div>
+            <div class="stat-number" id="requestCount">0</div>
+            <div class="stat-label">Support Requests</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🤝</div>
+            <div class="stat-number" id="partnershipCount">0</div>
+            <div class="stat-label">Partnership Applications</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🛠️</div>
+            <div class="stat-number" id="supportCount">0</div>
+            <div class="stat-label">Skills & Resources</div>
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         MEMBERS
+    ========================== -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h3>👥 Registered Members</h3>
+
+            <div class="section-tools">
+                <input
+                    type="text"
+                    class="search"
+                    id="memberSearch"
+                    placeholder="Search members..."
+                >
+
+                <button
+                    class="btn btn-gold"
+                    onclick="exportTable('membersTable','members.csv')"
+                >
+                    Export CSV
+                </button>
+            </div>
+
+        </div>
+
+        <div class="table-wrapper">
+
+            <table id="membersTable">
+
+                <thead>
+                    <tr>
+                        <th>Registration ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Location</th>
+                        <th>Organization</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Joined</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="membersBody">
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div id="membersEmpty" class="empty" style="display:none;">
+            No members found.
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         DONATIONS
+    ========================== -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h3>🎒 Uniform Donations</h3>
+
+            <div class="section-tools">
+
+                <input
+                    type="text"
+                    class="search"
+                    id="donationSearch"
+                    placeholder="Search donations..."
+                >
+
+                <button
+                    class="btn btn-gold"
+                    onclick="exportTable('donationsTable','uniform-donations.csv')"
+                >
+                    Export CSV
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="table-wrapper">
+
+            <table id="donationsTable">
+
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Uniform Type</th>
+                        <th>School</th>
+                        <th>Size</th>
+                        <th>Quantity</th>
+                        <th>Condition</th>
+                        <th>Repair</th>
+                        <th>Collection</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="donationsBody">
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div id="donationsEmpty" class="empty" style="display:none;">
+            No uniform donations found.
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         REQUESTS
+    ========================== -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h3>🆘 Uniform Support Requests</h3>
+
+            <div class="section-tools">
+
+                <input
+                    type="text"
+                    class="search"
+                    id="requestSearch"
+                    placeholder="Search requests..."
+                >
+
+                <button
+                    class="btn btn-gold"
+                    onclick="exportTable('requestsTable','support-requests.csv')"
+                >
+                    Export CSV
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="table-wrapper">
+
+            <table id="requestsTable">
+
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Student</th>
+                        <th>School</th>
+                        <th>Class / Grade</th>
+                        <th>Uniform Type</th>
+                        <th>Size</th>
+                        <th>Quantity</th>
+                        <th>Reason</th>
+                        <th>Urgency</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="requestsBody">
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div id="requestsEmpty" class="empty" style="display:none;">
+            No support requests found.
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         PARTNERSHIPS
+    ========================== -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h3>🤝 Partnership Applications</h3>
+
+            <div class="section-tools">
+
+                <input
+                    type="text"
+                    class="search"
+                    id="partnershipSearch"
+                    placeholder="Search partnerships..."
+                >
+
+                <button
+                    class="btn btn-gold"
+                    onclick="exportTable('partnershipsTable','partnerships.csv')"
+                >
+                    Export CSV
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="table-wrapper">
+
+            <table id="partnershipsTable">
+
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Organization</th>
+                        <th>Type</th>
+                        <th>Contact Person</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Location</th>
+                        <th>Contribution</th>
+                        <th>Duration</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="partnershipsBody">
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div id="partnershipsEmpty" class="empty" style="display:none;">
+            No partnership applications found.
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         SKILLS & RESOURCES
+    ========================== -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h3>🛠️ Skills & Resources</h3>
+
+            <div class="section-tools">
+
+                <input
+                    type="text"
+                    class="search"
+                    id="supportSearch"
+                    placeholder="Search applications..."
+                >
+
+                <button
+                    class="btn btn-gold"
+                    onclick="exportTable('supportTable','skills-resources.csv')"
+                >
+                    Export CSV
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="table-wrapper">
+
+            <table id="supportTable">
+
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Support Area</th>
+                        <th>Skills / Services</th>
+                        <th>Availability</th>
+                        <th>Resources</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="supportBody">
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div id="supportEmpty" class="empty" style="display:none;">
+            No skills or resource applications found.
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =========================
+     DETAIL MODAL
+========================== -->
+
+<div class="detail-overlay" id="detailOverlay">
+
+    <div class="detail-box">
+
+        <div class="detail-header">
+
+            <h3 id="detailTitle">
+                Submission Details
+            </h3>
+
+            <button
+                class="close-detail"
+                onclick="closeDetails()"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div class="detail-content">
+
+            <div class="detail-grid" id="detailGrid">
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<footer>
+
+    <p>
+        <strong>OUT Organization</strong> — Uniform Cycle
+    </p>
+
+    <p>
+        Secure Administration Dashboard
+    </p>
+
+</footer>
+
+
+<!-- =========================
+     SUPABASE
+========================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+    /* =========================================
+       SUPABASE CONFIGURATION
+    ========================================= */
+
+    const SUPABASE_URL =
+        "https://kxajujtqqfodqxmkuguv.supabase.co";
+
+    const SUPABASE_ANON_KEY =
+        "sb_publishable_7WBopHAmgduaTJl5vbe4Sw_PD5GLAMA";
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        );
+
+
+    /* =========================================
+       DATA STORAGE
+    ========================================= */
+
+    let members = [];
+    let donations = [];
+    let requests = [];
+    let partnerships = [];
+    let supportApplications = [];
+
+
+    /* =========================================
+       HELPERS
+    ========================================= */
+
+    function showError(message) {
+
+        const box = document.getElementById("errorMessage");
+
+        box.textContent = message;
+        box.classList.add("show");
+
+        document.getElementById("successMessage")
+            .classList.remove("show");
+    }
+
+
+    function showSuccess(message) {
+
+        const box = document.getElementById("successMessage");
+
+        box.textContent = message;
+        box.classList.add("show");
+
+        document.getElementById("errorMessage")
+            .classList.remove("show");
+    }
+
+
+    function clearMessages() {
+
+        document.getElementById("errorMessage")
+            .classList.remove("show");
+
+        document.getElementById("successMessage")
+            .classList.remove("show");
+    }
+
+
+    function escapeHtml(value) {
+
+        if (value === null || value === undefined) {
+            return "";
+        }
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+
+    function formatDate(value) {
+
+        if (!value) {
+            return "";
+        }
+
+        return new Date(value).toLocaleString();
+    }
+
+
+    function statusBadge(status) {
+
+        if (!status) {
+            return "";
+        }
+
+        const safeStatus =
+            escapeHtml(status)
+                .replace(/\s+/g, "_");
+
+        return `
+            <span class="status status-${safeStatus}">
+                ${escapeHtml(status.replace(/_/g, " "))}
+            </span>
+        `;
+    }
+
+
+    /* =========================================
+       ADMIN VERIFICATION
+    ========================================= */
+
+    async function verifyAdmin() {
+
+        const {
+            data: { user },
+            error: sessionError
+        } = await supabaseClient.auth.getUser();
+
+        if (sessionError || !user) {
+
+            window.location.href =
+                "uniform-login.html";
+
+            return false;
+        }
+
+
+        const {
+            data: profile,
+            error
+        } = await supabaseClient
+            .from("profiles")
+            .select("id, full_name, email, is_admin")
+            .eq("id", user.id)
+            .single();
+
+
+        if (error) {
+
+            showError(
+                "Unable to verify administrator account: "
+                + error.message
+            );
+
+            return false;
+        }
+
+
+        if (!profile || profile.is_admin !== true) {
+
+            await supabaseClient.auth.signOut();
+
+            window.location.href =
+                "uniform-login.html";
+
+            return false;
+        }
+
+
+        return true;
+    }
+
+
+    /* =========================================
+       LOAD ALL DATA
+    ========================================= */
+
+    async function loadAllData() {
+
+        clearMessages();
+
+        try {
+
+            const [
+                membersResult,
+                donationsResult,
+                requestsResult,
+                partnershipsResult,
+                supportResult
+            ] = await Promise.all([
+
+                supabaseClient
+                    .from("profiles")
+                    .select("*")
+                    .order("created_at", {
+                        ascending: false
+                    }),
+
+                supabaseClient
+                    .from("uniform_donations")
+                    .select("*")
+                    .order("created_at", {
+                        ascending: false
+                    }),
+
+                supabaseClient
+                    .from("uniform_requests")
+                    .select("*")
+                    .order("created_at", {
+                        ascending: false
+                    }),
+
+                supabaseClient
+                    .from("uniform_partnerships")
+                    .select("*")
+                    .order("created_at", {
+                        ascending: false
+                    }),
+
+                supabaseClient
+                    .from("uniform_support")
+                    .select("*")
+                    .order("created_at", {
+                        ascending: false
+                    })
+
+            ]);
+
+
+            if (membersResult.error)
+                throw membersResult.error;
+
+            if (donationsResult.error)
+                throw donationsResult.error;
+
+            if (requestsResult.error)
+                throw requestsResult.error;
+
+            if (partnershipsResult.error)
+                throw partnershipsResult.error;
+
+            if (supportResult.error)
+                throw supportResult.error;
+
+
+            members =
+                membersResult.data || [];
+
+            donations =
+                donationsResult.data || [];
+
+            requests =
+                requestsResult.data || [];
+
+            partnerships =
+                partnershipsResult.data || [];
+
+            supportApplications =
+                supportResult.data || [];
+
+
+            updateStatistics();
+
+            renderMembers();
+
+            renderDonations();
+
+            renderRequests();
+
+            renderPartnerships();
+
+            renderSupport();
+
+
+            showSuccess(
+                "Dashboard data loaded successfully."
+            );
+
+        } catch (error) {
+
+            console.error(error);
+
+            showError(
+                "Unable to load dashboard data: "
+                + error.message
+            );
+        }
+    }
+
+
+    /* =========================================
+       STATISTICS
+    ========================================= */
+
+    function updateStatistics() {
+
+        document.getElementById("memberCount")
+            .textContent = members.length;
+
+        document.getElementById("donationCount")
+            .textContent = donations.length;
+
+        document.getElementById("requestCount")
+            .textContent = requests.length;
+
+        document.getElementById("partnershipCount")
+            .textContent = partnerships.length;
+
+        document.getElementById("supportCount")
+            .textContent = supportApplications.length;
+    }
+
+
+    /* =========================================
+       MEMBERS
+    ========================================= */
+
+    function renderMembers(filter = "") {
+
+        const body =
+            document.getElementById("membersBody");
+
+        body.innerHTML = "";
+
+        const term =
+            filter.toLowerCase().trim();
+
+        const filtered =
+            members.filter(item =>
+                JSON.stringify(item)
+                    .toLowerCase()
+                    .includes(term)
+            );
+
+
+        document.getElementById("membersEmpty")
+            .style.display =
+                filtered.length ? "none" : "block";
+
+
+        filtered.forEach((item, index) => {
+
+            const location = [
+                item.city_town,
+                item.county_state,
+                item.country
+            ]
+            .filter(Boolean)
+            .join(", ");
+
+
+            body.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        ${escapeHtml(item.registration_id)}
+                    </td>
+
+                    <td>
+                        <strong>
+                            ${escapeHtml(item.full_name)}
+                        </strong>
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.email)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.phone)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(location)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.organization_name)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.organization_type)}
+                    </td>
+
+                    <td>
+                        ${statusBadge(item.status)}
+                    </td>
+
+                    <td>
+                        ${formatDate(item.created_at)}
+                    </td>
+
+                    <td>
+                        <button
+                            class="btn btn-gold"
+                            onclick="showDetails('Member', members[${members.indexOf(item)}])"
+                        >
+                            View
+                        </button>
+                    </td>
+
+                </tr>
+
+            `;
+        });
+    }
+
+
+    /* =========================================
+       DONATIONS
+    ========================================= */
+
+    function renderDonations(filter = "") {
+
+        const body =
+            document.getElementById("donationsBody");
+
+        body.innerHTML = "";
+
+        const term =
+            filter.toLowerCase().trim();
+
+        const filtered =
+            donations.filter(item =>
+                JSON.stringify(item)
+                    .toLowerCase()
+                    .includes(term)
+            );
+
+
+        document.getElementById("donationsEmpty")
+            .style.display =
+                filtered.length ? "none" : "block";
+
+
+        filtered.forEach(item => {
+
+            body.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        ${formatDate(item.created_at)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.uniform_type)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.school_name)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.size)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.quantity)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.condition)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.needs_repair)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.collection_method)}
+                    </td>
+
+                    <td>
+                        ${statusBadge(item.status)}
+                    </td>
+
+                    <td>
+                        <button
+                            class="btn btn-gold"
+                            onclick="showDetails('Uniform Donation', donations[${donations.indexOf(item)}])"
+                        >
+                            View
+                        </button>
+                    </td>
+
+                </tr>
+
+            `;
+        });
+    }
+
+
+    /* =========================================
+       REQUESTS
+    ========================================= */
+
+    function renderRequests(filter = "") {
+
+        const body =
+            document.getElementById("requestsBody");
+
+        body.innerHTML = "";
+
+        const term =
+            filter.toLowerCase().trim();
+
+        const filtered =
+            requests.filter(item =>
+                JSON.stringify(item)
+                    .toLowerCase()
+                    .includes(term)
+            );
+
+
+        document.getElementById("requestsEmpty")
+            .style.display =
+                filtered.length ? "none" : "block";
+
+
+        filtered.forEach(item => {
+
+            body.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        ${formatDate(item.created_at)}
+                    </td>
+
+                    <td>
+                        <strong>
+                            ${escapeHtml(item.student_name)}
+                        </strong>
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.school_name)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.class_grade)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.uniform_type)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.size)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.quantity)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.reason_for_request)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.urgency)}
+                    </td>
+
+                    <td>
+                        ${statusBadge(item.status)}
+                    </td>
+
+                    <td>
+                        <button
+                            class="btn btn-gold"
+                            onclick="showDetails('Support Request', requests[${requests.indexOf(item)}])"
+                        >
+                            View
+                        </button>
+                    </td>
+
+                </tr>
+
+            `;
+        });
+    }
+
+
+    /* =========================================
+       PARTNERSHIPS
+    ========================================= */
+
+    function renderPartnerships(filter = "") {
+
+        const body =
+            document.getElementById("partnershipsBody");
+
+        body.innerHTML = "";
+
+        const term =
+            filter.toLowerCase().trim();
+
+        const filtered =
+            partnerships.filter(item =>
+                JSON.stringify(item)
+                    .toLowerCase()
+                    .includes(term)
+            );
+
+
+        document.getElementById("partnershipsEmpty")
+            .style.display =
+                filtered.length ? "none" : "block";
+
+
+        filtered.forEach(item => {
+
+            const location = [
+                item.city_town,
+                item.county_state,
+                item.country
+            ]
+            .filter(Boolean)
+            .join(", ");
+
+
+            body.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        ${formatDate(item.created_at)}
+                    </td>
+
+                    <td>
+                        <strong>
+                            ${escapeHtml(item.organization_name)}
+                        </strong>
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.organization_type)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.contact_person)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.email)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.phone)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(location)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.proposed_contribution)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.expected_duration)}
+                    </td>
+
+                    <td>
+                        ${statusBadge(item.status)}
+                    </td>
+
+                    <td>
+                        <button
+                            class="btn btn-gold"
+                            onclick="showDetails('Partnership Application', partnerships[${partnerships.indexOf(item)}])"
+                        >
+                            View
+                        </button>
+                    </td>
+
+                </tr>
+
+            `;
+        });
+    }
+
+
+    /* =========================================
+       SUPPORT / SKILLS
+    ========================================== */
+
+    function renderSupport(filter = "") {
+
+        const body =
+            document.getElementById("supportBody");
+
+        body.innerHTML = "";
+
+        const term =
+            filter.toLowerCase().trim();
+
+        const filtered =
+            supportApplications.filter(item =>
+                JSON.stringify(item)
+                    .toLowerCase()
+                    .includes(term)
+            );
+
+
+        document.getElementById("supportEmpty")
+            .style.display =
+                filtered.length ? "none" : "block";
+
+
+        filtered.forEach(item => {
+
+            body.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        ${formatDate(item.created_at)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.support_area)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.skills_services)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.availability)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.resources_available)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.reason_for_support)}
+                    </td>
+
+                    <td>
+                        ${statusBadge(item.status)}
+                    </td>
+
+                    <td>
+                        <button
+                            class="btn btn-gold"
+                            onclick="showDetails('Skills & Resources Application', supportApplications[${supportApplications.indexOf(item)}])"
+                        >
+                            View
+                        </button>
+                    </td>
+
+                </tr>
+
+            `;
+        });
+    }
+
+
+    /* =========================================
+       DETAILS
+    ========================================== */
+
+    function showDetails(title, data) {
+
+        document.getElementById("detailTitle")
+            .textContent = title;
+
+
+        const grid =
+            document.getElementById("detailGrid");
+
+        grid.innerHTML = "";
+
+
+        Object.entries(data).forEach(([key, value]) => {
+
+            let displayValue = value;
+
+            if (
+                key === "created_at" ||
+                key === "updated_at"
+            ) {
+                displayValue = formatDate(value);
+            }
+
+            if (
+                key === "status"
+            ) {
+                displayValue = statusBadge(value);
+            }
+
+            grid.innerHTML += `
+
+                <div class="detail-item">
+
+                    <strong>
+                        ${escapeHtml(
+                            key
+                                .replace(/_/g, " ")
+                                .replace(/\b\w/g,
+                                    letter => letter.toUpperCase())
+                        )}
+                    </strong>
+
+                    <span>
+                        ${
+                            key === "status"
+                                ? displayValue
+                                : escapeHtml(displayValue)
+                        }
+                    </span>
+
+                </div>
+
+            `;
+        });
+
+
+        document.getElementById("detailOverlay")
+            .classList.add("show");
+    }
+
+
+    function closeDetails() {
+
+        document.getElementById("detailOverlay")
+            .classList.remove("show");
+    }
+
+
+    document.getElementById("detailOverlay")
+        .addEventListener("click", function(event) {
+
+            if (event.target === this) {
+                closeDetails();
+            }
+
+        });
+
+
+    /* =========================================
+       SEARCH
+    ========================================== */
+
+    document.getElementById("memberSearch")
+        .addEventListener("input", e =>
+            renderMembers(e.target.value)
+        );
+
+    document.getElementById("donationSearch")
+        .addEventListener("input", e =>
+            renderDonations(e.target.value)
+        );
+
+    document.getElementById("requestSearch")
+        .addEventListener("input", e =>
+            renderRequests(e.target.value)
+        );
+
+    document.getElementById("partnershipSearch")
+        .addEventListener("input", e =>
+            renderPartnerships(e.target.value)
+        );
+
+    document.getElementById("supportSearch")
+        .addEventListener("input", e =>
+            renderSupport(e.target.value)
+        );
+
+
+    /* =========================================
+       CSV EXPORT
+    ========================================== */
+
+    function exportTable(tableId, filename) {
+
+        const table =
+            document.getElementById(tableId);
+
+        const rows =
+            Array.from(table.querySelectorAll("tr"));
+
+
+        const csv =
+            rows.map(row => {
+
+                const cells =
+                    Array.from(
+                        row.querySelectorAll("th, td")
+                    );
+
+                return cells.map(cell => {
+
+                    let text =
+                        cell.innerText
+                            .replace(/\s+/g, " ")
+                            .trim();
+
+                    text =
+                        text.replace(/"/g, '""');
+
+                    return `"${text}"`;
+
+                }).join(",");
+
+            }).join("\n");
+
+
+        const blob =
+            new Blob(
+                [csv],
+                {
+                    type: "text/csv;charset=utf-8;"
+                }
+            );
+
+
+        const url =
+            URL.createObjectURL(blob);
+
+
+        const link =
+            document.createElement("a");
+
+        link.href = url;
+        link.download = filename;
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        document.body.removeChild(link);
+
+        URL.revokeObjectURL(url);
+    }
+
+
+    /* =========================================
+       LOGOUT
+    ========================================== */
+
+    document.getElementById("logoutBtn")
+        .addEventListener("click", async () => {
+
+            await supabaseClient.auth.signOut();
+
+            window.location.href =
+                "uniform-login.html";
+        });
+
+
+    /* =========================================
+       START DASHBOARD
+    ========================================== */
+
+    async function startDashboard() {
+
+        const isAdmin =
+            await verifyAdmin();
+
+        if (!isAdmin) {
+            return;
+        }
+
+        await loadAllData();
+    }
+
+
+    startDashboard();
+
+</script>
+
+</body>
+</html>
