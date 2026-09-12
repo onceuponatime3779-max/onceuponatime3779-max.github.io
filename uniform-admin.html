@@ -1487,45 +1487,16 @@
 
                     <tr>
 
-                        <th>
-                            Registration ID
-                        </th>
-
-                        <th>
-                            Name
-                        </th>
-
-                        <th>
-                            Email
-                        </th>
-
-                        <th>
-                            Phone
-                        </th>
-
-                        <th>
-                            Location
-                        </th>
-
-                        <th>
-                            Organization
-                        </th>
-
-                        <th>
-                            Type
-                        </th>
-
-                        <th>
-                            Status
-                        </th>
-
-                        <th>
-                            Joined
-                        </th>
-
-                        <th>
-                            Action
-                        </th>
+                        <th>Registration ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Location</th>
+                        <th>Organization</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Joined</th>
+                        <th>Action</th>
 
                     </tr>
 
@@ -2068,7 +2039,6 @@
 
     const STATUS_OPTIONS = {
 
-
         donation: [
 
             ["submitted", "Submitted"],
@@ -2182,8 +2152,18 @@
             STATUS_OPTIONS[type] || [];
 
 
+        /*
+         * IMPORTANT:
+         * id MUST be the real Supabase UUID.
+         * It must NEVER be the row number.
+         */
+
+        const safeId =
+            String(id || "");
+
+
         const selectId =
-            `status-${type}-${id}`;
+            `status-${type}-${safeId}`;
 
 
         const optionsHtml =
@@ -2232,7 +2212,7 @@
                         class="save-status-btn"
                         onclick="saveStatus(
                             '${escapeHtml(type)}',
-                            '${escapeHtml(id)}'
+                            '${escapeHtml(safeId)}'
                         )"
                     >
                         Save
@@ -2951,6 +2931,15 @@
         body.innerHTML =
             filtered.map(item => {
 
+                /*
+                 * IMPORTANT:
+                 * item.id is the actual UUID from Supabase.
+                 */
+
+                const donationId =
+                    String(item.id || "");
+
+
                 return `
 
                     <tr>
@@ -3021,7 +3010,7 @@
 
                             ${statusControl(
                                 "donation",
-                                item.id,
+                                donationId,
                                 item.status
                             )}
 
@@ -3196,7 +3185,7 @@
 
                             ${statusControl(
                                 "request",
-                                item.id,
+                                String(item.id || ""),
                                 item.status
                             )}
 
@@ -3379,7 +3368,7 @@
 
                             ${statusControl(
                                 "partnership",
-                                item.id,
+                                String(item.id || ""),
                                 item.status
                             )}
 
@@ -3526,7 +3515,7 @@
 
                             ${statusControl(
                                 "support",
-                                item.id,
+                                String(item.id || ""),
                                 item.status
                             )}
 
@@ -3556,293 +3545,386 @@
        SAVE STATUS
     ===================================================== */
 
-    async function saveStatus(
-        type,
-        id
-    ) {
+   async function saveStatus(type, id) {
 
-        clearMessages();
+    clearMessages();
+
+    /*
+     * The database record IDs are numeric/bigint.
+     * Do NOT validate them as UUIDs.
+     */
+
+    const recordId = String(id || "").trim();
+
+    if (!recordId) {
+
+        showError(
+            "The record ID is missing."
+        );
+
+        return;
+    }
 
 
-        const select =
-            document.getElementById(
-                `status-${type}-${id}`
+    /*
+     * Make sure the ID is actually numeric.
+     */
+
+    if (!/^\d+$/.test(recordId)) {
+
+        showError(
+            "Invalid record ID."
+        );
+
+        console.error(
+            "Invalid numeric ID received:",
+            recordId
+        );
+
+        return;
+    }
+
+
+    const select =
+        document.getElementById(
+            `status-${type}-${recordId}`
+        );
+
+
+    if (!select) {
+
+        showError(
+            "Status control could not be found."
+        );
+
+        return;
+    }
+
+
+    const newStatus =
+        select.value;
+
+
+    if (!newStatus) {
+
+        showError(
+            "Please select a status."
+        );
+
+        return;
+    }
+
+
+    const container =
+        select.closest(
+            ".status-action"
+        );
+
+
+    const button =
+        container
+            ? container.querySelector(
+                ".save-status-btn"
+            )
+            : null;
+
+
+    if (button) {
+
+        button.disabled = true;
+
+        button.textContent =
+            "Saving...";
+    }
+
+
+    try {
+
+        let functionName;
+
+
+        /*
+         * These function names match the
+         * corrected Supabase functions.
+         */
+
+        if (type === "donation") {
+
+            functionName =
+                "admin_update_donation_status";
+        }
+
+        else if (type === "request") {
+
+            functionName =
+                "admin_update_request_status";
+        }
+
+        else if (type === "partnership") {
+
+            functionName =
+                "admin_update_partnership_status";
+        }
+
+        else if (type === "support") {
+
+            functionName =
+                "admin_update_support_status";
+        }
+
+        else {
+
+            throw new Error(
+                "Invalid status type."
             );
-
-
-        if (!select) {
-
-            showError(
-                "Status control could not be found."
-            );
-
-            return;
         }
 
 
-        const newStatus =
-            select.value;
+        console.log(
+            "Updating status:",
+            {
+                type: type,
+                id: recordId,
+                status: newStatus,
+                function: functionName
+            }
+        );
 
 
-        const container =
-            select.closest(
-                ".status-action"
+        /*
+         * Send the numeric ID to Supabase.
+         */
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .rpc(
+                    functionName,
+                    {
+                        p_id: recordId,
+                        p_status: newStatus
+                    }
+                );
+
+
+        if (error) {
+
+            console.error(
+                "Supabase status error:",
+                error
             );
 
+            throw error;
+        }
 
-        const button =
-            container
-                ? container.querySelector(
-                    ".save-status-btn"
-                )
-                : null;
+
+        /*
+         * The RPC returns the updated
+         * database record.
+         */
+
+        if (!data) {
+
+            throw new Error(
+                "The record was not found or could not be updated."
+            );
+        }
+
+
+        /*
+         * Update the local record.
+         */
+
+        if (type === "donation") {
+
+            const item =
+                donations.find(
+                    row =>
+                        String(row.id) === recordId
+                );
+
+            if (item) {
+
+                item.status =
+                    newStatus;
+
+                item.updated_at =
+                    new Date().toISOString();
+            }
+        }
+
+
+        else if (type === "request") {
+
+            const item =
+                requests.find(
+                    row =>
+                        String(row.id) === recordId
+                );
+
+            if (item) {
+
+                item.status =
+                    newStatus;
+
+                item.updated_at =
+                    new Date().toISOString();
+            }
+        }
+
+
+        else if (type === "partnership") {
+
+            const item =
+                partnerships.find(
+                    row =>
+                        String(row.id) === recordId
+                );
+
+            if (item) {
+
+                item.status =
+                    newStatus;
+
+                item.updated_at =
+                    new Date().toISOString();
+            }
+        }
+
+
+        else if (type === "support") {
+
+            const item =
+                supportApplications.find(
+                    row =>
+                        String(row.id) === recordId
+                );
+
+            if (item) {
+
+                item.status =
+                    newStatus;
+
+                item.updated_at =
+                    new Date().toISOString();
+            }
+        }
+
+
+        /*
+         * Re-render the section.
+         */
+
+        if (type === "donation") {
+
+            renderDonations(
+                document.getElementById(
+                    "donationSearch"
+                )?.value || ""
+            );
+        }
+
+
+        else if (type === "request") {
+
+            renderRequests(
+                document.getElementById(
+                    "requestSearch"
+                )?.value || ""
+            );
+        }
+
+
+        else if (type === "partnership") {
+
+            renderPartnerships(
+                document.getElementById(
+                    "partnershipSearch"
+                )?.value || ""
+            );
+        }
+
+
+        else if (type === "support") {
+
+            renderSupport(
+                document.getElementById(
+                    "supportSearch"
+                )?.value || ""
+            );
+        }
+
+
+        /*
+         * Refresh dashboard statistics.
+         */
+
+        if (typeof updateStatistics === "function") {
+
+            updateStatistics();
+        }
+
+
+        if (typeof updateStatusOverview === "function") {
+
+            updateStatusOverview();
+        }
+
+
+        /*
+         * Success message.
+         */
+
+        showSuccess(
+            "Status updated successfully to " +
+            formatLabel(newStatus) +
+            "."
+        );
+
+
+        /*
+         * Restore button.
+         */
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                "Save";
+        }
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "Status update error:",
+            error
+        );
+
+
+        showError(
+            "Unable to update status: " +
+            (
+                error.message ||
+                "Unknown error"
+            )
+        );
 
 
         if (button) {
 
-            button.disabled = true;
+            button.disabled = false;
 
             button.textContent =
-                "Saving...";
-        }
-
-
-        try {
-
-            let functionName;
-
-
-            if (
-                type === "donation"
-            ) {
-
-                functionName =
-                    "admin_update_donation_status";
-            }
-
-
-            else if (
-                type === "request"
-            ) {
-
-                functionName =
-                    "admin_update_request_status";
-            }
-
-
-            else if (
-                type === "partnership"
-            ) {
-
-                functionName =
-                    "admin_update_partnership_status";
-            }
-
-
-            else if (
-                type === "support"
-            ) {
-
-                functionName =
-                    "admin_update_support_status";
-            }
-
-
-            else {
-
-                throw new Error(
-                    "Invalid status type."
-                );
-            }
-
-
-            const {
-                data,
-                error
-            } =
-                await supabaseClient
-                    .rpc(
-                        functionName,
-                        {
-                            p_id: id,
-                            p_status: newStatus
-                        }
-                    );
-
-
-            if (error) {
-
-                throw error;
-            }
-
-
-            if (data !== true) {
-
-                throw new Error(
-                    "The record was not found or the status was not changed."
-                );
-            }
-
-
-            /*
-             * Update local data
-             */
-
-            if (
-                type === "donation"
-            ) {
-
-                const item =
-                    donations.find(
-                        row =>
-                            row.id === id
-                    );
-
-                if (item) {
-                    item.status =
-                        newStatus;
-                }
-            }
-
-
-            else if (
-                type === "request"
-            ) {
-
-                const item =
-                    requests.find(
-                        row =>
-                            row.id === id
-                    );
-
-                if (item) {
-                    item.status =
-                        newStatus;
-                }
-            }
-
-
-            else if (
-                type === "partnership"
-            ) {
-
-                const item =
-                    partnerships.find(
-                        row =>
-                            row.id === id
-                    );
-
-                if (item) {
-                    item.status =
-                        newStatus;
-                }
-            }
-
-
-            else if (
-                type === "support"
-            ) {
-
-                const item =
-                    supportApplications.find(
-                        row =>
-                            row.id === id
-                    );
-
-                if (item) {
-                    item.status =
-                        newStatus;
-                }
-            }
-
-
-            /*
-             * Re-render affected section
-             */
-
-            if (
-                type === "donation"
-            ) {
-
-                renderDonations(
-                    document.getElementById(
-                        "donationSearch"
-                    ).value
-                );
-            }
-
-
-            if (
-                type === "request"
-            ) {
-
-                renderRequests(
-                    document.getElementById(
-                        "requestSearch"
-                    ).value
-                );
-            }
-
-
-            if (
-                type === "partnership"
-            ) {
-
-                renderPartnerships(
-                    document.getElementById(
-                        "partnershipSearch"
-                    ).value
-                );
-            }
-
-
-            if (
-                type === "support"
-            ) {
-
-                renderSupport(
-                    document.getElementById(
-                        "supportSearch"
-                    ).value
-                );
-            }
-
-
-            updateStatusOverview();
-
-
-            showSuccess(
-                "Status updated successfully."
-            );
-
-        }
-
-
-        catch (error) {
-
-            console.error(
-                "Status update error:",
-                error
-            );
-
-
-            showError(
-                "Unable to update status: " +
-                error.message
-            );
-
-
-            if (button) {
-
-                button.disabled = false;
-
-                button.textContent =
-                    "Save";
-            }
+                "Save";
         }
     }
-
-
+}
 
     /* =====================================================
        DETAILS MODAL
@@ -4165,8 +4247,7 @@
         event =>
             renderSupport(
                 event.target.value
-            )
-    );
+            );
 
 
 
