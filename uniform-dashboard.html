@@ -2282,89 +2282,178 @@ document
 
         event.preventDefault();
 
-
         const button =
             document.getElementById("donationSubmit");
 
-
         button.disabled = true;
-
-        button.textContent =
-            "Submitting...";
-
+        button.textContent = "Submitting...";
 
         try {
 
+            if (!currentUser) {
+                throw new Error(
+                    "Your login session has expired. Please log in again."
+                );
+            }
+
+            const uniformType =
+                document.getElementById(
+                    "donationUniformType"
+                ).value;
+
+            const schoolName =
+                document.getElementById(
+                    "donationSchool"
+                ).value.trim();
+
+            const size =
+                document.getElementById(
+                    "donationSize"
+                ).value.trim();
+
+            const quantity =
+                parseInt(
+                    document.getElementById(
+                        "donationQuantity"
+                    ).value,
+                    10
+                );
+
+            const condition =
+                document.getElementById(
+                    "donationCondition"
+                ).value;
+
+            const needsRepair =
+                document.getElementById(
+                    "donationRepair"
+                ).value === "true";
+
+            const reason =
+                document.getElementById(
+                    "donationReason"
+                ).value.trim();
+
+            const unusedDuration =
+                document.getElementById(
+                    "donationUnused"
+                ).value.trim();
+
+            const collectionMethod =
+                document.getElementById(
+                    "donationCollectionMethod"
+                ).value;
+
+            const collectionLocation =
+                document.getElementById(
+                    "donationLocation"
+                ).value.trim();
+
+            const additionalInformation =
+                document.getElementById(
+                    "donationAdditional"
+                ).value.trim();
+
+
+            /* BASIC VALIDATION */
+
+            if (!uniformType) {
+                throw new Error(
+                    "Please select the uniform type."
+                );
+            }
+
+            if (!size) {
+                throw new Error(
+                    "Please enter the uniform size."
+                );
+            }
+
+            if (!quantity || quantity < 1) {
+                throw new Error(
+                    "Quantity must be at least 1."
+                );
+            }
+
+            if (!condition) {
+                throw new Error(
+                    "Please select the uniform condition."
+                );
+            }
+
+            if (!reason) {
+                throw new Error(
+                    "Please provide the reason for donating."
+                );
+            }
+
+
+            /* SECURE SUPABASE FUNCTION */
+
             const {
+                data,
                 error
-            } = await supabaseClient
-                .from("uniform_donations")
-                .insert({
+            } = await supabaseClient.rpc(
+                "submit_uniform_donation",
+                {
+                    p_uniform_type:
+                        uniformType,
 
-                    user_id: currentUser.id,
+                    p_school_name:
+                        schoolName,
 
-                    uniform_type:
-                        document.getElementById(
-                            "donationUniformType"
-                        ).value,
+                    p_size:
+                        size,
 
-                    school_name:
-                        document.getElementById(
-                            "donationSchool"
-                        ).value.trim(),
+                    p_quantity:
+                        quantity,
 
-                    size:
-                        document.getElementById(
-                            "donationSize"
-                        ).value.trim(),
+                    p_condition:
+                        condition,
 
-                    quantity:
-                        parseInt(
-                            document.getElementById(
-                                "donationQuantity"
-                            ).value
-                        ),
+                    p_needs_repair:
+                        needsRepair,
 
-                    condition:
-                        document.getElementById(
-                            "donationCondition"
-                        ).value,
+                    p_reason_for_donation:
+                        reason,
 
-                    needs_repair:
-                        document.getElementById(
-                            "donationRepair"
-                        ).value === "true",
+                    p_unused_duration:
+                        unusedDuration,
 
-                    reason_for_donation:
-                        document.getElementById(
-                            "donationReason"
-                        ).value.trim(),
+                    p_collection_method:
+                        collectionMethod,
 
-                    unused_duration:
-                        document.getElementById(
-                            "donationUnused"
-                        ).value.trim(),
+                    p_collection_location:
+                        collectionLocation,
 
-                    collection_method:
-                        document.getElementById(
-                            "donationCollectionMethod"
-                        ).value,
-
-                    collection_location:
-                        document.getElementById(
-                            "donationLocation"
-                        ).value.trim(),
-
-                    additional_information:
-                        document.getElementById(
-                            "donationAdditional"
-                        ).value.trim()
-
-                });
+                    p_additional_information:
+                        additionalInformation
+                }
+            );
 
 
-            if (error) throw error;
+            if (error) {
 
+                console.error(
+                    "Donation submission error:",
+                    error
+                );
+
+                throw new Error(
+                    error.message ||
+                    "The donation could not be submitted."
+                );
+            }
+
+
+            if (!data) {
+                throw new Error(
+                    "The donation was not saved. Please try again."
+                );
+            }
+
+
+            /* SUCCESS */
 
             document
                 .getElementById("donationForm")
@@ -2379,14 +2468,21 @@ document
 
             await loadCounts();
 
+
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                "Donation submission failed:",
+                error
+            );
+
 
             showMessage(
+                error.message ||
                 "We could not submit your donation. Please try again.",
                 "error"
             );
+
 
         } finally {
 
@@ -2399,7 +2495,7 @@ document
 
     });
 
-
+    
 /* =====================================================
    REQUEST FORM
 ===================================================== */
