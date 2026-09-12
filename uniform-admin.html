@@ -1073,57 +1073,53 @@
     /* =========================================
        ADMIN VERIFICATION
     ========================================= */
-
-    async function verifyAdmin() {
-
+async function verifyAdmin() {
+    try {
         const {
             data: { user },
-            error: sessionError
+            error: userError
         } = await supabaseClient.auth.getUser();
 
-        if (sessionError || !user) {
-
-            window.location.href =
-                "uniform-login.html";
-
+        if (userError || !user) {
+            window.location.href = "uniform-login.html";
             return false;
         }
 
-
-        const {
-            data: profile,
-            error
-        } = await supabaseClient
-            .from("profiles")
-            .select("id, full_name, email, is_admin")
-            .eq("id", user.id)
-            .single();
-
+        const { data, error } = await supabaseClient
+            .rpc("is_uniform_cycle_admin");
 
         if (error) {
+            console.error("Admin verification error:", error);
 
             showError(
-                "Unable to verify administrator account: "
-                + error.message
+                "Unable to verify administrator account: " +
+                error.message
             );
 
             return false;
         }
 
-
-        if (!profile || profile.is_admin !== true) {
-
-            await supabaseClient.auth.signOut();
-
-            window.location.href =
-                "uniform-login.html";
+        if (data !== true) {
+            showError(
+                "Access denied. This account is not authorized as an administrator."
+            );
 
             return false;
         }
 
-
         return true;
+
+    } catch (error) {
+        console.error("Unexpected admin verification error:", error);
+
+        showError(
+            "Unable to verify administrator account: " +
+            error.message
+        );
+
+        return false;
     }
+}
 
 
     /* =========================================
