@@ -1,316 +1,674 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Admin Dashboard | OUT Organization</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <meta name="description"
-          content="OUT Organization Uniform Cycle secure administration dashboard">
+    <meta
+        name="theme-color"
+        content="#145A32"
+    >
+
+    <title>
+        Admin Dashboard | OUT Organization
+    </title>
+
+
+    <!-- Supabase -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
 
     <style>
+
         :root {
             --green: #145A32;
-            --green-dark: #0b3d22;
-            --green-light: #eaf5ee;
+            --green-dark: #0d3f22;
             --gold: #D4AF37;
-            --white: #ffffff;
-            --bg: #f4f7f5;
+            --gold-dark: #b89520;
+
             --text: #1f2937;
             --muted: #6b7280;
+
+            --bg: #f5f7f6;
+            --white: #ffffff;
+
             --border: #e5e7eb;
-            --danger: #b91c1c;
-            --warning: #b45309;
+
             --success: #166534;
+            --warning: #92400e;
+            --danger: #991b1b;
             --blue: #1d4ed8;
+
+            --shadow:
+                0 4px 15px rgba(0,0,0,.07);
         }
+
 
         * {
             box-sizing: border-box;
         }
 
+
         body {
+
             margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
             background: var(--bg);
+
             color: var(--text);
+
+            line-height: 1.5;
         }
+
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+
+        button,
+        input,
+        select {
+            font-family: inherit;
+        }
+
+
+        button {
+            cursor: pointer;
+        }
+
 
         /* =========================
            HEADER
         ========================== */
 
         .topbar {
-            background: var(--green);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--green),
+                    var(--green-dark)
+                );
+
             color: white;
-            padding: 16px 24px;
+
+            padding:
+                15px 25px;
+
             display: flex;
-            justify-content: space-between;
+
             align-items: center;
+
+            justify-content: space-between;
+
             gap: 20px;
+
             position: sticky;
+
             top: 0;
+
             z-index: 1000;
-            box-shadow: 0 3px 12px rgba(0,0,0,.12);
+
+            box-shadow:
+                0 2px 10px rgba(0,0,0,.15);
         }
 
+
         .brand {
+
             display: flex;
+
             align-items: center;
+
             gap: 12px;
         }
 
-        .brand img {
-            width: 48px;
-            height: 48px;
-            object-fit: cover;
+
+        .brand-logo {
+
+            width: 43px;
+
+            height: 43px;
+
             border-radius: 50%;
+
+            object-fit: cover;
+
             background: white;
+
+            border:
+                2px solid
+                var(--gold);
         }
 
-        .brand h1 {
+
+        .brand-text h1 {
+
             margin: 0;
-            font-size: 20px;
+
+            font-size: 19px;
         }
 
-        .brand p {
-            margin: 3px 0 0;
+
+        .brand-text span {
+
             font-size: 12px;
+
             opacity: .85;
         }
 
+
         .top-actions {
+
             display: flex;
-            gap: 10px;
+
+            align-items: center;
+
+            gap: 8px;
+
             flex-wrap: wrap;
         }
 
-        button,
-        .btn {
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            padding: 10px 15px;
-            border-radius: 7px;
-            font-weight: 600;
-            font-size: 14px;
-        }
 
-        .btn-light {
-            background: white;
-            color: var(--green);
-        }
+        .top-btn {
 
-        .btn-gold {
-            background: var(--gold);
-            color: #1f2937;
-        }
+            border:
+                1px solid
+                rgba(255,255,255,.35);
 
-        .btn-danger {
-            background: #991b1b;
+            background:
+                rgba(255,255,255,.08);
+
             color: white;
+
+            padding:
+                8px 12px;
+
+            border-radius: 7px;
+
+            font-size: 12px;
         }
 
-        .btn:hover,
-        button:hover {
-            opacity: .9;
+
+        .top-btn:hover {
+
+            background:
+                rgba(255,255,255,.18);
         }
+
+
+        .logout-btn {
+
+            background: var(--gold);
+
+            color: #111;
+
+            border: none;
+
+            font-weight: 700;
+        }
+
 
         /* =========================
-           PAGE
+           MAIN
         ========================== */
 
         .container {
-            width: min(1400px, 94%);
-            margin: 30px auto;
+
+            width: 96%;
+
+            max-width: 1500px;
+
+            margin:
+                25px auto 50px;
         }
 
-        .welcome {
-            margin-bottom: 25px;
+
+        .page-title {
+
+            margin-bottom: 22px;
         }
 
-        .welcome h2 {
-            margin: 0 0 6px;
+
+        .page-title h2 {
+
+            margin:
+                0 0 5px;
+
             color: var(--green);
+
+            font-size: 28px;
         }
 
-        .welcome p {
+
+        .page-title p {
+
             margin: 0;
+
             color: var(--muted);
+
+            font-size: 14px;
         }
+
 
         /* =========================
-           LOADING / ERROR
+           MESSAGES
         ========================== */
 
         .message {
+
             display: none;
-            padding: 15px;
+
+            padding:
+                12px 15px;
+
             border-radius: 8px;
+
             margin-bottom: 20px;
+
+            font-size: 13px;
+
+            font-weight: 600;
         }
 
-        .message.show {
-            display: block;
-        }
-
-        .message.error {
-            background: #fee2e2;
-            color: var(--danger);
-        }
 
         .message.success {
+
             background: #dcfce7;
-            color: var(--success);
+
+            color: #166534;
+
+            border:
+                1px solid #bbf7d0;
         }
 
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: var(--muted);
+
+        .message.error {
+
+            background: #fee2e2;
+
+            color: #991b1b;
+
+            border:
+                1px solid #fecaca;
         }
+
 
         /* =========================
            STAT CARDS
         ========================== */
 
-        .stats {
+        .stats-grid {
+
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 18px;
-            margin-bottom: 30px;
+
+            grid-template-columns:
+                repeat(5, minmax(0, 1fr));
+
+            gap: 15px;
+
+            margin-bottom: 25px;
         }
+
 
         .stat-card {
+
             background: white;
-            padding: 22px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            box-shadow: 0 2px 8px rgba(0,0,0,.05);
+
+            border-radius: 10px;
+
+            padding: 18px;
+
+            box-shadow: var(--shadow);
+
+            border-top:
+                4px solid var(--green);
         }
+
 
         .stat-icon {
-            font-size: 28px;
-            margin-bottom: 10px;
+
+            font-size: 25px;
+
+            margin-bottom: 8px;
         }
 
+
+        .stat-label {
+
+            color: var(--muted);
+
+            font-size: 12px;
+
+            font-weight: 600;
+        }
+
+
         .stat-number {
-            font-size: 30px;
-            font-weight: 700;
+
+            font-size: 28px;
+
+            font-weight: 800;
+
+            color: var(--green);
+
+            margin-top: 3px;
+        }
+
+
+        /* =========================
+           STATUS OVERVIEW
+        ========================== */
+
+        .overview-card {
+
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 10px;
+
+            box-shadow: var(--shadow);
+
+            margin-bottom: 25px;
+        }
+
+
+        .overview-card h3 {
+
+            margin:
+                0 0 15px;
+
+            color: var(--green);
+
+            font-size: 18px;
+        }
+
+
+        .overview-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(150px, 1fr));
+
+            gap: 10px;
+        }
+
+
+        .overview-item {
+
+            padding: 12px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 8px;
+
+            background: #fafafa;
+        }
+
+
+        .overview-item strong {
+
+            display: block;
+
+            font-size: 20px;
+
             color: var(--green);
         }
 
-        .stat-label {
+
+        .overview-item span {
+
             color: var(--muted);
-            margin-top: 5px;
-            font-size: 14px;
+
+            font-size: 11px;
         }
+
 
         /* =========================
            SECTIONS
         ========================== */
 
         .section {
+
             background: white;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            margin-bottom: 28px;
+
+            border-radius: 10px;
+
+            box-shadow: var(--shadow);
+
+            margin-bottom: 25px;
+
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,.04);
         }
+
 
         .section-header {
-            padding: 18px 20px;
-            background: var(--green-light);
-            border-bottom: 1px solid var(--border);
+
+            padding:
+                18px 20px;
+
+            border-bottom:
+                1px solid var(--border);
+
             display: flex;
-            justify-content: space-between;
+
             align-items: center;
+
+            justify-content: space-between;
+
             gap: 15px;
+
             flex-wrap: wrap;
         }
+
 
         .section-header h3 {
+
             margin: 0;
+
             color: var(--green);
+
+            font-size: 18px;
         }
 
+
         .section-tools {
+
             display: flex;
+
             gap: 8px;
+
+            align-items: center;
+
             flex-wrap: wrap;
         }
 
+
         .search {
-            padding: 9px 12px;
-            border: 1px solid #cfd5d1;
+
+            padding:
+                9px 12px;
+
+            border:
+                1px solid #d1d5db;
+
             border-radius: 7px;
+
             min-width: 220px;
+
+            font-size: 12px;
+
             outline: none;
         }
 
+
         .search:focus {
+
             border-color: var(--green);
         }
 
+
+        /* =========================
+           BUTTONS
+        ========================== */
+
+        .btn {
+
+            border: none;
+
+            border-radius: 7px;
+
+            padding:
+                8px 12px;
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+
+        .btn-gold {
+
+            background: var(--gold);
+
+            color: #111;
+        }
+
+
+        .btn-gold:hover {
+
+            background: var(--gold-dark);
+        }
+
+
+        .btn-green {
+
+            background: var(--green);
+
+            color: white;
+        }
+
+
+        .btn-green:hover {
+
+            background: var(--green-dark);
+        }
+
+
+        /* =========================
+           TABLE
+        ========================== */
+
         .table-wrapper {
+
             overflow-x: auto;
         }
 
+
         table {
+
             width: 100%;
+
             border-collapse: collapse;
-            min-width: 800px;
+
+            min-width: 1000px;
         }
 
-        th,
-        td {
-            padding: 13px 14px;
-            border-bottom: 1px solid var(--border);
-            text-align: left;
-            vertical-align: top;
-            font-size: 13px;
-        }
 
         th {
-            background: #fafafa;
-            color: var(--green-dark);
-            font-weight: 700;
+
+            background: #f4f7f5;
+
+            color: var(--green);
+
+            text-align: left;
+
+            padding:
+                11px 12px;
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+
+            letter-spacing: .3px;
+
             white-space: nowrap;
+
+            border-bottom:
+                1px solid var(--border);
         }
+
+
+        td {
+
+            padding:
+                11px 12px;
+
+            font-size: 12px;
+
+            border-bottom:
+                1px solid var(--border);
+
+            vertical-align: middle;
+        }
+
 
         tr:hover td {
-            background: #fafdf9;
+
+            background: #fafcfb;
         }
 
-        .empty {
-            padding: 30px;
-            text-align: center;
-            color: var(--muted);
-        }
 
         /* =========================
-           STATUS
+           STATUS BADGES
         ========================== */
 
         .status {
+
             display: inline-block;
-            padding: 5px 9px;
+
+            padding:
+                5px 9px;
+
             border-radius: 20px;
+
             font-size: 11px;
+
             font-weight: 700;
+
             text-transform: capitalize;
+
             white-space: nowrap;
         }
+
 
         .status-submitted,
         .status-under_review,
         .status-searching {
+
             background: #fef3c7;
+
             color: var(--warning);
         }
+
 
         .status-approved,
         .status-active,
@@ -318,188 +676,472 @@
         .status-ready_for_matching,
         .status-ready_for_collection,
         .status-contacted {
+
             background: #dcfce7;
+
             color: var(--success);
         }
+
 
         .status-matched,
         .status-completed,
         .status-fulfilled {
+
             background: #dbeafe;
+
             color: var(--blue);
         }
+
 
         .status-declined,
         .status-closed,
         .status-unavailable,
         .status-inactive,
         .status-suspended {
+
             background: #fee2e2;
+
             color: var(--danger);
         }
 
+
         .status-being_restored,
         .status-collection_pending {
+
             background: #ede9fe;
+
             color: #6d28d9;
         }
 
+
         /* =========================
-           DETAIL PANEL
+           STATUS CONTROLS
         ========================== */
 
-        .detail-overlay {
+        .status-control {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            flex-wrap: wrap;
+
+            min-width: 240px;
+        }
+
+
+        .status-select {
+
+            min-width: 145px;
+
+            padding:
+                7px 8px;
+
+            border:
+                1px solid #cfd5d1;
+
+            border-radius: 7px;
+
+            background: white;
+
+            color: var(--text);
+
+            font-size: 11px;
+
+            cursor: pointer;
+        }
+
+
+        .status-select:focus {
+
+            outline: none;
+
+            border-color: var(--green);
+        }
+
+
+        .save-status-btn {
+
+            background: var(--green);
+
+            color: white;
+
+            border: none;
+
+            padding:
+                7px 9px;
+
+            border-radius: 7px;
+
+            font-size: 11px;
+
+            font-weight: 700;
+        }
+
+
+        .save-status-btn:hover {
+
+            background: var(--green-dark);
+        }
+
+
+        .save-status-btn:disabled {
+
+            opacity: .55;
+
+            cursor: not-allowed;
+        }
+
+
+        .status-action {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 6px;
+
+            align-items: flex-start;
+        }
+
+
+        /* =========================
+           EMPTY
+        ========================== */
+
+        .empty {
+
+            padding:
+                30px 20px;
+
+            text-align: center;
+
+            color: var(--muted);
+
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           MODAL
+        ========================== */
+
+        .modal {
+
             display: none;
+
             position: fixed;
+
             inset: 0;
-            background: rgba(0,0,0,.55);
-            z-index: 3000;
+
+            background:
+                rgba(0,0,0,.55);
+
+            z-index: 2000;
+
             padding: 20px;
+
             overflow-y: auto;
         }
 
-        .detail-overlay.show {
-            display: block;
-        }
 
-        .detail-box {
+        .modal-content {
+
             background: white;
-            max-width: 900px;
-            margin: 30px auto;
+
+            max-width: 850px;
+
+            margin:
+                40px auto;
+
             border-radius: 12px;
+
+            box-shadow:
+                0 15px 50px rgba(0,0,0,.25);
+
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,.25);
         }
 
-        .detail-header {
+
+        .modal-header {
+
             background: var(--green);
+
             color: white;
-            padding: 18px 22px;
+
+            padding:
+                16px 20px;
+
             display: flex;
-            justify-content: space-between;
+
             align-items: center;
+
+            justify-content: space-between;
+
+            gap: 10px;
         }
 
-        .detail-header h3 {
+
+        .modal-header h3 {
+
             margin: 0;
+
+            font-size: 18px;
         }
 
-        .close-detail {
+
+        .modal-close {
+
             background: transparent;
+
             color: white;
+
+            border: none;
+
             font-size: 25px;
-            padding: 2px 8px;
+
+            line-height: 1;
         }
 
-        .detail-content {
-            padding: 22px;
+
+        .modal-body {
+
+            padding: 20px;
         }
+
 
         .detail-grid {
+
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 12px;
         }
+
 
         .detail-item {
-            padding: 13px;
-            background: #f8faf9;
+
+            border:
+                1px solid var(--border);
+
             border-radius: 8px;
-            border: 1px solid var(--border);
+
+            padding: 12px;
+
+            background: #fafafa;
         }
 
-        .detail-item strong {
+
+        .detail-label {
+
             display: block;
-            color: var(--green);
-            font-size: 12px;
-            margin-bottom: 5px;
+
+            color: var(--muted);
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            margin-bottom: 3px;
         }
 
-        .detail-item span {
+
+        .detail-value {
+
+            font-size: 13px;
+
             word-break: break-word;
         }
+
+
+        /* =========================
+           LOADING
+        ========================== */
+
+        .loading {
+
+            padding: 35px;
+
+            text-align: center;
+
+            color: var(--muted);
+
+            font-size: 13px;
+        }
+
+
+        .spinner {
+
+            display: inline-block;
+
+            width: 18px;
+
+            height: 18px;
+
+            border:
+                2px solid #ddd;
+
+            border-top-color:
+                var(--green);
+
+            border-radius: 50%;
+
+            animation:
+                spin .8s linear infinite;
+
+            vertical-align: middle;
+
+            margin-right: 7px;
+        }
+
+
+        @keyframes spin {
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
 
         /* =========================
            FOOTER
         ========================== */
 
         footer {
+
             background: var(--green-dark);
+
             color: white;
+
             text-align: center;
-            padding: 25px;
-            margin-top: 40px;
+
+            padding:
+                22px 15px;
+
+            font-size: 12px;
         }
 
-        footer p {
-            margin: 5px;
-            font-size: 13px;
+
+        footer strong {
+
+            color: var(--gold);
         }
+
 
         /* =========================
-           RESPONSIVE
+           MOBILE
         ========================== */
 
-        @media (max-width: 1100px) {
-            .stats {
-                grid-template-columns: repeat(3, 1fr);
+        @media (max-width: 1000px) {
+
+            .stats-grid {
+
+                grid-template-columns:
+                    repeat(3, 1fr);
             }
         }
 
+
         @media (max-width: 700px) {
+
             .topbar {
+
                 align-items: flex-start;
+
                 flex-direction: column;
+
+                padding: 12px 15px;
             }
 
+
             .top-actions {
+
                 width: 100%;
             }
 
-            .top-actions .btn {
+
+            .top-btn {
+
                 flex: 1;
+
                 text-align: center;
             }
 
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
+
+            .container {
+
+                width: 94%;
+
+                margin-top: 18px;
             }
 
-            .detail-grid {
-                grid-template-columns: 1fr;
+
+            .stats-grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
             }
+
+
+            .page-title h2 {
+
+                font-size: 23px;
+            }
+
 
             .search {
+
                 width: 100%;
+
                 min-width: 0;
             }
 
-            .section-header {
-                align-items: stretch;
-            }
 
             .section-tools {
+
                 width: 100%;
+            }
+
+
+            .section-tools .search {
+
+                flex: 1;
+            }
+
+
+            .detail-grid {
+
+                grid-template-columns: 1fr;
             }
         }
 
+
         @media (max-width: 450px) {
-            .stats {
+
+            .stats-grid {
+
                 grid-template-columns: 1fr;
             }
 
-            .container {
-                width: 92%;
-            }
+            .brand-text h1 {
 
-            .brand h1 {
-                font-size: 17px;
+                font-size: 16px;
             }
         }
+
     </style>
+
 </head>
 
+
 <body>
+
 
 <!-- =========================
      HEADER
@@ -508,86 +1150,297 @@
 <header class="topbar">
 
     <div class="brand">
-        <img src="images/logo.jpg" alt="OUT Organization Logo">
 
-        <div>
-            <h1>OUT Organization</h1>
-            <p>Uniform Cycle — Administration</p>
+        <img
+            src="images/logo.jpg"
+            alt="OUT Organization"
+            class="brand-logo"
+        >
+
+        <div class="brand-text">
+
+            <h1>
+                OUT Organization
+            </h1>
+
+            <span>
+                Uniform Cycle — Administration
+            </span>
+
         </div>
+
     </div>
 
+
     <div class="top-actions">
-        <a href="uniform-cycle.html" class="btn btn-light">
-            Public Page
+
+        <a
+            href="uniform-cycle.html"
+            class="top-btn"
+        >
+            Uniform Cycle
         </a>
 
-        <a href="uniform-dashboard.html" class="btn btn-gold">
+        <a
+            href="uniform-dashboard.html"
+            class="top-btn"
+        >
             Member Dashboard
         </a>
 
-        <button id="logoutBtn" class="btn btn-danger">
+        <button
+            class="top-btn logout-btn"
+            onclick="logout()"
+        >
             Logout
         </button>
+
     </div>
 
 </header>
 
 
+
+<!-- =========================
+     MAIN
+========================== -->
+
 <main class="container">
 
-    <div id="errorMessage" class="message error"></div>
-    <div id="successMessage" class="message success"></div>
 
-    <!-- =========================
-         WELCOME
-    ========================== -->
+    <div class="page-title">
 
-    <div class="welcome">
-        <h2>Uniform Cycle Admin Dashboard</h2>
+        <h2>
+            Uniform Cycle Admin Dashboard
+        </h2>
+
         <p>
-            Manage members, uniform donations, support requests,
-            partnerships, and skills/resource applications.
+            Manage members, uniform donations,
+            support requests, partnerships,
+            and skills/resources applications.
         </p>
+
     </div>
+
+
+    <div
+        id="successMessage"
+        class="message success"
+    ></div>
+
+
+    <div
+        id="errorMessage"
+        class="message error"
+    ></div>
 
 
     <!-- =========================
          STATISTICS
     ========================== -->
 
-    <section class="stats">
+    <div class="stats-grid">
+
 
         <div class="stat-card">
-            <div class="stat-icon">👥</div>
-            <div class="stat-number" id="memberCount">0</div>
-            <div class="stat-label">Registered Members</div>
+
+            <div class="stat-icon">
+                👥
+            </div>
+
+            <div class="stat-label">
+                Registered Members
+            </div>
+
+            <div
+                class="stat-number"
+                id="memberCount"
+            >
+                0
+            </div>
+
         </div>
 
-        <div class="stat-card">
-            <div class="stat-icon">🎒</div>
-            <div class="stat-number" id="donationCount">0</div>
-            <div class="stat-label">Uniform Donations</div>
-        </div>
 
         <div class="stat-card">
-            <div class="stat-icon">🆘</div>
-            <div class="stat-number" id="requestCount">0</div>
-            <div class="stat-label">Support Requests</div>
+
+            <div class="stat-icon">
+                🎒
+            </div>
+
+            <div class="stat-label">
+                Uniform Donations
+            </div>
+
+            <div
+                class="stat-number"
+                id="donationCount"
+            >
+                0
+            </div>
+
         </div>
 
-        <div class="stat-card">
-            <div class="stat-icon">🤝</div>
-            <div class="stat-number" id="partnershipCount">0</div>
-            <div class="stat-label">Partnership Applications</div>
-        </div>
 
         <div class="stat-card">
-            <div class="stat-icon">🛠️</div>
-            <div class="stat-number" id="supportCount">0</div>
-            <div class="stat-label">Skills & Resources</div>
+
+            <div class="stat-icon">
+                🆘
+            </div>
+
+            <div class="stat-label">
+                Support Requests
+            </div>
+
+            <div
+                class="stat-number"
+                id="requestCount"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🤝
+            </div>
+
+            <div class="stat-label">
+                Partnership Applications
+            </div>
+
+            <div
+                class="stat-number"
+                id="partnershipCount"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🛠️
+            </div>
+
+            <div class="stat-label">
+                Skills & Resources
+            </div>
+
+            <div
+                class="stat-number"
+                id="supportCount"
+            >
+                0
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         STATUS OVERVIEW
+    ========================== -->
+
+    <section class="overview-card">
+
+        <h3>
+            📊 Uniform Cycle Status Overview
+        </h3>
+
+
+        <div class="overview-grid">
+
+
+            <div class="overview-item">
+
+                <strong id="submittedCount">
+                    0
+                </strong>
+
+                <span>
+                    Submitted
+                </span>
+
+            </div>
+
+
+            <div class="overview-item">
+
+                <strong id="underReviewCount">
+                    0
+                </strong>
+
+                <span>
+                    Under Review
+                </span>
+
+            </div>
+
+
+            <div class="overview-item">
+
+                <strong id="approvedCount">
+                    0
+                </strong>
+
+                <span>
+                    Approved
+                </span>
+
+            </div>
+
+
+            <div class="overview-item">
+
+                <strong id="collectionCount">
+                    0
+                </strong>
+
+                <span>
+                    Collection / Restoration
+                </span>
+
+            </div>
+
+
+            <div class="overview-item">
+
+                <strong id="matchingCount">
+                    0
+                </strong>
+
+                <span>
+                    Ready / Matched
+                </span>
+
+            </div>
+
+
+            <div class="overview-item">
+
+                <strong id="completedCount">
+                    0
+                </strong>
+
+                <span>
+                    Completed / Fulfilled
+                </span>
+
+            </div>
+
+
         </div>
 
     </section>
+
 
 
     <!-- =========================
@@ -598,9 +1451,12 @@
 
         <div class="section-header">
 
-            <h3>👥 Registered Members</h3>
+            <h3>
+                👥 Registered Members
+            </h3>
 
             <div class="section-tools">
+
                 <input
                     type="text"
                     class="search"
@@ -610,31 +1466,69 @@
 
                 <button
                     class="btn btn-gold"
-                    onclick="exportTable('membersTable','members.csv')"
+                    onclick="exportTable(
+                        'membersTable',
+                        'uniform-members.csv'
+                    )"
                 >
                     Export CSV
                 </button>
+
             </div>
 
         </div>
+
 
         <div class="table-wrapper">
 
             <table id="membersTable">
 
                 <thead>
+
                     <tr>
-                        <th>Registration ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Location</th>
-                        <th>Organization</th>
-                        <th>Type</th>
-                        <th>Status</th>
-                        <th>Joined</th>
-                        <th>Action</th>
+
+                        <th>
+                            Registration ID
+                        </th>
+
+                        <th>
+                            Name
+                        </th>
+
+                        <th>
+                            Email
+                        </th>
+
+                        <th>
+                            Phone
+                        </th>
+
+                        <th>
+                            Location
+                        </th>
+
+                        <th>
+                            Organization
+                        </th>
+
+                        <th>
+                            Type
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Joined
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
                     </tr>
+
                 </thead>
 
                 <tbody id="membersBody">
@@ -644,11 +1538,17 @@
 
         </div>
 
-        <div id="membersEmpty" class="empty" style="display:none;">
+
+        <div
+            id="membersEmpty"
+            class="empty"
+            style="display:none;"
+        >
             No members found.
         </div>
 
     </section>
+
 
 
     <!-- =========================
@@ -659,7 +1559,9 @@
 
         <div class="section-header">
 
-            <h3>🎒 Uniform Donations</h3>
+            <h3>
+                🎒 Uniform Donations
+            </h3>
 
             <div class="section-tools">
 
@@ -672,7 +1574,10 @@
 
                 <button
                     class="btn btn-gold"
-                    onclick="exportTable('donationsTable','uniform-donations.csv')"
+                    onclick="exportTable(
+                        'donationsTable',
+                        'uniform-donations.csv'
+                    )"
                 >
                     Export CSV
                 </button>
@@ -681,12 +1586,15 @@
 
         </div>
 
+
         <div class="table-wrapper">
 
             <table id="donationsTable">
 
                 <thead>
+
                     <tr>
+
                         <th>Date</th>
                         <th>Uniform Type</th>
                         <th>School</th>
@@ -697,7 +1605,9 @@
                         <th>Collection</th>
                         <th>Status</th>
                         <th>Action</th>
+
                     </tr>
+
                 </thead>
 
                 <tbody id="donationsBody">
@@ -707,22 +1617,30 @@
 
         </div>
 
-        <div id="donationsEmpty" class="empty" style="display:none;">
+
+        <div
+            id="donationsEmpty"
+            class="empty"
+            style="display:none;"
+        >
             No uniform donations found.
         </div>
 
     </section>
 
 
+
     <!-- =========================
-         REQUESTS
+         SUPPORT REQUESTS
     ========================== -->
 
     <section class="section">
 
         <div class="section-header">
 
-            <h3>🆘 Uniform Support Requests</h3>
+            <h3>
+                🆘 Uniform Support Requests
+            </h3>
 
             <div class="section-tools">
 
@@ -735,7 +1653,10 @@
 
                 <button
                     class="btn btn-gold"
-                    onclick="exportTable('requestsTable','support-requests.csv')"
+                    onclick="exportTable(
+                        'requestsTable',
+                        'uniform-support-requests.csv'
+                    )"
                 >
                     Export CSV
                 </button>
@@ -744,12 +1665,15 @@
 
         </div>
 
+
         <div class="table-wrapper">
 
             <table id="requestsTable">
 
                 <thead>
+
                     <tr>
+
                         <th>Date</th>
                         <th>Student</th>
                         <th>School</th>
@@ -761,7 +1685,9 @@
                         <th>Urgency</th>
                         <th>Status</th>
                         <th>Action</th>
+
                     </tr>
+
                 </thead>
 
                 <tbody id="requestsBody">
@@ -771,11 +1697,17 @@
 
         </div>
 
-        <div id="requestsEmpty" class="empty" style="display:none;">
+
+        <div
+            id="requestsEmpty"
+            class="empty"
+            style="display:none;"
+        >
             No support requests found.
         </div>
 
     </section>
+
 
 
     <!-- =========================
@@ -786,7 +1718,9 @@
 
         <div class="section-header">
 
-            <h3>🤝 Partnership Applications</h3>
+            <h3>
+                🤝 Partnership Applications
+            </h3>
 
             <div class="section-tools">
 
@@ -799,7 +1733,10 @@
 
                 <button
                     class="btn btn-gold"
-                    onclick="exportTable('partnershipsTable','partnerships.csv')"
+                    onclick="exportTable(
+                        'partnershipsTable',
+                        'uniform-partnerships.csv'
+                    )"
                 >
                     Export CSV
                 </button>
@@ -808,12 +1745,15 @@
 
         </div>
 
+
         <div class="table-wrapper">
 
             <table id="partnershipsTable">
 
                 <thead>
+
                     <tr>
+
                         <th>Date</th>
                         <th>Organization</th>
                         <th>Type</th>
@@ -825,7 +1765,9 @@
                         <th>Duration</th>
                         <th>Status</th>
                         <th>Action</th>
+
                     </tr>
+
                 </thead>
 
                 <tbody id="partnershipsBody">
@@ -835,11 +1777,17 @@
 
         </div>
 
-        <div id="partnershipsEmpty" class="empty" style="display:none;">
+
+        <div
+            id="partnershipsEmpty"
+            class="empty"
+            style="display:none;"
+        >
             No partnership applications found.
         </div>
 
     </section>
+
 
 
     <!-- =========================
@@ -850,7 +1798,9 @@
 
         <div class="section-header">
 
-            <h3>🛠️ Skills & Resources</h3>
+            <h3>
+                🛠️ Skills & Resources
+            </h3>
 
             <div class="section-tools">
 
@@ -858,12 +1808,15 @@
                     type="text"
                     class="search"
                     id="supportSearch"
-                    placeholder="Search applications..."
+                    placeholder="Search skills/resources..."
                 >
 
                 <button
                     class="btn btn-gold"
-                    onclick="exportTable('supportTable','skills-resources.csv')"
+                    onclick="exportTable(
+                        'supportTable',
+                        'uniform-skills-resources.csv'
+                    )"
                 >
                     Export CSV
                 </button>
@@ -872,12 +1825,15 @@
 
         </div>
 
+
         <div class="table-wrapper">
 
             <table id="supportTable">
 
                 <thead>
+
                     <tr>
+
                         <th>Date</th>
                         <th>Support Area</th>
                         <th>Skills / Services</th>
@@ -886,7 +1842,9 @@
                         <th>Reason</th>
                         <th>Status</th>
                         <th>Action</th>
+
                     </tr>
+
                 </thead>
 
                 <tbody id="supportBody">
@@ -896,43 +1854,53 @@
 
         </div>
 
-        <div id="supportEmpty" class="empty" style="display:none;">
-            No skills or resource applications found.
+
+        <div
+            id="supportEmpty"
+            class="empty"
+            style="display:none;"
+        >
+            No skills or resources applications found.
         </div>
 
     </section>
 
+
 </main>
 
 
+
 <!-- =========================
-     DETAIL MODAL
+     DETAILS MODAL
 ========================== -->
 
-<div class="detail-overlay" id="detailOverlay">
+<div
+    id="detailsModal"
+    class="modal"
+>
 
-    <div class="detail-box">
+    <div class="modal-content">
 
-        <div class="detail-header">
+        <div class="modal-header">
 
-            <h3 id="detailTitle">
-                Submission Details
+            <h3 id="modalTitle">
+                Details
             </h3>
 
             <button
-                class="close-detail"
-                onclick="closeDetails()"
+                class="modal-close"
+                onclick="closeModal()"
             >
                 ×
             </button>
 
         </div>
 
-        <div class="detail-content">
 
-            <div class="detail-grid" id="detailGrid">
-            </div>
-
+        <div
+            id="modalBody"
+            class="modal-body"
+        >
         </div>
 
     </div>
@@ -940,36 +1908,40 @@
 </div>
 
 
+
+<!-- =========================
+     FOOTER
+========================== -->
+
 <footer>
 
-    <p>
-        <strong>OUT Organization</strong> — Uniform Cycle
-    </p>
+    <strong>
+        OUT Organization
+    </strong>
 
-    <p>
-        Secure Administration Dashboard
-    </p>
+    — Uniform Cycle
+
+    <br>
+
+    Secure Administration Dashboard
 
 </footer>
 
 
-<!-- =========================
-     SUPABASE
-========================== -->
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
-    /* =========================================
-       SUPABASE CONFIGURATION
-    ========================================= */
+    /* =====================================================
+       SUPABASE
+    ===================================================== */
 
     const SUPABASE_URL =
         "https://kxajujtqqfodqxmkuguv.supabase.co";
 
+
     const SUPABASE_ANON_KEY =
         "sb_publishable_7WBopHAmgduaTJl5vbe4Sw_PD5GLAMA";
+
 
     const supabaseClient =
         window.supabase.createClient(
@@ -978,58 +1950,33 @@
         );
 
 
-    /* =========================================
-       DATA STORAGE
-    ========================================= */
+
+    /* =====================================================
+       DATA
+    ===================================================== */
 
     let members = [];
+
     let donations = [];
+
     let requests = [];
+
     let partnerships = [];
+
     let supportApplications = [];
 
 
-    /* =========================================
-       HELPERS
-    ========================================= */
 
-    function showError(message) {
-
-        const box = document.getElementById("errorMessage");
-
-        box.textContent = message;
-        box.classList.add("show");
-
-        document.getElementById("successMessage")
-            .classList.remove("show");
-    }
-
-
-    function showSuccess(message) {
-
-        const box = document.getElementById("successMessage");
-
-        box.textContent = message;
-        box.classList.add("show");
-
-        document.getElementById("errorMessage")
-            .classList.remove("show");
-    }
-
-
-    function clearMessages() {
-
-        document.getElementById("errorMessage")
-            .classList.remove("show");
-
-        document.getElementById("successMessage")
-            .classList.remove("show");
-    }
-
+    /* =====================================================
+       ESCAPE HTML
+    ===================================================== */
 
     function escapeHtml(value) {
 
-        if (value === null || value === undefined) {
+        if (
+            value === null ||
+            value === undefined
+        ) {
             return "";
         }
 
@@ -1042,54 +1989,410 @@
     }
 
 
-    function formatDate(value) {
 
-        if (!value) {
-            return "";
+    /* =====================================================
+       DISPLAY LABEL
+    ===================================================== */
+
+    function formatLabel(value) {
+
+        if (
+            value === null ||
+            value === undefined ||
+            value === ""
+        ) {
+            return "-";
         }
 
-        return new Date(value).toLocaleString();
+        return String(value)
+            .replace(/_/g, " ")
+            .replace(/\b\w/g, letter =>
+                letter.toUpperCase()
+            );
     }
 
 
-    function statusBadge(status) {
 
-        if (!status) {
-            return "";
+    /* =====================================================
+       DATE
+    ===================================================== */
+
+    function formatDate(value) {
+
+        if (!value) {
+            return "-";
         }
 
-        const safeStatus =
-            escapeHtml(status)
-                .replace(/\s+/g, "_");
+        const date =
+            new Date(value);
+
+        if (isNaN(date.getTime())) {
+            return "-";
+        }
+
+        return date.toLocaleDateString(
+            undefined,
+            {
+                year: "numeric",
+                month: "short",
+                day: "numeric"
+            }
+        );
+    }
+
+
+
+    /* =====================================================
+       STATUS BADGE
+    ===================================================== */
+
+    function statusBadge(status) {
+
+        const safe =
+            escapeHtml(status || "unknown");
 
         return `
-            <span class="status status-${safeStatus}">
-                ${escapeHtml(status.replace(/_/g, " "))}
+            <span class="status status-${safe}">
+                ${escapeHtml(
+                    formatLabel(status || "Unknown")
+                )}
             </span>
         `;
     }
 
 
-    /* =========================================
-       ADMIN VERIFICATION
-    ========================================= */
-async function verifyAdmin() {
-    try {
-        const {
-            data: { user },
-            error: userError
-        } = await supabaseClient.auth.getUser();
 
-        if (userError || !user) {
-            window.location.href = "uniform-login.html";
-            return false;
+    /* =====================================================
+       STATUS OPTIONS
+    ===================================================== */
+
+    const STATUS_OPTIONS = {
+
+
+        donation: [
+
+            ["submitted", "Submitted"],
+
+            ["under_review", "Under Review"],
+
+            ["approved", "Approved"],
+
+            [
+                "collection_pending",
+                "Collection Pending"
+            ],
+
+            ["collected", "Collected"],
+
+            [
+                "being_restored",
+                "Being Restored"
+            ],
+
+            [
+                "ready_for_matching",
+                "Ready for Matching"
+            ],
+
+            ["matched", "Matched"],
+
+            ["completed", "Completed"],
+
+            ["declined", "Declined"]
+
+        ],
+
+
+        request: [
+
+            ["submitted", "Submitted"],
+
+            ["under_review", "Under Review"],
+
+            ["approved", "Approved"],
+
+            ["searching", "Searching"],
+
+            ["matched", "Matched"],
+
+            [
+                "ready_for_collection",
+                "Ready for Collection"
+            ],
+
+            ["fulfilled", "Fulfilled"],
+
+            ["unavailable", "Unavailable"],
+
+            ["closed", "Closed"]
+
+        ],
+
+
+        partnership: [
+
+            ["submitted", "Submitted"],
+
+            ["under_review", "Under Review"],
+
+            ["contacted", "Contacted"],
+
+            ["approved", "Approved"],
+
+            ["active", "Active"],
+
+            ["declined", "Declined"],
+
+            ["closed", "Closed"]
+
+        ],
+
+
+        support: [
+
+            ["submitted", "Submitted"],
+
+            ["under_review", "Under Review"],
+
+            ["contacted", "Contacted"],
+
+            ["approved", "Approved"],
+
+            ["active", "Active"],
+
+            ["closed", "Closed"]
+
+        ]
+
+    };
+
+
+
+    /* =====================================================
+       STATUS CONTROL
+    ===================================================== */
+
+    function statusControl(
+        type,
+        id,
+        currentStatus
+    ) {
+
+        const options =
+            STATUS_OPTIONS[type] || [];
+
+
+        const selectId =
+            `status-${type}-${id}`;
+
+
+        const optionsHtml =
+            options.map(option => {
+
+                const value =
+                    option[0];
+
+                const label =
+                    option[1];
+
+                return `
+                    <option
+                        value="${escapeHtml(value)}"
+                        ${
+                            value === currentStatus
+                            ? "selected"
+                            : ""
+                        }
+                    >
+                        ${escapeHtml(label)}
+                    </option>
+                `;
+
+            }).join("");
+
+
+        return `
+
+            <div class="status-action">
+
+                <div class="status-control">
+
+                    <select
+                        id="${escapeHtml(selectId)}"
+                        class="status-select"
+                    >
+
+                        ${optionsHtml}
+
+                    </select>
+
+
+                    <button
+                        type="button"
+                        class="save-status-btn"
+                        onclick="saveStatus(
+                            '${escapeHtml(type)}',
+                            '${escapeHtml(id)}'
+                        )"
+                    >
+                        Save
+                    </button>
+
+                </div>
+
+
+                ${statusBadge(currentStatus)}
+
+            </div>
+
+        `;
+    }
+
+
+
+    /* =====================================================
+       MESSAGES
+    ===================================================== */
+
+    function clearMessages() {
+
+        const success =
+            document.getElementById(
+                "successMessage"
+            );
+
+        const error =
+            document.getElementById(
+                "errorMessage"
+            );
+
+        success.style.display = "none";
+
+        error.style.display = "none";
+
+        success.textContent = "";
+
+        error.textContent = "";
+    }
+
+
+
+    function showSuccess(message) {
+
+        clearMessages();
+
+        const element =
+            document.getElementById(
+                "successMessage"
+            );
+
+        element.textContent = message;
+
+        element.style.display = "block";
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+
+
+
+    function showError(message) {
+
+        clearMessages();
+
+        const element =
+            document.getElementById(
+                "errorMessage"
+            );
+
+        element.textContent = message;
+
+        element.style.display = "block";
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+
+
+
+    /* =====================================================
+       VERIFY ADMIN
+    ===================================================== */
+
+    async function verifyAdmin() {
+
+        try {
+
+            const {
+                data: {
+                    user
+                },
+                error: userError
+            } =
+                await supabaseClient
+                    .auth
+                    .getUser();
+
+
+            if (
+                userError ||
+                !user
+            ) {
+
+                window.location.href =
+                    "uniform-login.html";
+
+                return false;
+            }
+
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .rpc(
+                        "is_uniform_cycle_admin"
+                    );
+
+
+            if (error) {
+
+                console.error(
+                    "Admin verification error:",
+                    error
+                );
+
+                showError(
+                    "Unable to verify administrator account: " +
+                    error.message
+                );
+
+                return false;
+            }
+
+
+            if (data !== true) {
+
+                showError(
+                    "Access denied. This account is not authorized as an administrator."
+                );
+
+                return false;
+            }
+
+
+            return true;
+
         }
 
-        const { data, error } = await supabaseClient
-            .rpc("is_uniform_cycle_admin");
+        catch (error) {
 
-        if (error) {
-            console.error("Admin verification error:", error);
+            console.error(error);
 
             showError(
                 "Unable to verify administrator account: " +
@@ -1098,113 +2401,126 @@ async function verifyAdmin() {
 
             return false;
         }
-
-        if (data !== true) {
-            showError(
-                "Access denied. This account is not authorized as an administrator."
-            );
-
-            return false;
-        }
-
-        return true;
-
-    } catch (error) {
-        console.error("Unexpected admin verification error:", error);
-
-        showError(
-            "Unable to verify administrator account: " +
-            error.message
-        );
-
-        return false;
     }
-}
 
 
-    /* =========================================
+
+    /* =====================================================
        LOAD ALL DATA
-    ========================================= */
+    ===================================================== */
 
     async function loadAllData() {
 
         clearMessages();
 
+
         try {
 
+            const results =
+                await Promise.all([
+
+                    supabaseClient
+                        .from("profiles")
+                        .select("*")
+                        .order(
+                            "created_at",
+                            {
+                                ascending: false
+                            }
+                        ),
+
+                    supabaseClient
+                        .from("uniform_donations")
+                        .select("*")
+                        .order(
+                            "created_at",
+                            {
+                                ascending: false
+                            }
+                        ),
+
+                    supabaseClient
+                        .from("uniform_requests")
+                        .select("*")
+                        .order(
+                            "created_at",
+                            {
+                                ascending: false
+                            }
+                        ),
+
+                    supabaseClient
+                        .from("uniform_partnerships")
+                        .select("*")
+                        .order(
+                            "created_at",
+                            {
+                                ascending: false
+                            }
+                        ),
+
+                    supabaseClient
+                        .from("uniform_support")
+                        .select("*")
+                        .order(
+                            "created_at",
+                            {
+                                ascending: false
+                            }
+                        )
+
+                ]);
+
+
             const [
-                membersResult,
+                profilesResult,
                 donationsResult,
                 requestsResult,
                 partnershipsResult,
                 supportResult
-            ] = await Promise.all([
-
-                supabaseClient
-                    .from("profiles")
-                    .select("*")
-                    .order("created_at", {
-                        ascending: false
-                    }),
-
-                supabaseClient
-                    .from("uniform_donations")
-                    .select("*")
-                    .order("created_at", {
-                        ascending: false
-                    }),
-
-                supabaseClient
-                    .from("uniform_requests")
-                    .select("*")
-                    .order("created_at", {
-                        ascending: false
-                    }),
-
-                supabaseClient
-                    .from("uniform_partnerships")
-                    .select("*")
-                    .order("created_at", {
-                        ascending: false
-                    }),
-
-                supabaseClient
-                    .from("uniform_support")
-                    .select("*")
-                    .order("created_at", {
-                        ascending: false
-                    })
-
-            ]);
+            ] = results;
 
 
-            if (membersResult.error)
-                throw membersResult.error;
+            if (profilesResult.error) {
+                throw profilesResult.error;
+            }
 
-            if (donationsResult.error)
+
+            if (donationsResult.error) {
                 throw donationsResult.error;
+            }
 
-            if (requestsResult.error)
+
+            if (requestsResult.error) {
                 throw requestsResult.error;
+            }
 
-            if (partnershipsResult.error)
+
+            if (partnershipsResult.error) {
                 throw partnershipsResult.error;
+            }
 
-            if (supportResult.error)
+
+            if (supportResult.error) {
                 throw supportResult.error;
+            }
 
 
             members =
-                membersResult.data || [];
+                profilesResult.data || [];
+
 
             donations =
                 donationsResult.data || [];
 
+
             requests =
                 requestsResult.data || [];
 
+
             partnerships =
                 partnershipsResult.data || [];
+
 
             supportApplications =
                 supportResult.data || [];
@@ -1212,628 +2528,1488 @@ async function verifyAdmin() {
 
             updateStatistics();
 
-            renderMembers();
-
-            renderDonations();
-
-            renderRequests();
-
-            renderPartnerships();
-
-            renderSupport();
+            updateStatusOverview();
 
 
-            showSuccess(
-                "Dashboard data loaded successfully."
+            renderMembers(
+                document.getElementById(
+                    "memberSearch"
+                ).value
             );
 
-        } catch (error) {
 
-            console.error(error);
+            renderDonations(
+                document.getElementById(
+                    "donationSearch"
+                ).value
+            );
+
+
+            renderRequests(
+                document.getElementById(
+                    "requestSearch"
+                ).value
+            );
+
+
+            renderPartnerships(
+                document.getElementById(
+                    "partnershipSearch"
+                ).value
+            );
+
+
+            renderSupport(
+                document.getElementById(
+                    "supportSearch"
+                ).value
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Dashboard loading error:",
+                error
+            );
 
             showError(
-                "Unable to load dashboard data: "
-                + error.message
+                "Unable to load dashboard data: " +
+                error.message
             );
         }
     }
 
 
-    /* =========================================
+
+    /* =====================================================
        STATISTICS
-    ========================================= */
+    ===================================================== */
 
     function updateStatistics() {
 
-        document.getElementById("memberCount")
-            .textContent = members.length;
+        document.getElementById(
+            "memberCount"
+        ).textContent =
+            members.length;
 
-        document.getElementById("donationCount")
-            .textContent = donations.length;
 
-        document.getElementById("requestCount")
-            .textContent = requests.length;
+        document.getElementById(
+            "donationCount"
+        ).textContent =
+            donations.length;
 
-        document.getElementById("partnershipCount")
-            .textContent = partnerships.length;
 
-        document.getElementById("supportCount")
-            .textContent = supportApplications.length;
+        document.getElementById(
+            "requestCount"
+        ).textContent =
+            requests.length;
+
+
+        document.getElementById(
+            "partnershipCount"
+        ).textContent =
+            partnerships.length;
+
+
+        document.getElementById(
+            "supportCount"
+        ).textContent =
+            supportApplications.length;
     }
 
 
-    /* =========================================
+
+    /* =====================================================
+       STATUS OVERVIEW
+    ===================================================== */
+
+    function updateStatusOverview() {
+
+        const all =
+            [
+                ...donations,
+                ...requests,
+                ...partnerships,
+                ...supportApplications
+            ];
+
+
+        const count =
+            status =>
+                all.filter(
+                    item =>
+                        item.status === status
+                ).length;
+
+
+        document.getElementById(
+            "submittedCount"
+        ).textContent =
+            count("submitted");
+
+
+        document.getElementById(
+            "underReviewCount"
+        ).textContent =
+            count("under_review");
+
+
+        document.getElementById(
+            "approvedCount"
+        ).textContent =
+            count("approved");
+
+
+        const collectionCount =
+            all.filter(item =>
+                [
+                    "collection_pending",
+                    "collected",
+                    "being_restored"
+                ].includes(item.status)
+            ).length;
+
+
+        document.getElementById(
+            "collectionCount"
+        ).textContent =
+            collectionCount;
+
+
+        const matchingCount =
+            all.filter(item =>
+                [
+                    "ready_for_matching",
+                    "matched"
+                ].includes(item.status)
+            ).length;
+
+
+        document.getElementById(
+            "matchingCount"
+        ).textContent =
+            matchingCount;
+
+
+        const completedCount =
+            all.filter(item =>
+                [
+                    "completed",
+                    "fulfilled"
+                ].includes(item.status)
+            ).length;
+
+
+        document.getElementById(
+            "completedCount"
+        ).textContent =
+            completedCount;
+    }
+
+
+
+    /* =====================================================
        MEMBERS
-    ========================================= */
+    ===================================================== */
 
-    function renderMembers(filter = "") {
+    function renderMembers(
+        searchTerm = ""
+    ) {
 
         const body =
-            document.getElementById("membersBody");
+            document.getElementById(
+                "membersBody"
+            );
 
-        body.innerHTML = "";
-
-        const term =
-            filter.toLowerCase().trim();
-
-        const filtered =
-            members.filter(item =>
-                JSON.stringify(item)
-                    .toLowerCase()
-                    .includes(term)
+        const empty =
+            document.getElementById(
+                "membersEmpty"
             );
 
 
-        document.getElementById("membersEmpty")
-            .style.display =
-                filtered.length ? "none" : "block";
+        const search =
+            String(searchTerm || "")
+                .toLowerCase()
+                .trim();
 
 
-        filtered.forEach((item, index) => {
+        const filtered =
+            members.filter(item => {
 
-            const location = [
-                item.city_town,
-                item.county_state,
-                item.country
-            ]
-            .filter(Boolean)
-            .join(", ");
+                const text = [
+
+                    item.registration_id,
+
+                    item.full_name,
+
+                    item.email,
+
+                    item.phone,
+
+                    item.country,
+
+                    item.county_state,
+
+                    item.city_town,
+
+                    item.organization_name,
+
+                    item.organization_type,
+
+                    item.status
+
+                ]
+                .join(" ")
+                .toLowerCase();
 
 
-            body.innerHTML += `
+                return text.includes(search);
+            });
 
-                <tr>
 
-                    <td>
-                        ${escapeHtml(item.registration_id)}
-                    </td>
+        if (!filtered.length) {
 
-                    <td>
-                        <strong>
-                            ${escapeHtml(item.full_name)}
-                        </strong>
-                    </td>
+            body.innerHTML = "";
 
-                    <td>
-                        ${escapeHtml(item.email)}
-                    </td>
+            empty.style.display =
+                "block";
 
-                    <td>
-                        ${escapeHtml(item.phone)}
-                    </td>
+            return;
+        }
 
-                    <td>
-                        ${escapeHtml(location)}
-                    </td>
 
-                    <td>
-                        ${escapeHtml(item.organization_name)}
-                    </td>
+        empty.style.display =
+            "none";
 
-                    <td>
-                        ${escapeHtml(item.organization_type)}
-                    </td>
 
-                    <td>
-                        ${statusBadge(item.status)}
-                    </td>
+        body.innerHTML =
+            filtered.map(item => {
 
-                    <td>
-                        ${formatDate(item.created_at)}
-                    </td>
+                return `
 
-                    <td>
-                        <button
-                            class="btn btn-gold"
-                            onclick="showDetails('Member', members[${members.indexOf(item)}])"
-                        >
-                            View
-                        </button>
-                    </td>
+                    <tr>
 
-                </tr>
+                        <td>
+                            ${escapeHtml(
+                                item.registration_id || "-"
+                            )}
+                        </td>
 
-            `;
-        });
+                        <td>
+                            ${escapeHtml(
+                                item.full_name || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.email || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.phone || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                [
+                                    item.city_town,
+                                    item.county_state,
+                                    item.country
+                                ]
+                                .filter(Boolean)
+                                .join(", ") || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.organization_name || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                formatLabel(
+                                    item.organization_type
+                                )
+                            )}
+                        </td>
+
+                        <td>
+                            ${statusBadge(
+                                item.status
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                formatDate(
+                                    item.created_at
+                                )
+                            )}
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn btn-gold"
+                                onclick='showDetails(
+                                    "Registered Member",
+                                    ${JSON.stringify(item)}
+                                )'
+                            >
+                                View Details
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }).join("");
     }
 
 
-    /* =========================================
+
+    /* =====================================================
        DONATIONS
-    ========================================= */
+    ===================================================== */
 
-    function renderDonations(filter = "") {
+    function renderDonations(
+        searchTerm = ""
+    ) {
 
         const body =
-            document.getElementById("donationsBody");
+            document.getElementById(
+                "donationsBody"
+            );
 
-        body.innerHTML = "";
-
-        const term =
-            filter.toLowerCase().trim();
-
-        const filtered =
-            donations.filter(item =>
-                JSON.stringify(item)
-                    .toLowerCase()
-                    .includes(term)
+        const empty =
+            document.getElementById(
+                "donationsEmpty"
             );
 
 
-        document.getElementById("donationsEmpty")
-            .style.display =
-                filtered.length ? "none" : "block";
+        const search =
+            String(searchTerm || "")
+                .toLowerCase()
+                .trim();
 
 
-        filtered.forEach(item => {
+        const filtered =
+            donations.filter(item => {
 
-            body.innerHTML += `
+                const text = [
 
-                <tr>
+                    item.uniform_type,
 
-                    <td>
-                        ${formatDate(item.created_at)}
-                    </td>
+                    item.school_name,
 
-                    <td>
-                        ${escapeHtml(item.uniform_type)}
-                    </td>
+                    item.size,
 
-                    <td>
-                        ${escapeHtml(item.school_name)}
-                    </td>
+                    item.quantity,
 
-                    <td>
-                        ${escapeHtml(item.size)}
-                    </td>
+                    item.condition,
 
-                    <td>
-                        ${escapeHtml(item.quantity)}
-                    </td>
+                    item.collection_method,
 
-                    <td>
-                        ${escapeHtml(item.condition)}
-                    </td>
+                    item.collection_location,
 
-                    <td>
-                        ${escapeHtml(item.needs_repair)}
-                    </td>
+                    item.status
 
-                    <td>
-                        ${escapeHtml(item.collection_method)}
-                    </td>
+                ]
+                .join(" ")
+                .toLowerCase();
 
-                    <td>
-                        ${statusBadge(item.status)}
-                    </td>
 
-                    <td>
-                        <button
-                            class="btn btn-gold"
-                            onclick="showDetails('Uniform Donation', donations[${donations.indexOf(item)}])"
-                        >
-                            View
-                        </button>
-                    </td>
+                return text.includes(search);
+            });
 
-                </tr>
 
-            `;
-        });
+        if (!filtered.length) {
+
+            body.innerHTML = "";
+
+            empty.style.display =
+                "block";
+
+            return;
+        }
+
+
+        empty.style.display =
+            "none";
+
+
+        body.innerHTML =
+            filtered.map(item => {
+
+                return `
+
+                    <tr>
+
+                        <td>
+                            ${escapeHtml(
+                                formatDate(
+                                    item.created_at
+                                )
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.uniform_type || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.school_name || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.size || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.quantity ?? "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                formatLabel(
+                                    item.condition
+                                )
+                            )}
+                        </td>
+
+                        <td>
+                            ${
+                                item.needs_repair
+                                ? "Yes"
+                                : "No"
+                            }
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                formatLabel(
+                                    item.collection_method
+                                )
+                            )}
+                        </td>
+
+                        <td>
+                            ${statusBadge(
+                                item.status
+                            )}
+                        </td>
+
+                        <td>
+
+                            ${statusControl(
+                                "donation",
+                                item.id,
+                                item.status
+                            )}
+
+                            <button
+                                class="btn btn-gold"
+                                style="margin-top:6px;"
+                                onclick='showDetails(
+                                    "Uniform Donation",
+                                    ${JSON.stringify(item)}
+                                )'
+                            >
+                                View Details
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }).join("");
     }
 
 
-    /* =========================================
-       REQUESTS
-    ========================================= */
 
-    function renderRequests(filter = "") {
+    /* =====================================================
+       SUPPORT REQUESTS
+    ===================================================== */
+
+    function renderRequests(
+        searchTerm = ""
+    ) {
 
         const body =
-            document.getElementById("requestsBody");
+            document.getElementById(
+                "requestsBody"
+            );
 
-        body.innerHTML = "";
-
-        const term =
-            filter.toLowerCase().trim();
-
-        const filtered =
-            requests.filter(item =>
-                JSON.stringify(item)
-                    .toLowerCase()
-                    .includes(term)
+        const empty =
+            document.getElementById(
+                "requestsEmpty"
             );
 
 
-        document.getElementById("requestsEmpty")
-            .style.display =
-                filtered.length ? "none" : "block";
+        const search =
+            String(searchTerm || "")
+                .toLowerCase()
+                .trim();
 
 
-        filtered.forEach(item => {
+        const filtered =
+            requests.filter(item => {
 
-            body.innerHTML += `
+                const text = [
 
-                <tr>
+                    item.student_name,
 
-                    <td>
-                        ${formatDate(item.created_at)}
-                    </td>
+                    item.school_name,
 
-                    <td>
-                        <strong>
-                            ${escapeHtml(item.student_name)}
-                        </strong>
-                    </td>
+                    item.class_grade,
 
-                    <td>
-                        ${escapeHtml(item.school_name)}
-                    </td>
+                    item.uniform_type,
 
-                    <td>
-                        ${escapeHtml(item.class_grade)}
-                    </td>
+                    item.size,
 
-                    <td>
-                        ${escapeHtml(item.uniform_type)}
-                    </td>
+                    item.reason_for_request,
 
-                    <td>
-                        ${escapeHtml(item.size)}
-                    </td>
+                    item.request_type,
 
-                    <td>
-                        ${escapeHtml(item.quantity)}
-                    </td>
+                    item.urgency,
 
-                    <td>
-                        ${escapeHtml(item.reason_for_request)}
-                    </td>
+                    item.status
 
-                    <td>
-                        ${escapeHtml(item.urgency)}
-                    </td>
+                ]
+                .join(" ")
+                .toLowerCase();
 
-                    <td>
-                        ${statusBadge(item.status)}
-                    </td>
 
-                    <td>
-                        <button
-                            class="btn btn-gold"
-                            onclick="showDetails('Support Request', requests[${requests.indexOf(item)}])"
-                        >
-                            View
-                        </button>
-                    </td>
+                return text.includes(search);
+            });
 
-                </tr>
 
-            `;
-        });
+        if (!filtered.length) {
+
+            body.innerHTML = "";
+
+            empty.style.display =
+                "block";
+
+            return;
+        }
+
+
+        empty.style.display =
+            "none";
+
+
+        body.innerHTML =
+            filtered.map(item => {
+
+                return `
+
+                    <tr>
+
+                        <td>
+                            ${escapeHtml(
+                                formatDate(
+                                    item.created_at
+                                )
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.student_name || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.school_name || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.class_grade || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.uniform_type || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.size || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.quantity ?? "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                formatLabel(
+                                    item.reason_for_request
+                                )
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                formatLabel(
+                                    item.urgency
+                                )
+                            )}
+                        </td>
+
+                        <td>
+                            ${statusBadge(
+                                item.status
+                            )}
+                        </td>
+
+                        <td>
+
+                            ${statusControl(
+                                "request",
+                                item.id,
+                                item.status
+                            )}
+
+                            <button
+                                class="btn btn-gold"
+                                style="margin-top:6px;"
+                                onclick='showDetails(
+                                    "Uniform Support Request",
+                                    ${JSON.stringify(item)}
+                                )'
+                            >
+                                View Details
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }).join("");
     }
 
 
-    /* =========================================
+
+    /* =====================================================
        PARTNERSHIPS
-    ========================================= */
+    ===================================================== */
 
-    function renderPartnerships(filter = "") {
+    function renderPartnerships(
+        searchTerm = ""
+    ) {
 
         const body =
-            document.getElementById("partnershipsBody");
+            document.getElementById(
+                "partnershipsBody"
+            );
 
-        body.innerHTML = "";
-
-        const term =
-            filter.toLowerCase().trim();
-
-        const filtered =
-            partnerships.filter(item =>
-                JSON.stringify(item)
-                    .toLowerCase()
-                    .includes(term)
+        const empty =
+            document.getElementById(
+                "partnershipsEmpty"
             );
 
 
-        document.getElementById("partnershipsEmpty")
-            .style.display =
-                filtered.length ? "none" : "block";
+        const search =
+            String(searchTerm || "")
+                .toLowerCase()
+                .trim();
 
 
-        filtered.forEach(item => {
+        const filtered =
+            partnerships.filter(item => {
 
-            const location = [
-                item.city_town,
-                item.county_state,
-                item.country
-            ]
-            .filter(Boolean)
-            .join(", ");
+                const text = [
+
+                    item.organization_name,
+
+                    item.organization_type,
+
+                    item.contact_person,
+
+                    item.email,
+
+                    item.phone,
+
+                    item.country,
+
+                    item.county_state,
+
+                    item.city_town,
+
+                    item.proposed_contribution,
+
+                    item.expected_duration,
+
+                    item.status
+
+                ]
+                .join(" ")
+                .toLowerCase();
 
 
-            body.innerHTML += `
+                return text.includes(search);
+            });
 
-                <tr>
 
-                    <td>
-                        ${formatDate(item.created_at)}
-                    </td>
+        if (!filtered.length) {
 
-                    <td>
-                        <strong>
-                            ${escapeHtml(item.organization_name)}
-                        </strong>
-                    </td>
+            body.innerHTML = "";
 
-                    <td>
-                        ${escapeHtml(item.organization_type)}
-                    </td>
+            empty.style.display =
+                "block";
 
-                    <td>
-                        ${escapeHtml(item.contact_person)}
-                    </td>
+            return;
+        }
 
-                    <td>
-                        ${escapeHtml(item.email)}
-                    </td>
 
-                    <td>
-                        ${escapeHtml(item.phone)}
-                    </td>
+        empty.style.display =
+            "none";
 
-                    <td>
-                        ${escapeHtml(location)}
-                    </td>
 
-                    <td>
-                        ${escapeHtml(item.proposed_contribution)}
-                    </td>
+        body.innerHTML =
+            filtered.map(item => {
 
-                    <td>
-                        ${escapeHtml(item.expected_duration)}
-                    </td>
+                return `
 
-                    <td>
-                        ${statusBadge(item.status)}
-                    </td>
+                    <tr>
 
-                    <td>
-                        <button
-                            class="btn btn-gold"
-                            onclick="showDetails('Partnership Application', partnerships[${partnerships.indexOf(item)}])"
-                        >
-                            View
-                        </button>
-                    </td>
+                        <td>
+                            ${escapeHtml(
+                                formatDate(
+                                    item.created_at
+                                )
+                            )}
+                        </td>
 
-                </tr>
+                        <td>
+                            ${escapeHtml(
+                                item.organization_name || "-"
+                            )}
+                        </td>
 
-            `;
-        });
+                        <td>
+                            ${escapeHtml(
+                                formatLabel(
+                                    item.organization_type
+                                )
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.contact_person || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.email || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.phone || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                [
+                                    item.city_town,
+                                    item.county_state,
+                                    item.country
+                                ]
+                                .filter(Boolean)
+                                .join(", ") || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.proposed_contribution || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.expected_duration || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${statusBadge(
+                                item.status
+                            )}
+                        </td>
+
+                        <td>
+
+                            ${statusControl(
+                                "partnership",
+                                item.id,
+                                item.status
+                            )}
+
+                            <button
+                                class="btn btn-gold"
+                                style="margin-top:6px;"
+                                onclick='showDetails(
+                                    "Partnership Application",
+                                    ${JSON.stringify(item)}
+                                )'
+                            >
+                                View Details
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }).join("");
     }
 
 
-    /* =========================================
-       SUPPORT / SKILLS
-    ========================================== */
 
-    function renderSupport(filter = "") {
+    /* =====================================================
+       SKILLS & RESOURCES
+    ===================================================== */
+
+    function renderSupport(
+        searchTerm = ""
+    ) {
 
         const body =
-            document.getElementById("supportBody");
+            document.getElementById(
+                "supportBody"
+            );
 
-        body.innerHTML = "";
-
-        const term =
-            filter.toLowerCase().trim();
-
-        const filtered =
-            supportApplications.filter(item =>
-                JSON.stringify(item)
-                    .toLowerCase()
-                    .includes(term)
+        const empty =
+            document.getElementById(
+                "supportEmpty"
             );
 
 
-        document.getElementById("supportEmpty")
-            .style.display =
-                filtered.length ? "none" : "block";
+        const search =
+            String(searchTerm || "")
+                .toLowerCase()
+                .trim();
 
 
-        filtered.forEach(item => {
+        const filtered =
+            supportApplications.filter(item => {
 
-            body.innerHTML += `
+                const text = [
 
-                <tr>
+                    item.support_area,
 
-                    <td>
-                        ${formatDate(item.created_at)}
-                    </td>
+                    item.skills_services,
 
-                    <td>
-                        ${escapeHtml(item.support_area)}
-                    </td>
+                    item.availability,
 
-                    <td>
-                        ${escapeHtml(item.skills_services)}
-                    </td>
+                    item.resources_available,
 
-                    <td>
-                        ${escapeHtml(item.availability)}
-                    </td>
+                    item.reason_for_support,
 
-                    <td>
-                        ${escapeHtml(item.resources_available)}
-                    </td>
+                    item.status
 
-                    <td>
-                        ${escapeHtml(item.reason_for_support)}
-                    </td>
+                ]
+                .join(" ")
+                .toLowerCase();
 
-                    <td>
-                        ${statusBadge(item.status)}
-                    </td>
 
-                    <td>
-                        <button
-                            class="btn btn-gold"
-                            onclick="showDetails('Skills & Resources Application', supportApplications[${supportApplications.indexOf(item)}])"
-                        >
-                            View
-                        </button>
-                    </td>
+                return text.includes(search);
+            });
 
-                </tr>
 
-            `;
-        });
+        if (!filtered.length) {
+
+            body.innerHTML = "";
+
+            empty.style.display =
+                "block";
+
+            return;
+        }
+
+
+        empty.style.display =
+            "none";
+
+
+        body.innerHTML =
+            filtered.map(item => {
+
+                return `
+
+                    <tr>
+
+                        <td>
+                            ${escapeHtml(
+                                formatDate(
+                                    item.created_at
+                                )
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.support_area || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.skills_services || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.availability || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.resources_available || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                item.reason_for_support || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${statusBadge(
+                                item.status
+                            )}
+                        </td>
+
+                        <td>
+
+                            ${statusControl(
+                                "support",
+                                item.id,
+                                item.status
+                            )}
+
+                            <button
+                                class="btn btn-gold"
+                                style="margin-top:6px;"
+                                onclick='showDetails(
+                                    "Skills & Resources Application",
+                                    ${JSON.stringify(item)}
+                                )'
+                            >
+                                View Details
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }).join("");
     }
 
 
-    /* =========================================
-       DETAILS
-    ========================================== */
 
-    function showDetails(title, data) {
+    /* =====================================================
+       SAVE STATUS
+    ===================================================== */
 
-        document.getElementById("detailTitle")
-            .textContent = title;
+    async function saveStatus(
+        type,
+        id
+    ) {
 
-
-        const grid =
-            document.getElementById("detailGrid");
-
-        grid.innerHTML = "";
+        clearMessages();
 
 
-        Object.entries(data).forEach(([key, value]) => {
+        const select =
+            document.getElementById(
+                `status-${type}-${id}`
+            );
 
-            let displayValue = value;
+
+        if (!select) {
+
+            showError(
+                "Status control could not be found."
+            );
+
+            return;
+        }
+
+
+        const newStatus =
+            select.value;
+
+
+        const container =
+            select.closest(
+                ".status-action"
+            );
+
+
+        const button =
+            container
+                ? container.querySelector(
+                    ".save-status-btn"
+                )
+                : null;
+
+
+        if (button) {
+
+            button.disabled = true;
+
+            button.textContent =
+                "Saving...";
+        }
+
+
+        try {
+
+            let functionName;
+
 
             if (
-                key === "created_at" ||
-                key === "updated_at"
+                type === "donation"
             ) {
-                displayValue = formatDate(value);
+
+                functionName =
+                    "admin_update_donation_status";
             }
 
-            if (
-                key === "status"
+
+            else if (
+                type === "request"
             ) {
-                displayValue = statusBadge(value);
+
+                functionName =
+                    "admin_update_request_status";
             }
 
-            grid.innerHTML += `
 
-                <div class="detail-item">
+            else if (
+                type === "partnership"
+            ) {
 
-                    <strong>
-                        ${escapeHtml(
-                            key
-                                .replace(/_/g, " ")
-                                .replace(/\b\w/g,
-                                    letter => letter.toUpperCase())
-                        )}
-                    </strong>
+                functionName =
+                    "admin_update_partnership_status";
+            }
 
-                    <span>
-                        ${
-                            key === "status"
-                                ? displayValue
-                                : escapeHtml(displayValue)
+
+            else if (
+                type === "support"
+            ) {
+
+                functionName =
+                    "admin_update_support_status";
+            }
+
+
+            else {
+
+                throw new Error(
+                    "Invalid status type."
+                );
+            }
+
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .rpc(
+                        functionName,
+                        {
+                            p_id: id,
+                            p_status: newStatus
                         }
-                    </span>
-
-                </div>
-
-            `;
-        });
+                    );
 
 
-        document.getElementById("detailOverlay")
-            .classList.add("show");
-    }
+            if (error) {
 
-
-    function closeDetails() {
-
-        document.getElementById("detailOverlay")
-            .classList.remove("show");
-    }
-
-
-    document.getElementById("detailOverlay")
-        .addEventListener("click", function(event) {
-
-            if (event.target === this) {
-                closeDetails();
+                throw error;
             }
 
-        });
+
+            if (data !== true) {
+
+                throw new Error(
+                    "The record was not found or the status was not changed."
+                );
+            }
 
 
-    /* =========================================
-       SEARCH
-    ========================================== */
+            /*
+             * Update local data
+             */
 
-    document.getElementById("memberSearch")
-        .addEventListener("input", e =>
-            renderMembers(e.target.value)
-        );
+            if (
+                type === "donation"
+            ) {
 
-    document.getElementById("donationSearch")
-        .addEventListener("input", e =>
-            renderDonations(e.target.value)
-        );
+                const item =
+                    donations.find(
+                        row =>
+                            row.id === id
+                    );
 
-    document.getElementById("requestSearch")
-        .addEventListener("input", e =>
-            renderRequests(e.target.value)
-        );
-
-    document.getElementById("partnershipSearch")
-        .addEventListener("input", e =>
-            renderPartnerships(e.target.value)
-        );
-
-    document.getElementById("supportSearch")
-        .addEventListener("input", e =>
-            renderSupport(e.target.value)
-        );
+                if (item) {
+                    item.status =
+                        newStatus;
+                }
+            }
 
 
-    /* =========================================
+            else if (
+                type === "request"
+            ) {
+
+                const item =
+                    requests.find(
+                        row =>
+                            row.id === id
+                    );
+
+                if (item) {
+                    item.status =
+                        newStatus;
+                }
+            }
+
+
+            else if (
+                type === "partnership"
+            ) {
+
+                const item =
+                    partnerships.find(
+                        row =>
+                            row.id === id
+                    );
+
+                if (item) {
+                    item.status =
+                        newStatus;
+                }
+            }
+
+
+            else if (
+                type === "support"
+            ) {
+
+                const item =
+                    supportApplications.find(
+                        row =>
+                            row.id === id
+                    );
+
+                if (item) {
+                    item.status =
+                        newStatus;
+                }
+            }
+
+
+            /*
+             * Re-render affected section
+             */
+
+            if (
+                type === "donation"
+            ) {
+
+                renderDonations(
+                    document.getElementById(
+                        "donationSearch"
+                    ).value
+                );
+            }
+
+
+            if (
+                type === "request"
+            ) {
+
+                renderRequests(
+                    document.getElementById(
+                        "requestSearch"
+                    ).value
+                );
+            }
+
+
+            if (
+                type === "partnership"
+            ) {
+
+                renderPartnerships(
+                    document.getElementById(
+                        "partnershipSearch"
+                    ).value
+                );
+            }
+
+
+            if (
+                type === "support"
+            ) {
+
+                renderSupport(
+                    document.getElementById(
+                        "supportSearch"
+                    ).value
+                );
+            }
+
+
+            updateStatusOverview();
+
+
+            showSuccess(
+                "Status updated successfully."
+            );
+
+        }
+
+
+        catch (error) {
+
+            console.error(
+                "Status update error:",
+                error
+            );
+
+
+            showError(
+                "Unable to update status: " +
+                error.message
+            );
+
+
+            if (button) {
+
+                button.disabled = false;
+
+                button.textContent =
+                    "Save";
+            }
+        }
+    }
+
+
+
+    /* =====================================================
+       DETAILS MODAL
+    ===================================================== */
+
+    function showDetails(
+        title,
+        data
+    ) {
+
+        const modal =
+            document.getElementById(
+                "detailsModal"
+            );
+
+        const modalTitle =
+            document.getElementById(
+                "modalTitle"
+            );
+
+        const modalBody =
+            document.getElementById(
+                "modalBody"
+            );
+
+
+        modalTitle.textContent =
+            title;
+
+
+        const entries =
+            Object.entries(data || {})
+                .filter(
+                    ([key]) =>
+                        key !== "user_id"
+                );
+
+
+        modalBody.innerHTML = `
+
+            <div class="detail-grid">
+
+                ${
+                    entries.map(
+                        ([key, value]) => `
+
+                            <div
+                                class="detail-item"
+                            >
+
+                                <span
+                                    class="detail-label"
+                                >
+                                    ${escapeHtml(
+                                        formatLabel(key)
+                                    )}
+                                </span>
+
+                                <div
+                                    class="detail-value"
+                                >
+                                    ${escapeHtml(
+                                        value === null ||
+                                        value === undefined ||
+                                        value === ""
+                                            ? "-"
+                                            : String(value)
+                                    )}
+                                </div>
+
+                            </div>
+
+                        `
+                    ).join("")
+                }
+
+            </div>
+
+        `;
+
+
+        modal.style.display =
+            "block";
+
+
+        document.body.style.overflow =
+            "hidden";
+    }
+
+
+
+    function closeModal() {
+
+        document.getElementById(
+            "detailsModal"
+        ).style.display =
+            "none";
+
+
+        document.body.style.overflow =
+            "";
+    }
+
+
+
+    /* =====================================================
+       CLOSE MODAL ON BACKGROUND CLICK
+    ===================================================== */
+
+    document.getElementById(
+        "detailsModal"
+    ).addEventListener(
+        "click",
+        function(event) {
+
+            if (
+                event.target === this
+            ) {
+
+                closeModal();
+            }
+        }
+    );
+
+
+
+    /* =====================================================
        CSV EXPORT
-    ========================================== */
+    ===================================================== */
 
-    function exportTable(tableId, filename) {
+    function exportTable(
+        tableId,
+        filename
+    ) {
 
         const table =
-            document.getElementById(tableId);
+            document.getElementById(
+                tableId
+            );
+
+
+        if (!table) {
+
+            showError(
+                "Table could not be found."
+            );
+
+            return;
+        }
+
 
         const rows =
-            Array.from(table.querySelectorAll("tr"));
+            Array.from(
+                table.querySelectorAll(
+                    "tr"
+                )
+            );
+
+
+        if (!rows.length) {
+
+            showError(
+                "There is no data to export."
+            );
+
+            return;
+        }
 
 
         const csv =
@@ -1841,22 +4017,32 @@ async function verifyAdmin() {
 
                 const cells =
                     Array.from(
-                        row.querySelectorAll("th, td")
+                        row.querySelectorAll(
+                            "th, td"
+                        )
                     );
 
-                return cells.map(cell => {
 
-                    let text =
-                        cell.innerText
-                            .replace(/\s+/g, " ")
-                            .trim();
+                return cells
+                    .map(cell => {
 
-                    text =
-                        text.replace(/"/g, '""');
+                        let text =
+                            cell.innerText
+                                .replace(
+                                    /\s+/g,
+                                    " "
+                                )
+                                .trim();
 
-                    return `"${text}"`;
 
-                }).join(",");
+                        return `"${text
+                            .replace(
+                                /"/g,
+                                '""'
+                            )}"`;
+
+                    })
+                    .join(",");
 
             }).join("\n");
 
@@ -1865,57 +4051,159 @@ async function verifyAdmin() {
             new Blob(
                 [csv],
                 {
-                    type: "text/csv;charset=utf-8;"
+                    type:
+                        "text/csv;charset=utf-8;"
                 }
             );
 
 
         const url =
-            URL.createObjectURL(blob);
+            URL.createObjectURL(
+                blob
+            );
 
 
         const link =
-            document.createElement("a");
+            document.createElement(
+                "a"
+            );
+
 
         link.href = url;
-        link.download = filename;
 
-        document.body.appendChild(link);
+        link.download =
+            filename;
+
+
+        document.body.appendChild(
+            link
+        );
+
 
         link.click();
 
-        document.body.removeChild(link);
 
-        URL.revokeObjectURL(url);
+        link.remove();
+
+
+        URL.revokeObjectURL(
+            url
+        );
     }
 
 
-    /* =========================================
+
+    /* =====================================================
        LOGOUT
-    ========================================== */
+    ===================================================== */
 
-    document.getElementById("logoutBtn")
-        .addEventListener("click", async () => {
+    async function logout() {
 
-            await supabaseClient.auth.signOut();
-
-            window.location.href =
-                "uniform-login.html";
-        });
+        await supabaseClient
+            .auth
+            .signOut();
 
 
-    /* =========================================
+        window.location.href =
+            "uniform-login.html";
+    }
+
+
+
+    /* =====================================================
+       SEARCH EVENTS
+    ===================================================== */
+
+    document.getElementById(
+        "memberSearch"
+    ).addEventListener(
+        "input",
+        event =>
+            renderMembers(
+                event.target.value
+            )
+    );
+
+
+    document.getElementById(
+        "donationSearch"
+    ).addEventListener(
+        "input",
+        event =>
+            renderDonations(
+                event.target.value
+            )
+    );
+
+
+    document.getElementById(
+        "requestSearch"
+    ).addEventListener(
+        "input",
+        event =>
+            renderRequests(
+                event.target.value
+            )
+    );
+
+
+    document.getElementById(
+        "partnershipSearch"
+    ).addEventListener(
+        "input",
+        event =>
+            renderPartnerships(
+                event.target.value
+            )
+    );
+
+
+    document.getElementById(
+        "supportSearch"
+    ).addEventListener(
+        "input",
+        event =>
+            renderSupport(
+                event.target.value
+            )
+    );
+
+
+
+    /* =====================================================
+       ESC KEY CLOSES MODAL
+    ===================================================== */
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Escape"
+            ) {
+
+                closeModal();
+            }
+        }
+    );
+
+
+
+    /* =====================================================
        START DASHBOARD
-    ========================================== */
+    ===================================================== */
 
     async function startDashboard() {
 
         const isAdmin =
             await verifyAdmin();
 
+
         if (!isAdmin) {
+
             return;
         }
+
 
         await loadAllData();
     }
@@ -1926,4 +4214,5 @@ async function verifyAdmin() {
 </script>
 
 </body>
+
 </html>
