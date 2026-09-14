@@ -2788,82 +2788,89 @@ document
 
         event.preventDefault();
 
-
         const button =
             document.getElementById("supportSubmit");
 
-
         button.disabled = true;
-
-        button.textContent =
-            "Submitting...";
-
+        button.textContent = "Submitting...";
 
         try {
 
             const {
+                data,
                 error
-            } = await supabaseClient
-                .from("uniform_support")
-                .insert({
-
-                    user_id: currentUser.id,
-
-                    support_area:
+            } = await supabaseClient.rpc(
+                "submit_uniform_support",
+                {
+                    p_support_area:
                         document.getElementById(
                             "supportArea"
                         ).value,
 
-                    skills_services:
+                    p_skills_services:
                         document.getElementById(
                             "supportSkills"
                         ).value.trim(),
 
-                    availability:
+                    p_availability:
                         document.getElementById(
                             "supportAvailability"
                         ).value,
 
-                    resources_available:
+                    p_resources_available:
                         document.getElementById(
                             "supportResources"
                         ).value.trim(),
 
-                    reason_for_support:
+                    p_reason_for_support:
                         document.getElementById(
                             "supportReason"
                         ).value.trim(),
 
-                    additional_information:
+                    p_additional_information:
                         document.getElementById(
                             "supportAdditional"
                         ).value.trim()
+                }
+            );
 
-                });
+            if (error) {
 
+                console.error(
+                    "Support submission error:",
+                    error
+                );
 
-            if (error) throw error;
+                throw error;
+            }
 
+            if (!data) {
+                throw new Error(
+                    "The support application could not be created."
+                );
+            }
 
             document
                 .getElementById("supportForm")
                 .reset();
-
 
             showMessage(
                 "Your support application has been submitted successfully. Thank you for contributing to the Uniform Cycle.",
                 "success"
             );
 
-
             await loadCounts();
 
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                "Support submission error:",
+                error
+            );
 
             showMessage(
-                "We could not submit your support application. Please try again.",
+                "Support error: " +
+                (error.message || "Unknown error"),
                 "error"
             );
 
@@ -2873,11 +2880,9 @@ document
 
             button.textContent =
                 "Submit Support Application";
-
         }
 
     });
-
 
 /* =====================================================
    LOAD SUBMISSIONS
