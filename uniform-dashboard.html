@@ -2495,7 +2495,6 @@ document
 
     });
 
-    
 /* =====================================================
    REQUEST FORM
 ===================================================== */
@@ -2506,111 +2505,117 @@ document
 
         event.preventDefault();
 
-
         const button =
             document.getElementById("requestSubmit");
 
-
         button.disabled = true;
-
-        button.textContent =
-            "Submitting...";
-
+        button.textContent = "Submitting...";
 
         try {
 
             const {
+                data,
                 error
-            } = await supabaseClient
-                .from("uniform_requests")
-                .insert({
-
-                    user_id: currentUser.id,
-
-                    student_name:
+            } = await supabaseClient.rpc(
+                "submit_uniform_request",
+                {
+                    p_student_name:
                         document.getElementById(
                             "requestStudentName"
                         ).value.trim(),
 
-                    school_name:
+                    p_school_name:
                         document.getElementById(
                             "requestSchool"
                         ).value.trim(),
 
-                    class_grade:
+                    p_class_grade:
                         document.getElementById(
                             "requestGrade"
                         ).value.trim(),
 
-                    uniform_type:
+                    p_uniform_type:
                         document.getElementById(
                             "requestUniformType"
                         ).value,
 
-                    size:
+                    p_size:
                         document.getElementById(
                             "requestSize"
                         ).value.trim(),
 
-                    quantity:
+                    p_quantity:
                         parseInt(
                             document.getElementById(
                                 "requestQuantity"
-                            ).value
+                            ).value,
+                            10
                         ),
 
-                    reason_for_request:
+                    p_reason_for_request:
                         document.getElementById(
                             "requestReason"
                         ).value.trim(),
 
-                    request_type:
+                    p_request_type:
                         document.getElementById(
                             "requestType"
                         ).value,
 
-                    transferring_school:
+                    p_transferring_school:
                         document.getElementById(
                             "requestTransferringSchool"
                         ).value.trim(),
 
-                    current_uniform_available:
+                    p_current_uniform_available:
                         document.getElementById(
                             "requestCurrentUniform"
                         ).value,
 
-                    urgency:
+                    p_urgency:
                         document.getElementById(
                             "requestUrgency"
                         ).value,
 
-                    additional_information:
+                    p_additional_information:
                         document.getElementById(
                             "requestAdditional"
                         ).value.trim()
+                }
+            );
 
-                });
+            if (error) {
+                console.error(
+                    "Request submission error:",
+                    error
+                );
 
+                throw error;
+            }
 
-            if (error) throw error;
-
+            if (!data) {
+                throw new Error(
+                    "The request could not be created."
+                );
+            }
 
             document
                 .getElementById("requestForm")
                 .reset();
-
 
             showMessage(
                 "Your uniform support request has been submitted successfully. OUT Organization will review the request and contact you.",
                 "success"
             );
 
-
             await loadCounts();
 
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                "Request submission error:",
+                error
+            );
 
             showMessage(
                 "We could not submit your request. Please try again.",
@@ -2623,12 +2628,9 @@ document
 
             button.textContent =
                 "Submit Uniform Request";
-
         }
 
     });
-
-
 /* =====================================================
    PARTNERSHIP FORM
 ===================================================== */
