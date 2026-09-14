@@ -2617,10 +2617,13 @@ document
                 error
             );
 
-            showMessage(
-                "We could not submit your request. Please try again.",
-                "error"
-            );
+          showMessage(
+    "Request error: " +
+    (error.message || "Unknown error"),
+    "error"
+);
+
+console.error("FULL REQUEST ERROR:", error);
 
         } finally {
 
