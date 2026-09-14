@@ -2644,122 +2644,128 @@ document
 
         event.preventDefault();
 
-
         const button =
             document.getElementById("partnerSubmit");
 
-
         button.disabled = true;
-
-        button.textContent =
-            "Submitting...";
-
+        button.textContent = "Submitting...";
 
         try {
 
             const {
+                data,
                 error
-            } = await supabaseClient
-                .from("uniform_partnerships")
-                .insert({
-
-                    user_id: currentUser.id,
-
-                    organization_name:
+            } = await supabaseClient.rpc(
+                "submit_uniform_partnership",
+                {
+                    p_organization_name:
                         document.getElementById(
                             "partnerOrganization"
                         ).value.trim(),
 
-                    organization_type:
+                    p_organization_type:
                         document.getElementById(
                             "partnerType"
                         ).value,
 
-                    contact_person:
+                    p_contact_person:
                         document.getElementById(
                             "partnerContact"
                         ).value.trim(),
 
-                    email:
+                    p_email:
                         document.getElementById(
                             "partnerEmail"
                         ).value.trim(),
 
-                    phone:
+                    p_phone:
                         document.getElementById(
                             "partnerPhone"
                         ).value.trim(),
 
-                    country:
+                    p_country:
                         document.getElementById(
                             "partnerCountry"
                         ).value.trim(),
 
-                    county_state:
+                    p_county_state:
                         document.getElementById(
                             "partnerCounty"
                         ).value.trim(),
 
-                    city_town:
+                    p_city_town:
                         document.getElementById(
                             "partnerCity"
                         ).value.trim(),
 
-                    proposed_contribution:
+                    p_proposed_contribution:
                         document.getElementById(
                             "partnerContribution"
                         ).value.trim(),
 
-                    logistics_support:
+                    p_logistics_support:
                         document.getElementById(
                             "partnerLogistics"
                         ).value.trim(),
 
-                    partnership_idea:
+                    p_partnership_idea:
                         document.getElementById(
                             "partnerIdea"
                         ).value.trim(),
 
-                    relevant_experience:
+                    p_relevant_experience:
                         document.getElementById(
                             "partnerExperience"
                         ).value.trim(),
 
-                    expected_duration:
+                    p_expected_duration:
                         document.getElementById(
                             "partnerDuration"
                         ).value,
 
-                    additional_information:
+                    p_additional_information:
                         document.getElementById(
                             "partnerAdditional"
                         ).value.trim()
+                }
+            );
 
-                });
+            if (error) {
+                console.error(
+                    "Partnership submission error:",
+                    error
+                );
 
+                throw error;
+            }
 
-            if (error) throw error;
-
+            if (!data) {
+                throw new Error(
+                    "The partnership application could not be created."
+                );
+            }
 
             document
                 .getElementById("partnerForm")
                 .reset();
-
 
             showMessage(
                 "Your partnership application has been submitted successfully. OUT Organization will review it and contact you.",
                 "success"
             );
 
-
             await loadCounts();
 
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                "Partnership submission error:",
+                error
+            );
 
             showMessage(
-                "We could not submit your partnership application. Please try again.",
+                "Partnership error: " +
+                (error.message || "Unknown error"),
                 "error"
             );
 
@@ -2769,12 +2775,9 @@ document
 
             button.textContent =
                 "Submit Partnership Application";
-
         }
 
     });
-
-
 /* =====================================================
    SUPPORT FORM
 ===================================================== */
