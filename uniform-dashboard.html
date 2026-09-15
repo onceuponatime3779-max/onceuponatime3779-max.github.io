@@ -2081,17 +2081,16 @@ async function loadMember() {
     }
     /* ADMIN DASHBOARD ACCESS */
 
-    const adminDashboardButton =
-        document.getElementById("adminDashboardButton");
+const adminDashboardButton =
+    document.getElementById("adminDashboardButton");
 
-    if (adminDashboardButton) {
-        if (profile.is_admin === true) {
-            adminDashboardButton.style.display = "block";
-        } else {
-            adminDashboardButton.style.display = "none";
-        }
+if (adminDashboardButton) {
+    if (profile.is_admin === true) {
+        adminDashboardButton.style.display = "block";
+    } else {
+        adminDashboardButton.style.display = "none";
     }
-
+}
     /* PROFILE */
 
     document.getElementById("welcomeName")
