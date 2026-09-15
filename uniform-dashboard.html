@@ -570,7 +570,14 @@
                 data-section="submissions">
                 📋 My Submissions
             </button>
-
+            
+<button
+    id="adminDashboardButton"
+    class="uc-nav-button"
+    style="display:none;"
+    onclick="window.location.href='uniform-admin.html';">
+    🛠️ Admin Dashboard
+</button>
         </aside>
 
 
@@ -2072,7 +2079,18 @@ async function loadMember() {
         return;
 
     }
+    /* ADMIN DASHBOARD ACCESS */
 
+    const adminDashboardButton =
+        document.getElementById("adminDashboardButton");
+
+    if (adminDashboardButton) {
+        if (profile.is_admin === true) {
+            adminDashboardButton.style.display = "block";
+        } else {
+            adminDashboardButton.style.display = "none";
+        }
+    }
 
     /* PROFILE */
 
