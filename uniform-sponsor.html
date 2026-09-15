@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1">
+
+<meta name="theme-color"
+      content="#123c3a">
+
+<title>Sponsor a New Uniform | OUT Organization</title>
+
+<link rel="stylesheet"
+      href="css/style.css">
+
+<script
+src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js">
+</script>
+
+<style>
+
+.sponsor-page {
+    background:#f7f9f6;
+    min-height:100vh;
+    padding:70px 20px;
+}
+
+.sponsor-container {
+    max-width:900px;
+    margin:auto;
+}
+
+.sponsor-hero {
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.sponsor-hero h1 {
+    color:#145A32;
+    font-size:42px;
+    margin-bottom:15px;
+}
+
+.sponsor-hero p {
+    max-width:700px;
+    margin:auto;
+    font-size:18px;
+    line-height:1.7;
+}
+
+.sponsor-card {
+    background:#fff;
+    padding:40px;
+    border-radius:18px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+.sponsor-card h2 {
+    color:#145A32;
+    margin-bottom:10px;
+}
+
+.sponsor-price {
+    background:#145A32;
+    color:#fff;
+    padding:25px;
+    border-radius:14px;
+    margin:25px 0;
+    text-align:center;
+}
+
+.sponsor-price strong {
+    color:#D4AF37;
+    font-size:32px;
+}
+
+.sponsor-grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.sponsor-field {
+    margin-bottom:20px;
+}
+
+.sponsor-field.full {
+    grid-column:1 / -1;
+}
+
+.sponsor-field label {
+    display:block;
+    font-weight:bold;
+    margin-bottom:7px;
+    color:#333;
+}
+
+.sponsor-field input,
+.sponsor-field select,
+.sponsor-field textarea {
+    width:100%;
+    box-sizing:border-box;
+    padding:13px;
+    border:1px solid #d8ddd8;
+    border-radius:9px;
+    font-size:16px;
+}
+
+.sponsor-field textarea {
+    min-height:110px;
+    resize:vertical;
+}
+
+.amount-box {
+    background:#f1f6f2;
+    border-radius:10px;
+    padding:18px;
+    margin:10px 0 25px;
+    text-align:center;
+}
+
+.amount-box span {
+    display:block;
+    color:#555;
+}
+
+.amount-box strong {
+    color:#145A32;
+    font-size:30px;
+}
+
+.sponsor-button {
+    width:100%;
+    border:0;
+    background:#145A32;
+    color:#fff;
+    padding:16px;
+    border-radius:10px;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.sponsor-button:hover {
+    background:#0b6b3a;
+}
+
+.sponsor-message {
+    display:none;
+    padding:18px;
+    border-radius:10px;
+    margin-bottom:20px;
+}
+
+.sponsor-success {
+    background:#e8f5e9;
+    color:#145A32;
+}
+
+.sponsor-error {
+    background:#fdecec;
+    color:#a00000;
+}
+
+.sponsor-note {
+    font-size:14px;
+    color:#666;
+    line-height:1.6;
+    margin-top:20px;
+}
+
+@media(max-width:700px) {
+
+    .sponsor-page {
+        padding:40px 15px;
+    }
+
+    .sponsor-card {
+        padding:25px 20px;
+    }
+
+    .sponsor-grid {
+        grid-template-columns:1fr;
+    }
+
+    .sponsor-field.full {
+        grid-column:auto;
+    }
+
+    .sponsor-hero h1 {
+        font-size:32px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">
+        <a href="index.html">
+            <img src="images/logo.jpg"
+                 alt="OUT Organization">
+        </a>
+    </div>
+
+</header>
+
+
+<main class="sponsor-page">
+
+<div class="sponsor-container">
+
+
+<div class="sponsor-hero">
+
+<h1>Give a Learner a New Uniform</h1>
+
+<p>
+From approximately <strong>US$27</strong>, you can help provide
+a complete new school uniform to a learner who needs one.
+</p>
+
+<p>
+Your support gives more than a uniform — it helps a learner go
+to school feeling prepared, included and confident.
+</p>
+
+</div>
+
+
+<div class="sponsor-card">
+
+<h2>Sponsor a New Uniform</h2>
+
+<p>
+Complete the form below to register your sponsorship.
+</p>
+
+
+<div class="sponsor-price">
+
+<div>One complete new school uniform</div>
+
+<strong>Approximately US$27</strong>
+
+</div>
+
+
+<div id="sponsorMessage"
+     class="sponsor-message">
+</div>
+
+
+<form id="sponsorForm">
+
+
+<div class="sponsor-grid">
+
+
+<div class="sponsor-field">
+
+<label for="sponsorName">
+Full Name *
+</label>
+
+<input
+type="text"
+id="sponsorName"
+required
+placeholder="Your full name">
+
+</div>
+
+
+<div class="sponsor-field">
+
+<label for="sponsorEmail">
+Email Address *
+</label>
+
+<input
+type="email"
+id="sponsorEmail"
+required
+placeholder="you@example.com">
+
+</div>
+
+
+<div class="sponsor-field">
+
+<label for="sponsorPhone">
+Phone Number
+</label>
+
+<input
+type="tel"
+id="sponsorPhone"
+placeholder="+254...">
+
+</div>
+
+
+<div class="sponsor-field">
+
+<label for="sponsorCountry">
+Country
+</label>
+
+<input
+type="text"
+id="sponsorCountry"
+placeholder="Kenya">
+
+</div>
+
+
+<div class="sponsor-field">
+
+<label for="uniformCount">
+Number of Uniforms *
+</label>
+
+<input
+type="number"
+id="uniformCount"
+min="1"
+value="1"
+required>
+
+</div>
+
+
+<div class="sponsor-field">
+
+<label for="paymentMethod">
+Preferred Payment Method *
+</label>
+
+<select id="paymentMethod"
+required>
+
+<option value="">
+Select payment method
+</option>
+
+<option value="mpesa">
+M-Pesa
+</option>
+
+<option value="bank">
+Bank Transfer
+</option>
+
+<option value="card">
+Card Payment
+</option>
+
+<option value="other">
+Other
+</option>
+
+</select>
+
+</div>
+
+
+</div>
+
+
+<div class="amount-box">
+
+<span>
+Estimated Sponsorship
+</span>
+
+<strong id="totalAmount">
+US$27.00
+</strong>
+
+<span>
+Approximately US$27 per uniform
+</span>
+
+</div>
+
+
+<div class="sponsor-field">
+
+<label for="paymentReference">
+Payment Reference
+</label>
+
+<input
+type="text"
+id="paymentReference"
+placeholder="If payment has already been made">
+
+</div>
+
+
+<div class="sponsor-field">
+
+<label for="sponsorMessageText">
+Message (Optional)
+</label>
+
+<textarea
+id="sponsorMessageText"
+placeholder="Add a message or any information you would like OUT Organization to know."></textarea>
+
+</div>
+
+
+<button
+type="submit"
+class="sponsor-button"
+id="sponsorSubmit">
+
+Submit Sponsorship
+
+</button>
+
+
+<p class="sponsor-note">
+
+After submitting your sponsorship, OUT Organization will
+confirm the sponsorship and guide you through the payment
+process where necessary. Please keep your sponsorship
+reference for future communication.
+
+</p>
+
+
+</form>
+
+</div>
+
+</div>
+
+</main>
+
+
+<script>
+
+const SUPABASE_URL =
+"https://kxajujtqqfodqxmkuguv.supabase.co";
+
+const SUPABASE_ANON_KEY =
+"sb_publishable_7WBopHAmgduaTJl5vbe4Sw_PD5GLAMA";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
+
+
+const uniformCount =
+document.getElementById("uniformCount");
+
+const totalAmount =
+document.getElementById("totalAmount");
+
+const sponsorForm =
+document.getElementById("sponsorForm");
+
+const sponsorMessage =
+document.getElementById("sponsorMessage");
+
+const sponsorSubmit =
+document.getElementById("sponsorSubmit");
+
+
+function updateAmount() {
+
+    let count =
+        parseInt(uniformCount.value, 10);
+
+    if (!count || count < 1) {
+        count = 1;
+    }
+
+    const amount =
+        count * 27;
+
+    totalAmount.textContent =
+        "US$" + amount.toFixed(2);
+
+}
+
+
+uniformCount.addEventListener(
+    "input",
+    updateAmount
+);
+
+
+function showMessage(text, type) {
+
+    sponsorMessage.textContent = text;
+
+    sponsorMessage.className =
+        "sponsor-message " +
+        (type === "success"
+            ? "sponsor-success"
+            : "sponsor-error");
+
+    sponsorMessage.style.display = "block";
+
+    sponsorMessage.scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+    });
+
+}
+
+
+sponsorForm.addEventListener(
+"submit",
+async function(event) {
+
+    event.preventDefault();
+
+    sponsorMessage.style.display = "none";
+
+    sponsorSubmit.disabled = true;
+
+    sponsorSubmit.textContent =
+        "Submitting Sponsorship...";
+
+
+    const sponsorName =
+        document.getElementById(
+            "sponsorName"
+        ).value.trim();
+
+    const sponsorEmail =
+        document.getElementById(
+            "sponsorEmail"
+        ).value.trim();
+
+    const sponsorPhone =
+        document.getElementById(
+            "sponsorPhone"
+        ).value.trim();
+
+    const sponsorCountry =
+        document.getElementById(
+            "sponsorCountry"
+        ).value.trim();
+
+    const count =
+        parseInt(
+            uniformCount.value,
+            10
+        );
+
+    const paymentMethod =
+        document.getElementById(
+            "paymentMethod"
+        ).value;
+
+    const paymentReference =
+        document.getElementById(
+            "paymentReference"
+        ).value.trim();
+
+    const message =
+        document.getElementById(
+            "sponsorMessageText"
+        ).value.trim();
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient.rpc(
+        "submit_uniform_sponsorship",
+        {
+            p_sponsor_name:
+                sponsorName,
+
+            p_email:
+                sponsorEmail,
+
+            p_phone:
+                sponsorPhone,
+
+            p_country:
+                sponsorCountry,
+
+            p_uniforms_count:
+                count,
+
+            p_payment_method:
+                paymentMethod,
+
+            p_payment_reference:
+                paymentReference,
+
+            p_message:
+                message
+        }
+    );
+
+
+    if (error) {
+
+        console.error(error);
+
+        showMessage(
+            error.message ||
+            "Unable to submit sponsorship.",
+            "error"
+        );
+
+        sponsorSubmit.disabled = false;
+
+        sponsorSubmit.textContent =
+            "Submit Sponsorship";
+
+        return;
+    }
+
+
+    const sponsorship =
+        Array.isArray(data)
+            ? data[0]
+            : data;
+
+
+    showMessage(
+        "Sponsorship submitted successfully. Your sponsorship reference is " +
+        sponsorship.sponsorship_id +
+        ". Please keep this reference for future communication.",
+        "success"
+    );
+
+
+    sponsorForm.reset();
+
+    uniformCount.value = 1;
+
+    updateAmount();
+
+
+    sponsorSubmit.disabled = false;
+
+    sponsorSubmit.textContent =
+        "Submit Sponsorship";
+
+});
+
+</script>
+
+</body>
+
+</html>
